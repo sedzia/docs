@@ -16,8 +16,9 @@
                     {
                         "group": "Getting started",
                         "pages": [
-                            "guides/getting_started/introduction",
-                            "guides/getting_started/key-concepts",
+                          "guides/getting_started/Welcome-To-Voucherify",
+                            "guides/getting_started/Introduction",
+                            "guides/getting_started/Key-Concepts",
                             "guides/getting_started/project-setup-guide"
                         ]
                     },
