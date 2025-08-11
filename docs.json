@@ -16,7 +16,7 @@
                     {
                         "group": "Getting started",
                         "pages": [
-                          "guides/getting_started/welcome-to-voucherify",
+                            "guides/getting_started/welcome-to-voucherify",
                             "guides/getting_started/introduction",
                             "guides/getting_started/key-concepts",
                             "guides/getting_started/project-setup-guide"
