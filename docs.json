@@ -11,7 +11,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Developer guides",
         "groups": [
           {
             "group": "Getting started",
@@ -56,6 +56,27 @@
               "source": "/api-reference/openapi.json",
               "directory": "api-reference"
             }
+          }
+        ]
+        
+      },
+      {
+        "tab": "Dashboard user",
+        "groups": [
+          {
+            "group": "Campaigns",
+            "pages": [
+              "dashboard-stuff/campaign/discount"
+            ]
+          },
+          {
+            "groups": "Group of groups",
+            {
+            "group": "Group-01",
+            "pages": [
+              "dashboard-stuff/campaign/discount"
+            ]
+          }
           }
         ]
       }
