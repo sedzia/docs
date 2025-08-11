@@ -79,13 +79,13 @@
                     {
                         "group": "Campaigns",
                         "pages": [
-                            "dashboard-stuff/campaign/discount"
+                            "dashboard-stuff/campaigns/discount"
                         ]
                     },
                     {
                         "group": "Something",
                         "pages": [
-                            "dashboard-stuff/campaign/discount"
+                            "dashboard-stuff/campaigns/discount"
                         ]
                     }
                 ]
