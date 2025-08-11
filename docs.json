@@ -16,9 +16,16 @@
                     {
                         "group": "Getting started",
                         "pages": [
-                            "index",
-                            "quickstart",
-                            "development"
+                            "guides/getting/started/introduction",
+                            "guides/getting/started/key-concepts",
+                            "guides/getting/started/project-setup-guide"
+                        ]
+                    },
+                    {
+                        "group": "Integration blueprint",
+                        "pages": [
+                            "guides/integration_blueprint/integration-overview",
+                            "guides/integration_blueprint/campaign-limits"
                         ]
                     },
                     {
@@ -54,6 +61,13 @@
                         "group": "Endpoints",
                         "openapi": {
                             "source": "/api-reference/openapi.json",
+                            "directory": "api-reference"
+                        }
+                    },
+                    {
+                        "group": "Events",
+                        "openapi": {
+                            "source": "/api-reference/OpenAPIWebhooks.json",
                             "directory": "api-reference"
                         }
                     }
