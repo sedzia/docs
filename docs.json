@@ -1,140 +1,136 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
-  "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
-  },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Developer guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "Endpoints",
-            "openapi": {
-              "source": "/api-reference/openapi.json",
-              "directory": "api-reference"
-            }
-          }
-        ]
-        
-      },
-      {
-        "tab": "Dashboard user",
-        "groups": [
-          {
-            "group": "Campaigns",
-            "pages": [
-              "dashboard-stuff/campaign/discount"
-            ]
-          },
-          {
-            "groups": "Group of groups",
+    "$schema": "https://mintlify.com/docs.json",
+    "theme": "mint",
+    "name": "Mint Starter Kit",
+    "colors": {
+        "primary": "#16A34A",
+        "light": "#07C983",
+        "dark": "#15803D"
+    },
+    "favicon": "/favicon.svg",
+    "navigation": {
+        "tabs": [
             {
-            "group": "Group-01",
-            "pages": [
-              "dashboard-stuff/campaign/discount"
+                "tab": "Developer guides",
+                "groups": [
+                    {
+                        "group": "Getting started",
+                        "pages": [
+                            "index",
+                            "quickstart",
+                            "development"
+                        ]
+                    },
+                    {
+                        "group": "Customization",
+                        "pages": [
+                            "essentials/settings",
+                            "essentials/navigation"
+                        ]
+                    },
+                    {
+                        "group": "Writing content",
+                        "pages": [
+                            "essentials/markdown",
+                            "essentials/code",
+                            "essentials/images",
+                            "essentials/reusable-snippets"
+                        ]
+                    },
+                    {
+                        "group": "AI tools",
+                        "pages": [
+                            "ai-tools/cursor",
+                            "ai-tools/claude-code",
+                            "ai-tools/windsurf"
+                        ]
+                    }
+                ]
+            },
+            {
+                "tab": "API reference",
+                "groups": [
+                    {
+                        "group": "Endpoints",
+                        "openapi": {
+                            "source": "/api-reference/openapi.json",
+                            "directory": "api-reference"
+                        }
+                    }
+                ]
+            },
+            {
+                "tab": "Dashboard user",
+                "groups": [
+                    {
+                        "group": "Campaigns",
+                        "pages": [
+                            "dashboard-stuff/campaign/discount"
+                        ]
+                    },
+                    {
+                        "group": "Something",
+                        "pages": [
+                            "dashboard-stuff/campaign/discount"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "global": {
+            "anchors": [
+                {
+                    "anchor": "Documentation",
+                    "href": "https://mintlify.com/docs",
+                    "icon": "book-open-cover"
+                },
+                {
+                    "anchor": "Community",
+                    "href": "https://mintlify.com/community",
+                    "icon": "slack"
+                },
+                {
+                    "anchor": "Blog",
+                    "href": "https://mintlify.com/blog",
+                    "icon": "newspaper"
+                }
             ]
-          }
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
         }
-      ]
+    },
+    "logo": {
+        "light": "/logo/light.svg",
+        "dark": "/logo/dark.svg"
+    },
+    "navbar": {
+        "links": [
+            {
+                "label": "Support",
+                "href": "mailto:hi@mintlify.com"
+            }
+        ],
+        "primary": {
+            "type": "button",
+            "label": "Dashboard",
+            "href": "https://dashboard.mintlify.com"
+        }
+    },
+    "contextual": {
+        "options": [
+            "copy",
+            "view",
+            "chatgpt",
+            "claude",
+            "perplexity",
+            "mcp",
+            "cursor",
+            "vscode"
+        ]
+    },
+    "footer": {
+        "socials": {
+            "x": "https://x.com/mintlify",
+            "github": "https://github.com/mintlify",
+            "linkedin": "https://linkedin.com/company/mintlify"
+        }
     }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
-  }
 }
