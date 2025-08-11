@@ -16,9 +16,9 @@
                     {
                         "group": "Getting started",
                         "pages": [
-                            "guides/getting/started/introduction",
-                            "guides/getting/started/key-concepts",
-                            "guides/getting/started/project-setup-guide"
+                            "guides/getting_started/introduction",
+                            "guides/getting_started/key-concepts",
+                            "guides/getting_started/project-setup-guide"
                         ]
                     },
                     {
