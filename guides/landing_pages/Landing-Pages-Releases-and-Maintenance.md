@@ -1,6 +1,6 @@
 ---
 title: Landing Pages Releases and Maintenance
-excerpt: Learn more about landing pages releases and maintenance.
+description: Learn more about landing pages releases and maintenance.
 categorySlug: landing-pages
 slug: releases-and-maintenance-of-landing-pages
 type: basic

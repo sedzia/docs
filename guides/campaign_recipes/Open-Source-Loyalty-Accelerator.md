@@ -1,6 +1,6 @@
 ---
 title: Open Source Loyalty Accelerator for Omnichannel Retail
-excerpt: null
+description: null
 categorySlug: campaigns-recipes
 slug: open-source-loyalty
 type: link

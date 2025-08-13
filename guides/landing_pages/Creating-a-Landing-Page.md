@@ -1,6 +1,6 @@
 ---
 title: Creating a Landing Page
-excerpt: Learn more about how to create a landing page.
+description: Learn more about how to create a landing page.
 categorySlug: landing-pages
 slug: creating-a-landing-page
 type: basic
