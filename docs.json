@@ -30,6 +30,21 @@
                         ]
                     },
                     {
+                        "group": "Development",
+                        "pages": [
+                            "guides/development/API-Endpoints",
+                            "guides/development/API-Optimization",
+                            "guides/development/API-Reference",
+                            "guides/development/API-Version-Upgrades"
+                        ]
+                    },
+                    {
+                        "group": "Distribution recipes",
+                        "pages": [
+                            "guides/distribution_recipes/Messaging-Automation"
+                        ]
+                    },
+                    {
                         "group": "Customization",
                         "pages": [
                             "essentials/settings",
