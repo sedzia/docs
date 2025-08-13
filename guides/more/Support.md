@@ -1,6 +1,6 @@
 ---
 title: Support
-excerpt: 
+description: 
 categorySlug: more
 slug: support
 type: basic

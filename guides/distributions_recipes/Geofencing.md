@@ -1,6 +1,6 @@
 ---
 title: Geofencing
-excerpt: 
+description: 
 categorySlug: distributions-recipes
 slug: geofencing
 type: link

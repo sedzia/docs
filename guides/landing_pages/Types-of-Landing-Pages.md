@@ -1,6 +1,6 @@
 ---
 title: Types of Landing Pages
-excerpt: Learn more about all the available types of landing pages.
+description: Learn more about all the available types of landing pages.
 categorySlug: landing-pages
 slug: types-of-landing-pages
 type: basic

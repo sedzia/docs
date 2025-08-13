@@ -1,6 +1,6 @@
 ---
 title: Referral Program
-excerpt: null
+description: null
 categorySlug: campaigns-recipes
 slug: referral-program
 type: link

@@ -1,6 +1,6 @@
 ---
 title: Status
-excerpt: 
+description: 
 categorySlug: more
 slug: status
 type: link

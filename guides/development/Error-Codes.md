@@ -1,6 +1,6 @@
 ---
 title: Error codes
-excerpt: 
+description: 
 categorySlug: development
 slug: error-codes
 type: link

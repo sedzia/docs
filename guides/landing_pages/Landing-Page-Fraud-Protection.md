@@ -1,6 +1,6 @@
 ---
 title: Landing Page Fraud Protection
-excerpt: Learn more about fraud protection of landing pages.
+description: Learn more about fraud protection of landing pages.
 categorySlug: landing-pages
 slug: landing-page-fraud-protection
 type: basic

@@ -1,6 +1,6 @@
 ---
 title: How can customers upload photos on my landing page
-excerpt: Learn more about how customers can upload photos on your landing page.
+description: Learn more about how customers can upload photos on your landing page.
 categorySlug: landing-pages
 slug: upload-photos-to-a-landing-page
 type: basic

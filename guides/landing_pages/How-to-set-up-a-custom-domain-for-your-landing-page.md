@@ -1,6 +1,6 @@
 ---
 title: How to set up a custom domain for your landing page
-excerpt: Learn how to set up a custom domain for yout landing page.
+description: Learn how to set up a custom domain for yout landing page.
 categorySlug: landing-pages
 slug: custom-domain-for-landing-pages
 type: basic
