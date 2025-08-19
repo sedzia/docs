@@ -1,166 +1,128 @@
 {
-    "$schema": "https://mintlify.com/docs.json",
-    "theme": "mint",
-    "name": "Mint Starter Kit",
-    "colors": {
-        "primary": "#122460",
-        "light": "#07C983",
-        "dark": "#15803D"
-    },
-    "favicon": "/favicon.svg",
-    "navigation": {
-        "tabs": [
-            {
-                "tab": "Developer guides",
-                "groups": [
-                    {
-                        "group": "Getting started",
-                        "pages": [
-                            "guides/getting_started/welcome-to-voucherify",
-                            "guides/getting_started/introduction",
-                            "guides/getting_started/key-concepts",
-                            "guides/getting_started/project-setup-guide"
-                        ]
-                    },
-                    {
-                        "group": "Integration blueprint",
-                        "pages": [
-                            "guides/integration_blueprint/integration-overview",
-                            "guides/integration_blueprint/campaign-limits"
-                        ]
-                    },
-                    {
-                        "group": "Development",
-                        "pages": [
-                            "guides/development/API-Endpoints",
-                            "guides/development/API-Optimization",
-                            "guides/development/API-Reference",
-                            "guides/development/API-Version-Upgrades"
-                        ]
-                    },
-                    {
-                        "group": "Distribution recipes",
-                        "pages": [
-                            "guides/distribution_recipes/Messaging-Automation"
-                        ]
-                    },
-                    {
-                        "group": "Customization",
-                        "pages": [
-                            "essentials/settings",
-                            "essentials/navigation"
-                        ]
-                    },
-                    {
-                        "group": "Writing content",
-                        "pages": [
-                            "essentials/markdown",
-                            "essentials/code",
-                            "essentials/images",
-                            "essentials/reusable-snippets"
-                        ]
-                    },
-                    {
-                        "group": "AI tools",
-                        "pages": [
-                            "ai-tools/cursor",
-                            "ai-tools/claude-code",
-                            "ai-tools/windsurf"
-                        ]
-                    }
-                ]
-            },
-            {
-                "tab": "API reference",
-                "groups": [
-                    {
-                        "group": "Endpoints",
-                        "openapi": {
-                            "source": "/api-reference/openapi.json",
-                            "directory": "api-reference"
-                        }
-                    },
-                    {
-                        "group": "Events",
-                        "openapi": {
-                            "source": "/api-reference/OpenAPIWebhooks.json",
-                            "directory": "api-reference"
-                        }
-                    }
-                ]
-            },
-            {
-                "tab": "Voucherify dashboard documentation",
-                "groups": [
-                    {
-                        "group": "Campaigns",
-                        "pages": [
-                            "dashboard-stuff/campaigns/discount"
-                        ]
-                    },
-                    {
-                        "group": "Something",
-                        "pages": [
-                            "dashboard-stuff/campaigns/discount"
-                        ]
-                    }
-                ]
-            }
-        ],
-        "global": {
-            "anchors": [
-                {
-                    "anchor": "Documentation",
-                    "href": "https://mintlify.com/docs",
-                    "icon": "book-open-cover"
-                },
-                {
-                    "anchor": "Community",
-                    "href": "https://mintlify.com/community",
-                    "icon": "slack"
-                },
-                {
-                    "anchor": "Blog",
-                    "href": "https://mintlify.com/blog",
-                    "icon": "newspaper"
-                }
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Introduction",
+  "colors": {
+    "primary": "#122460",
+    "light": "#122460",
+    "dark": "#122460"
+  },
+  "favicon": "/ca79d4d-small-favicon.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "docs/introduction",
+              "docs/welcome-to-voucherify",
+              "docs/getting-started",
+              "docs/key-concepts"
             ]
-        }
-    },
-    "logo": {
-        "light": "/logo/light.svg",
-        "dark": "/logo/dark.svg"
-    },
-    "navbar": {
-        "links": [
-            {
-                "label": "Support",
-                "href": "mailto:hi@mintlify.com"
-            }
-        ],
-        "primary": {
-            "type": "button",
-            "label": "Dashboard",
-            "href": "https://dashboard.mintlify.com"
-        }
-    },
-    "contextual": {
-        "options": [
-            "copy",
-            "view",
-            "chatgpt",
-            "claude",
-            "perplexity",
-            "mcp",
-            "cursor",
-            "vscode"
+          },
+          {
+            "group": "Integration Blueprint",
+            "pages": [
+              "docs/integration-overview",
+              "docs/campaign-limits",
+              "docs/distributions",
+              "docs/campaign-reporting",
+              "docs/team-management",
+              "docs/brand-management",
+              "docs/security"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "docs/welcome",
+              "docs/authentication",
+              "docs/integration-processes",
+              "docs/data-parsing",
+              "docs/metadata-mapping",
+              "docs/data-synchronization",
+              "docs/api-endpoints",
+              "docs/sdks",
+              "docs/management-api",
+              "docs/performance",
+              "docs/limits",
+              "docs/api-optimization",
+              "docs/client-side-api",
+              "docs/api-version-upgrades",
+              "docs/fraud-prevention-mechanisms"
+            ]
+          },
+          {
+            "group": "Campaigns Recipes",
+            "pages": [
+              "docs/checking-eligibility",
+              "docs/locking-validation-session",
+              "docs/transfer-loyalty-points"
+            ]
+          },
+          {
+            "group": "Discounts Recipes",
+            "pages": [
+              "docs/manage-stackable-discounts",
+              "docs/discount-effects",
+              "docs/give-item-for-free-unit-discount"
+            ]
+          },
+          {
+            "group": "Distributions Recipes",
+            "pages": [
+              "docs/csv-export",
+              "docs/import-codes"
+            ]
+          },
+          {
+            "group": "More",
+            "pages": [
+              "docs/support"
+            ]
+          }
         ]
-    },
-    "footer": {
-        "socials": {
-            "x": "https://x.com/mintlify",
-            "github": "https://github.com/mintlify",
-            "linkedin": "https://linkedin.com/company/mintlify"
-        }
-    }
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "docs/introduction-1",
+              "docs/errors",
+              "docs/versioning",
+              "docs/listing",
+              "docs/object-schemas"
+            ]
+          },
+          {
+            "group": "Object schemas",
+            "pages": [
+              "docs/objects/redemption-object",
+              "docs/objects/voucher-object",
+              "docs/objects/campaign-object"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "openapi": {
+              "source": "/api-reference/openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Events",
+            "openapi": {
+              "source": "/api-reference/OpenAPIWebhooks.json",
+              "directory": "api-reference"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "logo": "/images/c94a6d3-small-voucherify_logo_white.png"
 }

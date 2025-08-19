@@ -1,0 +1,215 @@
+---
+title: "Overview"
+---
+
+## Async Action
+
+This is an object representing an asynchronous action.
+
+All of:
+
+1. [Async Action Base](#async-action-base)
+
+2. | Attributes | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+   | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | result     | One of: [CAMPAIGN.VOUCHERS\_IMPORT](#campaign.vouchers_import), [CAMPAIGN.VOUCHERS\_IMPORT\_CSV](#campaign.vouchers_import_csv), [CAMPAIGN.VOUCHERS\_UPDATE](#campaign.vouchers_update), [CAMPAIGN.VOUCHERS\_DELETE](#campaign.vouchers_delete), [CAMPAIGN.VOUCHERS\_GENERATE](#campaign.vouchers_generate), [CAMPAIGNS.METADATA\_KEY\_PURGE](#campaigns.metadata_key_purge), [CUSTOMERS.IMPORT\_CSV](#customers.import_csv), [CUSTOMERS.BULK\_UPDATE](#customers.bulk_update), [CUSTOMERS.METADATA\_UPDATE](#customers.metadata_update), [CUSTOMERS.METADATA\_KEY\_PURGE](#customers.metadata_key_purge), [PRODUCTS.BULK\_UPDATE](#products.bulk_update), [PRODUCTS.METADATA\_UPDATE](#products.metadata_update), [PRODUCTS.IMPORT\_CSV](#products.import_csv), [SKUS.IMPORT\_CSV](#skus.import_csv), [PRODUCTS.METADATA\_KEY\_PURGE](#products.metadata_key_purge), [VOUCHERS.IMPORT](#vouchers.import), [VOUCHERS.IMPORT\_CSV](#vouchers.import_csv), [VOUCHERS.BULK\_UPDATE](#vouchers.bulk_update), [VOUCHERS.METADATA\_UPDATE](#vouchers.metadata_update), [VOUCHERS.METADATA\_KEY\_PURGE](#vouchers.metadata_key_purge), [ORDERS.IMPORT](#orders.import), [ORDERS.METADATA\_KEY\_PURGE](#orders.metadata_key_purge) |
+
+## Async Action Base
+
+| Attributes                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id`string`                | Async action unique ID.**Example:**&#x61;a\_0adad13d6f057f088e                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| type`string`              | Type of async action.Available values: `CAMPAIGN.VOUCHERS_IMPORT`, `CAMPAIGN.VOUCHERS_IMPORT_CSV`, `CAMPAIGN.VOUCHERS_UPDATE`, `CAMPAIGN.VOUCHERS_DELETE`, `CAMPAIGN.VOUCHERS_GENERATE`, `CAMPAIGNS.METADATA_KEY_PURGE`, `CUSTOMERS.IMPORT_CSV`, `CUSTOMERS.BULK_UPDATE`, `CUSTOMERS.METADATA_UPDATE`, `CUSTOMERS.METADATA_KEY_PURGE`, `PRODUCTS.BULK_UPDATE`, `PRODUCTS.METADATA_UPDATE`, `PRODUCTS.METADATA_KEY_PURGE`, `PRODUCTS.IMPORT_CSV`, `SKUS.IMPORT_CSV`, `VOUCHERS.IMPORT`, `VOUCHERS.IMPORT_CSV`, `VOUCHERS.BULK_UPDATE`, `VOUCHERS.METADATA_UPDATE`, `VOUCHERS.METADATA_KEY_PURGE`, `ORDERS.IMPORT`, `ORDERS.METADATA_KEY_PURGE` |
+| status`string`            | Status of the async action. Informs you whether the async action has already been completed.Available values: `DONE`, `ENQUEUED`, `FAILED`, `IN_PROGRESS`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| operation\_status`string` | Status of async action processing. Informs about the async action status, whether it failed, succeeded, or the status is unknown.Available values: `FAILED`, `SUCCESS`, `UNKNOWN`                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| created\_at`string`       | Timestamp representing the date and time when the async action was scheduled in ISO 8601 format.**Example:**&#x32;022-06-23T11:21:45.578Z                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| updated\_at`string`       | Timestamp representing the date and time when the async action was updated. The value is shown in the ISO 8601 format.**Example:**&#x32;022-06-23T11:21:46.795Z                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| request\_id`string`       | Unique request ID.**Example:**&#x76;-0b45cee140c3c9b5ca                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| processing\_time`integer` | The length of time it took to process the request in milliseconds.**Example:**&#x31;217                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| progress`integer`         | % progress to completion of the asynchronous action.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| object`string`            | The type of the object represented by JSON. This object stores information about the `async_action`.Available values: `async_action`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+
+## CAMPAIGN.VOUCHERS\_IMPORT
+
+| Attributes             | Description                                                                                                                                                                                                                                     |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                                        |
+| failed`array`          | If any records failed during the process, this array shows the failure details.Array of:Attributes	Descriptioncodestring&#xA;&#xA;Unique voucher code.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the voucher code import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                     |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                          |
+
+## CAMPAIGN.VOUCHERS\_IMPORT\_CSV
+
+| Attributes             | Description                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                                                                                                                                                                                         |
+| failed`array`          | If any records failed during the process, this array shows the failure details.Array of:Attributes	Descriptioncodestring&#xA;&#xA;Unique voucher code.&#xA;&#xA;&#xA;rowinteger	&#xA;&#xA;The CSV file row number where the code definition is recorded. The row counter excludes the file headers row.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the voucher code import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                                                                                                                                                                      |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                                                                                                                                                                           |
+
+## CAMPAIGN.VOUCHERS\_UPDATE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## CAMPAIGN.VOUCHERS\_DELETE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## CAMPAIGN.VOUCHERS\_GENERATE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## CAMPAIGNS.METADATA\_KEY\_PURGE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## CUSTOMERS.IMPORT\_CSV
+
+| Attributes             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                                                                                                                                                                                                                                           |
+| failed`array`          | If any records failed during the process, this array shows the failure details.Array of:Attributes	Descriptionsource\_idstring&#xA;&#xA;Unique customer ID from your inventory system as indicated in the CSV file.&#xA;&#xA;&#xA;rowinteger	&#xA;&#xA;The CSV file row number where the customer is recorded. The row counter excludes the file headers row.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the customer import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                                                                                                                                                                                                                        |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                                                                                                                                                                                                                             |
+
+## CUSTOMERS.BULK\_UPDATE
+
+All of:
+
+1. [Async Action Voucher Customer Product Bulk Update Result](#async-action-voucher-customer-product-bulk-update-result)
+
+2. | Attributes    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+   | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | errors`array` | List of errors encountered during processing.Array of:Attributes	Descriptionmessagestring&#xA;&#xA;A human-readable message providing a short description of the error.&#xA;&#xA;&#xA;detailsstring	&#xA;&#xA;A human-readable message providing more details about the error.&#xA;&#xA;&#xA;keystring	&#xA;&#xA;Short string describing the kind of error which occurred.&#xA;&#xA;&#xA;source\_idstring	&#xA;&#xA;Source identifier of the customer for which the error occurred. |
+
+## CUSTOMERS.METADATA\_UPDATE
+
+| Attributes    | Description                                                                                                                                                                                                                                                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| errors`array` | List of errors encountered during processing.Array of:Attributes	Descriptionmessagestring&#xA;&#xA;A human-readable message providing a short description of the error.&#xA;&#xA;&#xA;detailsstring	&#xA;&#xA;A human-readable message providing more details about the error.&#xA;&#xA;&#xA;keystring	&#xA;&#xA;Short string describing the kind of error which occurred. |
+
+## CUSTOMERS.METADATA\_KEY\_PURGE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## PRODUCTS.BULK\_UPDATE
+
+All of:
+
+1. [Async Action Voucher Customer Product Bulk Update Result](#async-action-voucher-customer-product-bulk-update-result)
+
+2. | Attributes    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+   | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | errors`array` | List of errors encountered during processing.Array of:Attributes	Descriptionmessagestring&#xA;&#xA;A human-readable message providing a short description of the error.&#xA;&#xA;&#xA;detailsstring	&#xA;&#xA;A human-readable message providing more details about the error.&#xA;&#xA;&#xA;keystring	&#xA;&#xA;Short string describing the kind of error which occurred.&#xA;&#xA;&#xA;source\_idstring	&#xA;&#xA;Source identifier of the product for which the error occurred. |
+
+## PRODUCTS.METADATA\_UPDATE
+
+| Attributes    | Description                                                                                                                                                                                                                                                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| errors`array` | List of errors encountered during processing.Array of:Attributes	Descriptionmessagestring&#xA;&#xA;A human-readable message providing a short description of the error.&#xA;&#xA;&#xA;detailsstring	&#xA;&#xA;A human-readable message providing more details about the error.&#xA;&#xA;&#xA;keystring	&#xA;&#xA;Short string describing the kind of error which occurred. |
+
+## PRODUCTS.IMPORT\_CSV
+
+| Attributes             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                                                                                                                                                                                                                                    |
+| failed`array`          | If any records failed during the process, this array shows the failure details.Array of:Attributes	Descriptionrowinteger&#xA;&#xA;The CSV file row number where the product definition is recorded. The row counter excludes the file headers row.&#xA;&#xA;&#xA;source\_idstring	&#xA;&#xA;The source identifier of the product that caused the error.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the product import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                                                                                                                                                                                                                      |
+
+## SKUS.IMPORT\_CSV
+
+| Attributes             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message`string`        | A human-readable message providing a short description about the result.**Example:**&#x32; sku(s) imported successfully, 6 failed.                                                                                                                                                                                                                                                                                                                                                |
+| failed`array`          | If any records failed during the process, this array shows the failure details.Array of:Attributes	Descriptionrowinteger&#xA;&#xA;The CSV file row number where the SKU definition is recorded. The row counter excludes the file headers row.&#xA;&#xA;Example:&#xA;&#xA;2&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the SKU import.&#xA;&#xA;Example:&#xA;&#xA;Resource sku with id size-small is in use by products with ids \[prod\_0b0e3441c2462eff2c] |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+
+## PRODUCTS.METADATA\_KEY\_PURGE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources updated successfully.                                |
+
+## VOUCHERS.IMPORT
+
+| Attributes             | Description                                                                                                                                                                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                               |
+| failed`object`         | If any records failed during the process, this array shows the failure details.Attributes	Descriptioncodestring&#xA;&#xA;Unique voucher code.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the voucher code import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                            |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                 |
+
+## VOUCHERS.IMPORT\_CSV
+
+| Attributes             | Description                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                                                                                                                                                                                         |
+| failed`array`          | If any records failed during the process, this array shows the failure details.Array of:Attributes	Descriptioncodestring&#xA;&#xA;Unique voucher code.&#xA;&#xA;&#xA;rowinteger	&#xA;&#xA;The CSV file row number where the code definition is recorded. The row counter excludes the file headers row.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the voucher code import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                                                                                                                                                                      |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                                                                                                                                                                           |
+
+## VOUCHERS.BULK\_UPDATE
+
+All of:
+
+1. [Async Action Voucher Customer Product Bulk Update Result](#async-action-voucher-customer-product-bulk-update-result)
+
+2. | Attributes    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+   | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | errors`array` | List of errors encountered during processing.Array of:Attributes	Descriptionmessagestring&#xA;&#xA;A human-readable message providing a short description of the error.&#xA;&#xA;&#xA;detailsstring	&#xA;&#xA;A human-readable message providing more details about the error.&#xA;&#xA;&#xA;keystring	&#xA;&#xA;Short string describing the kind of error which occurred.&#xA;&#xA;&#xA;codestring	&#xA;&#xA;Code of the voucher for which the error occurred. |
+
+## VOUCHERS.METADATA\_UPDATE
+
+| Attributes    | Description                                                                                                                                                                                                                                                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| errors`array` | List of errors encountered during processing.Array of:Attributes	Descriptionmessagestring&#xA;&#xA;A human-readable message providing a short description of the error.&#xA;&#xA;&#xA;detailsstring	&#xA;&#xA;A human-readable message providing more details about the error.&#xA;&#xA;&#xA;keystring	&#xA;&#xA;Short string describing the kind of error which occurred. |
+
+## VOUCHERS.METADATA\_KEY\_PURGE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## ORDERS.IMPORT
+
+| Attributes             | Description                                                                                                                                                                                                                                     |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message`string`        | A human-readable message providing a short description about the result.                                                                                                                                                                        |
+| failed`object`         | If any records failed during the process, this array shows the failure details.Attributes	Descriptionsource\_idstring&#xA;&#xA;Unique order source ID.&#xA;&#xA;&#xA;reasonstring	&#xA;&#xA;Detailed failure cause for the voucher code import. |
+| done\_count`integer`   | Number of resources processed successfully.                                                                                                                                                                                                     |
+| failed\_count`integer` | Number of resources failed to process.                                                                                                                                                                                                          |
+
+## ORDERS.METADATA\_KEY\_PURGE
+
+| Attributes           | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| message`string`      | A human-readable message providing a short description about the result. |
+| done\_count`integer` | Number of resources processed successfully.                              |
+
+## Async Action Voucher Customer Product Bulk Update Result
+
+| Attributes                       | Description                                  |
+| -------------------------------- | -------------------------------------------- |
+| done\_count`integer`             | Number of items successfully processed.      |
+| failed\_count`integer`           | Number of items that failed to be processed. |
+| reports`array`                   | List of URLs to report files.                |
+| reports\_available\_till`string` | Timestamp until the reports are available.   |

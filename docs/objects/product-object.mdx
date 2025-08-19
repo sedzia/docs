@@ -1,0 +1,58 @@
+---
+title: "Overview"
+---
+
+## Product
+
+This is an object representing a product.
+
+This entity should be used to map product items from your inventory management system. The aim of products is to build which reflect product-specific campaigns.
+
+All of:
+
+1. [Product without Skus Object](#product-without-skus-object)
+
+2. | Attributes | Description                                          |
+   | ---------- | ---------------------------------------------------- |
+   | skus       | See: [Skus List For Product](#skus-list-for-product) |
+
+## Product without Skus Object
+
+| Attributes                  | Description                                                                                                                                                                                                                                                                             |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id`string`                  | Unique product ID assigned by Voucherify.**Example:**&#x70;rod\_0b1da8105693710357                                                                                                                                                                                                      |
+| source\_id`string`, `null`  | Unique product source ID.**Example:**&#x70;roductSourceID16                                                                                                                                                                                                                             |
+| name`string`, `null`        | Unique user-defined product name.**Example:**&#x54;-shirt                                                                                                                                                                                                                               |
+| price`integer`, `null`      | Unit price. It is represented by a value multiplied by 100 to accurately reflect 2 decimal places, such as `$100.00` being expressed as `10000`.                                                                                                                                        |
+| attributes`array`           | A list of product attributes whose values you can customize for given SKUs: `["color","size","ranking"]`. Each child SKU can have a unique value for a given attribute.                                                                                                                 |
+| metadata`object`            | The metadata object stores all custom attributes assigned to the product. A set of key/value pairs that you can attach to a product object. It can be useful for storing additional information about the product in a structured format. It can be used to create product collections. |
+| image\_url`string`, `null`  | The HTTPS URL pointing to the .png or .jpg file that will be used to render the product image.**Example:**[https://images.com/original.jpg](https://images.com/original.jpg)                                                                                                            |
+| created\_at`string`         | Timestamp representing the date and time when the product was created. The value is shown in the ISO 8601 format.**Example:**&#x32;022-05-23T06:52:55.008Z                                                                                                                              |
+| updated\_at`string`, `null` | Timestamp representing the date and time when the product was updated. The value is shown in the ISO 8601 format.**Example:**&#x32;022-05-23T09:24:07.405Z                                                                                                                              |
+| object`string`              | The type of the object represented by JSON. This object stores information about the product.Available values: `product`                                                                                                                                                                |
+
+## Skus List For Product
+
+| Attributes        | Description                                                                            |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| object`string`    | The type of the object represented by JSON. This object stores information about SKUs. |
+| data\_ref`string` | Identifies the name of the JSON property that contains the array of SKUs.              |
+| data`array`       | A dictionary that contains an array of SKUs.Array of [SKU Object](#sku-object)         |
+| total`integer`    | Total number of SKUs in the product.                                                   |
+
+## SKU Object
+
+| Attributes                  | Description                                                                                                                                                                                                                                                                 |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id`string`                  | A unique identifier that represents the SKU and is assigned by Voucherify.**Example:**&#x73;ku\_0b1621b319d248b79f                                                                                                                                                          |
+| source\_id`string`, `null`  | A unique SKU identifier from your inventory system.**Example:**&#x73;ku\_source\_id\_4                                                                                                                                                                                      |
+| product\_id`string`         | The parent product's unique ID.**Example:**&#x70;rod\_0b15f6b9f650c16990                                                                                                                                                                                                    |
+| sku`string`, `null`         | Unique user-defined SKU name.**Example:**&#x4C;arge Pink Shirt                                                                                                                                                                                                              |
+| price`integer`, `null`      | Unit price. It is represented by a value multiplied by 100 to accurately reflect 2 decimal places, such as `$100.00` being expressed as `10000`.                                                                                                                            |
+| currency`string`, `null`    | SKU price currency.**Example:**&#x55;SD                                                                                                                                                                                                                                     |
+| attributes`object`          | The attributes object stores values for all custom attributes inherited by the SKU from the parent product. A set of key/value pairs that are attached to a SKU object and are unique to each SKU within a product family.                                                  |
+| image\_url`string`, `null`  | The HTTPS URL pointing to the .png or .jpg file that will be used to render the SKU image.                                                                                                                                                                                  |
+| metadata`object`            | The metadata object stores all custom attributes assigned to the SKU. A set of key/value pairs that you can attach to a SKU object. It can be useful for storing additional information about the SKU in a structured format. It can be used to create product collections. |
+| created\_at`string`         | Timestamp representing the date and time when the SKU was created. The value is shown in the ISO 8601 format.**Example:**&#x32;022-05-17T10:36:30.187Z                                                                                                                      |
+| updated\_at`string`, `null` | Timestamp representing the date and time when the SKU was updated. The value is shown in the ISO 8601 format.**Example:**&#x32;022-05-17T10:55:09.137Z                                                                                                                      |
+| object`string`              | The type of the object represented by JSON. This object stores information about the `SKU`.Available values: `sku`                                                                                                                                                          |
