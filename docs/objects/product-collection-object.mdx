@@ -1,0 +1,61 @@
+---
+title: "Overview"
+---
+
+## Product Collection Base
+
+| Attributes          | Description                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id`string`          | Product collection ID.                                                                                                                                                                                                                                                                                                                                                                                                            |
+| name`string`        | Unique user-defined product collection name.**Example:**&#x41;ll Products                                                                                                                                                                                                                                                                                                                                                         |
+| type`string`        | Describes whether the product collection is dynamic (products come in and leave based on set criteria) or static (manually selected products).Available values: `STATIC`, `AUTO_UPDATE`                                                                                                                                                                                                                                           |
+| filter`object`      | Defines a set of criteria and boundary conditions for an `AUTO_UPDATE` product collection type.Attributes	Descriptionjunction	See: Junction&#xA;\[propertyName]	&#xA;&#xA;Valid keys: id, product\_id, source\_id, name, price, object, attributes, image\_url, skus, created\_at, updated\_at and metadata.\*&#xA;&#xA;Field Conditions                                                                                          |
+| products`array`     | Defines a set of products for a `STATIC` product collection type.Array of:### Product Collections Item Products ItemAttributes	Descriptionidstring&#xA;&#xA;The product ID.&#xA;&#xA;Example:&#xA;&#xA;prod\_0a41bcf807c5fcaaf6&#xA;&#xA;&#xA;product\_idstring	&#xA;&#xA;Product ID for SKUs.&#xA;&#xA;&#xA;objectstring	&#xA;&#xA;Denotes the type of the object represented by the ID.&#xA;&#xA;Available values: sku, product |
+| created\_at`string` | Timestamp representing the date and time when the product collection was created. The value is shown in the ISO 8601 format.**Example:**&#x32;021-12-09T12:51:29.898Z                                                                                                                                                                                                                                                             |
+| object`string`      | The type of the object represented by JSON. This object stores information about the static product collection.Available values: `products_collection`                                                                                                                                                                                                                                                                            |
+
+## Junction
+
+Logical Operator Between Filters. Filter by conditions set on the `junction` parameter indicating how the `conditions` should be accounted for in the query. An `AND` is an all-inclusive logical operator, meaning the `AND` operator displays a record if **ALL** the conditions separated by AND are TRUE, while an `OR` operator displays a record if **ANY** of the conditions separated by OR is TRUE.
+
+Available values: `and`, `or`
+
+## Field Conditions
+
+| Attributes | Description                                                                                                            |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| conditions | Data filters used to narrow down the data records to be returned in the result.[Filters Condition](#filters-condition) |
+
+## Filters Condition
+
+| Attributes            | Description      |
+| --------------------- | ---------------- |
+| $in                   | See: [Any](#any) |
+| $not\_in              | See: [Any](#any) |
+| $is                   | See: [Any](#any) |
+| $is\_days\_ago        | See: [Any](#any) |
+| $is\_days\_in\_future | See: [Any](#any) |
+| $is\_not              | See: [Any](#any) |
+| $has\_value           | See: [Any](#any) |
+| $is\_unknown          | See: [Any](#any) |
+| $contains             | See: [Any](#any) |
+| $not\_contain         | See: [Any](#any) |
+| $starts\_with         | See: [Any](#any) |
+| $ends\_with           | See: [Any](#any) |
+| $more\_than           | See: [Any](#any) |
+| $less\_than           | See: [Any](#any) |
+| $more\_than\_ago      | See: [Any](#any) |
+| $less\_than\_ago      | See: [Any](#any) |
+| $more\_than\_future   | See: [Any](#any) |
+| $less\_than\_future   | See: [Any](#any) |
+| $more\_than\_equal    | See: [Any](#any) |
+| $less\_than\_equal    | See: [Any](#any) |
+| $after                | See: [Any](#any) |
+| $before               | See: [Any](#any) |
+| $count                | See: [Any](#any) |
+| $count\_less          | See: [Any](#any) |
+| $count\_more          | See: [Any](#any) |
+
+## Any
+
+Array any of: string, string, string, number, object

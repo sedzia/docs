@@ -1,0 +1,20 @@
+---
+title: "Create Publication (client-side)"
+description: "post https://{cluster}.voucherify.io/client/v1/publish"
+---
+
+This method selects vouchers that are suitable for publication, adds a publish entry and returns the publication.
+
+A voucher is suitable for publication when it's active and hasn't been published yet.
+
+<Warning>
+  You must clearly define which source you want to publish the voucher code from. It can either be a code from a campaign or a specific voucher identified by a code.
+</Warning>
+
+<Warning>
+  In case you want to publish multiple vouchers within a single publication, you need to specify the campaign name and number of vouchers you want to publish.
+</Warning>
+
+<Info>
+  In case you want to ensure the number of publishable codes increases automatically with the number of customers, you should use an **auto-update** campaign.
+</Info>
