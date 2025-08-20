@@ -105,8 +105,8 @@
                                         "openapi": "/api-reference/openapi.json",
                                         "pages": [
                                             "reference-docs/test",
-                                            "GET /publications",
-                                            "POST /publications"
+                                            "GET /v1/publications",
+                                            "POST /v1/publications"
                                         ]
                                     }
                                 ]
