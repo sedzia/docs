@@ -97,7 +97,6 @@
                         "groups": [
                             {
                                 "group": "Endpoints",
-                                "openapi": "/api-reference/openapi.json",
                                 "pages": [
                                     "reference-docs/Introduction",
                                     {
