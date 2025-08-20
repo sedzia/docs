@@ -97,10 +97,18 @@
                         "groups": [
                             {
                                 "group": "Endpoints",
-                                "openapi": {
-                                    "source": "/api-reference/openapi.json",
-                                    "directory": "api-reference"
-                                }
+                                "openapi": "/api-reference/openapi.json",
+                                "pages": [
+                                    "reference-docs/Introduction",
+                                    {
+                                        "group": "Publications",
+                                        "pages": [
+                                            "reference-docs/test",
+                                            "GET /publications",
+                                            "POST /publications"
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }
