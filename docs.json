@@ -1,7 +1,7 @@
 {
     "$schema": "https://mintlify.com/docs.json",
-    "theme": "mint",
-    "name": "Mint Starter Kit",
+    "theme": "willow",
+    "name": "Voucherify test documentation",
     "colors": {
         "primary": "#122460",
         "light": "#07C983",
@@ -35,7 +35,8 @@
                             "guides/development/API-Endpoints",
                             "guides/development/API-Optimization",
                             "guides/development/API-Reference",
-                            "guides/development/API-Version-Upgrades"
+                            "guides/development/API-Version-Upgrades",
+                            "guides/development/Distributions"
                         ]
                     },
                     {
