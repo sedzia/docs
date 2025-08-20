@@ -102,6 +102,7 @@
                                     "reference-docs/Introduction",
                                     {
                                         "group": "Publications",
+                                        "openapi": "/api-reference/openapi.json",
                                         "pages": [
                                             "reference-docs/test",
                                             "GET /publications",
