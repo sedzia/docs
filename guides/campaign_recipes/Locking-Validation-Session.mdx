@@ -1,22 +1,21 @@
 ---
 title: "Locking Validation Session"
 description: "Temporary lock the voucher's usage until redemption is successful."
-
-
 ---
 
 The validation and redemption mechanisms always work in a transactional way. As a result, the voucher's usage is registered permanently once redemption is successful. By using the session feature, you can temporarily record (lock) the voucher usage after the voucher has been validated.
 
 The established session is released when one of the following events happens:
 
-* Expiration time passes
-* Redemption is being registered for the session
-* Manual release using a dedicated API endpoint (for vouchers only: [Release Validation Session](ref:release-validation-session))
-* Manual release using the [Validations Manager in the Dashboard](https://support.voucherify.io/article/16-dashboard-sections#validations) to unlock sessions.
+- Expiration time passes
+- Redemption is being registered for the session
+- Manual release using a dedicated API endpoint (for vouchers only: [Release Validation Session](ref:release-validation-session))
+- Manual release using the [Validations Manager in the Dashboard](https://support.voucherify.io/article/16-dashboard-sections#validations) to unlock sessions.
 
 Once the session is established, the API returns a unique session key. The key must be used with each of the following validation or redemption requests to clearly identify the session. Multiple requests with the same key will always override existing session values.
 
 By default, the number of available validation sessions is equal to the Code redemption limit set in the campaign manager. For example:
+
 - If the code redemption limit is set to `4`, Voucherify will be able to lock up to four sessions. Next sessions will result in the `quantity_exceeded` error.
 - If the code redemption limit is set to `unlimited`, Voucherify will allow any number of sessions.
 
@@ -26,12 +25,12 @@ By default, the number of available validation sessions is equal to the Code red
 
 You can establish the locking session while validating the code. Put the `session` object in your request by following the session object reference.
 
-| **Parameter**                                                                           | **Description**                                                                                                                                 | **Example**                                                                           |
-| :-------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------ |
-| session.type `string` **required**                                                | Type of the session. Required to establish a new session. Supported session types are listed in the table at the end of this guide.          | "session":`{"type": "LOCK"}`                                                    |
-| session.key `string` **optional**                                                 | Unique session identifier.                                                                                                                      | "session": `{"key": "ssn_yQGMTeKBSw8OOuFPwlBEjzGy8d8VA9Ts","type": "LOCK"}` |
-| session.ttl_unit `string` **optional** Default value for session is 7 days | Defines the type of unit for session time. Allowed values: `DAYS`, `HOURS`, `MICROSECONDS`, `MILLISECONDS`, `MINUTES`, `NANOSECONDS`, `SECONDS` | "session": `{"type": "LOCK","ttl": 7,"ttl_unit": "DAYS"}`               |
-| session.ttl `number`**optional** Default value for session is 7 days      | Value for the period of time that the session is active. Units for this paremter are defines by session.ttl_unit                                | "session": `{"type": "LOCK","ttl": 7,"ttl_unit": "DAYS"}`               |
+| **Parameter**                                                              | **Description**                                                                                                                                 | **Example**                                                                 |
+| :------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- |
+| session.type `string` **required**                                         | Type of the session. Required to establish a new session. Supported session types are listed in the table at the end of this guide.             | "session":`{"type": "LOCK"}`                                                |
+| session.key `string` **optional**                                          | Unique session identifier.                                                                                                                      | "session": `{"key": "ssn_yQGMTeKBSw8OOuFPwlBEjzGy8d8VA9Ts","type": "LOCK"}` |
+| session.ttl_unit `string` **optional** Default value for session is 7 days | Defines the type of unit for session time. Allowed values: `DAYS`, `HOURS`, `MICROSECONDS`, `MILLISECONDS`, `MINUTES`, `NANOSECONDS`, `SECONDS` | "session": `{"type": "LOCK","ttl": 7,"ttl_unit": "DAYS"}`                   |
+| session.ttl `number`**optional** Default value for session is 7 days       | Value for the period of time that the session is active. Units for this paremter are defines by session.ttl_unit                                | "session": `{"type": "LOCK","ttl": 7,"ttl_unit": "DAYS"}`                   |
 
 To link a request with the given session, always use the same session key for session-related validation and redemption requests. You can use your own session key or the system will generate one for you once the session option is enabled with the request.
 
@@ -71,6 +70,7 @@ To link a request with the given session, always use the same session key for se
     }
 }
 ```
+
 ```json Response
 {
     "valid": true,
@@ -133,7 +133,7 @@ To link a request with the given session, always use the same session key for se
 ```
 
 > 📘 Default session time
-> 
+>
 > If you do not establish a session timeframe by passing the `session.ttl` and `session.ttl_unit`, it will be active for 7 days.
 
 ### Step 2: Redeem the code with the session key
@@ -166,6 +166,7 @@ When redeeming the code, the session object needs to define `session.type` and `
     }
 }
 ```
+
 ```json Response
 {
     "redemptions": [
@@ -245,27 +246,25 @@ When redeeming the code, the session object needs to define `session.type` and `
 
 ### Step 3: Track redemption
 
-If the redemption request includes a proper `session.key` value, the request is validated and the redemption is executed. When Voucherify registers a new redemption for the locked resource, the session is automatically released. 
-
-
+If the redemption request includes a proper `session.key` value, the request is validated and the redemption is executed. When Voucherify registers a new redemption for the locked resource, the session is automatically released.
 
 If you need to remove an established session manually, use the [Release Validation Session](ref:release-validation-session) endpoint.
 
 > 👍 Locking Session in Short
-> 
+>
 > Registering a session will record a temporary usage for the specified timeframe. This means it will influence other incoming validation and redemption requests until the session is released.
-> 
+>
 > Once redemption is successful the session is removed automatically.
 
 ## Session Keys
 
 The following table presents the type of sessions that can be established.
 
-| **Session Type** | **Behaviour**                                                                                                                                                                                             |
-| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Session Type** | **Behaviour**                                                                                                                                                                             |
+| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LOCK             | Locks the following parameters within the session:- redemption quantity by 1 - redemption gift credits specified with the requests - redemption loyalty points specified with the request |
 
-You can always release established sessions by calling [Release Validation Session](ref:release-validation-session) endpoint. 
+You can always release established sessions by calling [Release Validation Session](ref:release-validation-session) endpoint.
 
 > 📘 Postman Collection
 >
