@@ -72,20 +72,45 @@
             },
             {
                 "tab": "API reference",
-                "groups": [
+                "versions": [
                     {
-                        "group": "Endpoints",
-                        "openapi": {
-                            "source": "/api-reference/openapi.json",
-                            "directory": "api-reference"
-                        }
+                        "version": "1.0",
+                        "groups": [
+                            {
+                                "group": "Endpoints",
+                                "openapi": {
+                                    "source": "/api-reference/openapi.json",
+                                    "directory": "api-reference"
+                                }
+                            },
+                            {
+                                "group": "Events",
+                                "openapi": {
+                                    "source": "/api-reference/OpenAPIWebhooks.json",
+                                    "directory": "api-reference"
+                                }
+                            }
+                        ]
                     },
                     {
-                        "group": "Events",
-                        "openapi": {
-                            "source": "/api-reference/OpenAPIWebhooks.json",
-                            "directory": "api-reference"
-                        }
+                        "version": "2.0",
+                        "groups": [
+                            {
+                                "group": "Endpoints",
+                                "pages": [
+                                    "reference-docs/Introduction",
+                                    {
+                                        "group": "Publications",
+                                        "openapi": "/api-reference/openapi.json",
+                                        "pages": [
+                                            "reference-docs/test",
+                                            "GET /v1/publications",
+                                            "POST /v1/publications"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             },
