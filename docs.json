@@ -105,6 +105,13 @@
               "docs/objects/voucher-object",
               "docs/objects/campaign-object"
             ]
+          },
+          {
+            "group": "Endpoints",
+            "openapi": {
+              "source": "/api-reference/split-by-endpoint/openapi-get-async-action.json",
+              "directory": "api-reference"
+            }
           }
         ]
       }
