@@ -233,13 +233,7 @@
                 "group": "Loyalties",
                 "openapi": "/reference/split-by-tags/loyalties.json",
                 "pages": [
-                  "GET /v1/loyalties",
-                  "POST /v1/loyalties",
-                  "GET /v1/loyalties/{campaignId}",
-                  "PUT /v1/loyalties/{campaignId}",
-                  "DELETE /v1/loyalties/{campaignId}",
-                  "GET /v1/loyalties/{campaignId}/members",
-                  "POST /v1/loyalties/{campaignId}/members"
+                  "GET /v1/loyalties"
                 ]
               }
             ]
