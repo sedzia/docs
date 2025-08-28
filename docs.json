@@ -228,7 +228,7 @@
                   "DELETE /v1/rewards/{rewardId}/assignments/{assignmentId}",
                   "GET /v1/rewards/{rewardId}/assignments/{assignmentId}"
                 ]
-              },
+              }
             ]
           },
           {
