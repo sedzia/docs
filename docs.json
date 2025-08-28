@@ -109,7 +109,7 @@
           {
             "group": "Endpoints",
             "openapi": {
-              "source": "/api-reference/split-by-endpoint/openapi-get-async-action.json",
+              "source": "/api-reference/split-by-endpoint/get-reward.json",
               "directory": "api-reference"
             }
           }
