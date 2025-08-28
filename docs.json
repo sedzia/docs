@@ -108,15 +108,9 @@
           },
           {
             "group": "Endpoints",
-            "pages": [
-              {
-                "group": "Async Actions",
-                "pages": [
-                  "/reference/split-by-endpoint/get-async-action.json GET /v1/async-actions/{asyncActionId}",
-                  "/reference/split-by-endpoint/list-async-actions.json GET /v1/async-actions"
-                ]
-              }
-            ]
+            "openapi": {
+              "source": "/reference/split-by-endpoint/get-async-action.json "
+            }
           },
           {
             "group": "Events",
