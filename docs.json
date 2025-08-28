@@ -124,16 +124,14 @@
           {
             "group": "Endpoints",
             "pages": [
-              [
-                {
-                  "group": "Async Actions",
-                  "openapi": "/reference/split-by-tags/async-actions.json",
-                  "pages": [
-                    "GET /v1/async-actions/{asyncActionId}",
-                    "GET /v1/async-actions"
-                  ]
-                }
-              ]
+              {
+                "group": "Async Actions",
+                "openapi": "/reference/split-by-tags/async-actions.json",
+                "pages": [
+                  "GET /v1/async-actions/{asyncActionId}",
+                  "GET /v1/async-actions"
+                ]
+              }
             ]
           }
         ]
