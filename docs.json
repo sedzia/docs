@@ -233,7 +233,297 @@
                 "group": "Loyalties",
                 "openapi": "/reference/split-by-tags/loyalties.json",
                 "pages": [
-                  "GET /v1/loyalties"
+                  "GET /v1/loyalties",
+                  "POST /v1/loyalties",
+                  "GET /v1/loyalties/{campaignId}",
+                  "PUT /v1/loyalties/{campaignId}",
+                  "DELETE /v1/loyalties/{campaignId}",
+                  "GET /v1/loyalties/{campaignId}/members",
+                  "POST /v1/loyalties/{campaignId}/members",
+                  "GET /v1/loyalties/{campaignId}/members/{memberId}",
+                  "GET /v1/loyalties/members/{memberId}",
+                  "GET /v1/loyalties/{campaignId}/pending-points",
+                  "GET /v1/loyalties/{campaignId}/members/{memberId}/pending-points",
+                  "GET /v1/loyalties/members/{memberId}/pending-points",
+                  "POST /v1/loyalties/members/{memberId}/pending-points/{pendingPointsId}/activate",
+                  "POST /v1/loyalties/members/{memberId}/pending-points/{pendingPointsId}/balance",
+                  "POST /v1/loyalties/members/{memberId}/pending-points/{pendingPointsId}/cancel",
+                  "GET /v1/loyalties/{campaignId}/members/{memberId}/activity",
+                  "GET /v1/loyalties/members/{memberId}/activity",
+                  "POST /v1/loyalties/{campaignId}/members/{memberId}/balance",
+                  "POST /v1/loyalties/members/{memberId}/balance",
+                  "POST /v1/loyalties/{campaignId}/members/{memberId}/transfers",
+                  "GET /v1/loyalties/{campaignId}/transactions",
+                  "POST /v1/loyalties/{campaignId}/transactions/export",
+                  "GET /v1/loyalties/{campaignId}/members/{memberId}/transactions",
+                  "GET /v1/loyalties/members/{memberId}/transactions",
+                  "POST /v1/loyalties/members/{memberId}/transactions/export",
+                  "POST /v1/loyalties/{campaignId}/members/{memberId}/transactions/export",
+                  "GET /v1/loyalties/{campaignId}/members/{memberId}/points-expiration",
+                  "POST /v1/loyalties/{campaignId}/points-expiration/export",
+                  "GET /v1/loyalties/{campaignId}/earning-rules",
+                  "POST /v1/loyalties/{campaignId}/earning-rules",
+                  "GET /v1/loyalties/{campaignId}/earning-rules/{earningRuleId}",
+                  "PUT /v1/loyalties/{campaignId}/earning-rules/{earningRuleId}",
+                  "DELETE /v1/loyalties/{campaignId}/earning-rules/{earningRuleId}",
+                  "POST /v1/loyalties/{campaignId}/earning-rules/{earningRuleId}/enable",
+                  "POST /v1/loyalties/{campaignId}/earning-rules/{earningRuleId}/disable",
+                  "GET /v1/loyalties/members/{memberId}/rewards",
+                  "GET /v1/loyalties/{campaignId}/reward-assignments/{assignmentId}/reward",
+                  "GET /v1/loyalties/{campaignId}/reward-assignments",
+                  "GET /v1/loyalties/{campaignId}/rewards",
+                  "POST /v1/loyalties/{campaignId}/rewards",
+                  "GET /v1/loyalties/{campaignId}/reward-assignments/{assignmentId}",
+                  "GET /v1/loyalties/{campaignId}/rewards/{assignmentId}",
+                  "PUT /v1/loyalties/{campaignId}/rewards/{assignmentId}",
+                  "DELETE /v1/loyalties/{campaignId}/rewards/{assignmentId}",
+                  "POST /v1/loyalties/{campaignId}/members/{memberId}/redemption",
+                  "POST /v1/loyalties/members/{memberId}/redemption",
+                  "GET /v1/loyalties/{campaignId}/tiers",
+                  "POST /v1/loyalties/{campaignId}/tiers",
+                  "GET /v1/loyalties/{campaignId}/tiers/{loyaltyTierId}",
+                  "GET /v1/loyalties/members/{memberId}/tiers",
+                  "GET /v1/loyalties/{campaignId}/tiers/{loyaltyTierId}/earning-rules",
+                  "GET /v1/loyalties/{campaignId}/tiers/{loyaltyTierId}/rewards"
+                ]
+              },
+              {
+                "group": "Customers",
+                "openapi": "/reference/split-by-tags/customers.json",
+                "pages": [
+                  "GET /v1/customers",
+                  "POST /v1/customers",
+                  "GET /v1/customers/{customerId}",
+                  "DELETE /v1/customers/{customerId}",
+                  "PUT /v1/customers/{customerId}",
+                  "POST /v1/customers/{customerId}/permanent-deletion",
+                  "POST /v1/customers/importCSV",
+                  "POST /v1/customers/bulk/async",
+                  "POST /v1/customers/metadata/async",
+                  "GET /v1/customers/{customerId}/activity",
+                  "GET /v1/customers/{customerId}/activities",
+                  "GET /v1/customers/{customerId}/segments",
+                  "GET /v1/customers/{customerId}/redeemables"
+                ]
+              },
+              {
+                "group": "Orders",
+                "openapi": "/reference/split-by-tags/orders.json",
+                "pages": [
+                  "GET /v1/orders",
+                  "POST /v1/orders",
+                  "GET /v1/orders/{orderId}",
+                  "PUT /v1/orders/{orderId}",
+                  "POST /v1/orders/import",
+                  "POST /v1/orders/export"
+                ]
+              },
+              {
+                "group": "Products",
+                "openapi": "/reference/split-by-tags/products.json",
+                "pages": [
+                  "GET /v1/products",
+                  "POST /v1/products",
+                  "GET /v1/products/{productId}",
+                  "PUT /v1/products/{productId}",
+                  "DELETE /v1/products/{productId}",
+                  "POST /v1/products/bulk/async",
+                  "POST /v1/products/metadata/async",
+                  "GET /v1/skus/{skuId}",
+                  "GET /v1/products/{productId}/skus",
+                  "POST /v1/products/{productId}/skus",
+                  "PUT /v1/products/{productId}/skus/{skuId}",
+                  "DELETE /v1/products/{productId}/skus/{skuId}",
+                  "POST /v1/products/importCSV",
+                  "POST /v1/skus/importCSV"
+                ]
+              },
+              {
+                "group": "Product Collections",
+                "openapi": "/reference/split-by-tags/product-collections.json",
+                "pages": [
+                  "GET /v1/product-collections",
+                  "POST /v1/product-collections",
+                  "GET /v1/product-collections/{productCollectionId}",
+                  "DELETE /v1/product-collections/{productCollectionId}",
+                  "GET /v1/product-collections/{productCollectionId}/products"
+                ]
+              },
+              {
+                "group": "Validation Rules",
+                "openapi": "/reference/split-by-tags/validation-rules.json",
+                "pages": [
+                  "GET /v1/validation-rules",
+                  "POST /v1/validation-rules",
+                  "GET /v1/validation-rules/{validationRuleId}",
+                  "PUT /v1/validation-rules/{validationRuleId}",
+                  "DELETE /v1/validation-rules/{validationRuleId}",
+                  "GET /v1/validation-rules-assignments",
+                  "GET /v1/validation-rules/{validationRuleId}/assignments",
+                  "POST /v1/validation-rules/{validationRuleId}/assignments",
+                  "DELETE /v1/validation-rules/{validationRuleId}/assignments/{assignmentId}"
+                ]
+              },
+              {
+                "group": "Segments",
+                "openapi": "/reference/split-by-tags/segments.json",
+                "pages": [
+                  "GET /v1/segments/{segmentId}",
+                  "DELETE /v1/segments/{segmentId}",
+                  "POST /v1/segments"
+                ]
+              },
+              {
+                "group": "Events",
+                "openapi": "/reference/split-by-tags/events.json",
+                "pages": [
+                  "POST /v1/events"
+                ]
+              },
+              {
+                "group": "Async Actions",
+                "openapi": "/reference/split-by-tags/async-actions.json",
+                "pages": [
+                  "GET /v1/async-actions",
+                  "GET /v1/async-actions/{asyncActionId}"
+                ]
+              },
+              {
+                "group": "Exports",
+                "openapi": "/reference/split-by-tags/exports.json",
+                "pages": [
+                  "POST /v1/exports",
+                  "GET /v1/exports",
+                  "GET /v1/exports/{exportId}",
+                  "DELETE /v1/exports/{exportId}",
+                  "GET /v1/exports/{export_Id}"
+                ]
+              },
+              {
+                "group": "Categories",
+                "openapi": "/reference/split-by-tags/categories.json",
+                "pages": [
+                  "GET /v1/categories",
+                  "POST /v1/categories",
+                  "GET /v1/categories/{categoryId}",
+                  "DELETE /v1/categories/{categoryId}",
+                  "PUT /v1/categories/{categoryId}"
+                ]
+              },
+              {
+                "group": "Metadata Schemas",
+                "openapi": "/reference/split-by-tags/metadata-schemas.json",
+                "pages": [
+                  "GET /v1/metadata-schemas",
+                  "GET /v1/metadata-schemas/{resource}"
+                ]
+              },
+              {
+                "group": "Locations",
+                "openapi": "/reference/split-by-tags/locations.json",
+                "pages": [
+                  "GET /v1/locations",
+                  "GET /v1/locations/{locationId}"
+                ]
+              },
+              {
+                "group": "Referrals",
+                "openapi": "/reference/split-by-tags/referrals.json",
+                "pages": [
+                  "POST /v1/referrals/{campaignId}/members/{memberId}/holders",
+                  "GET /v1/referrals/{campaignId}/members/{memberId}/holders",
+                  "DELETE /v1/referrals/{campaignId}/members/{memberId}/holders/{holderId}",
+                  "POST /v1/referrals/members/{memberId}/holders",
+                  "GET /v1/referrals/members/{memberId}/holders",
+                  "DELETE /v1/referrals/members/{memberId}/holders/{holderId}"
+                ]
+              },
+              {
+                "group": "Bin",
+                "openapi": "/reference/split-by-tags/bin.json",
+                "pages": [
+                  "GET /v1/trash-bin",
+                  "DELETE /v1/trash-bin/{binEntryId}"
+                ]
+              },
+              {
+                "group": "Templates",
+                "openapi": "/reference/split-by-tags/templates.json",
+                "pages": [
+                  "GET /v1/templates/campaigns",
+                  "POST /v1/templates/campaigns",
+                  "GET /v1/templates/campaigns/{campaignTemplateId}",
+                  "PUT /v1/templates/campaigns/{campaignTemplateId}",
+                  "DELETE /v1/templates/campaigns/{campaignTemplateId}",
+                  "POST /v1/templates/campaigns/{campaignTemplateId}/campaign-setup",
+                  "POST /v1/templates/campaigns/{campaignTemplateId}/tier-setup"
+                ]
+              },
+              {
+                "group": "Management",
+                "openapi": "/reference/split-by-tags/management.json",
+                "pages": [
+                  "POST /management/v1/projects",
+                  "GET /management/v1/projects",
+                  "GET /management/v1/projects/{projectId}",
+                  "PUT /management/v1/projects/{projectId}",
+                  "DELETE /management/v1/projects/{projectId}",
+                  "POST /management/v1/projects/{projectId}/users",
+                  "GET /management/v1/projects/{projectId}/users",
+                  "GET /management/v1/projects/{projectId}/users/{userId}",
+                  "PUT /management/v1/projects/{projectId}/users/{userId}",
+                  "DELETE /management/v1/projects/{projectId}/users/{userId}",
+                  "POST /management/v1/projects/users/invite",
+                  "GET /management/v1/projects/{projectId}/templates/campaigns",
+                  "POST /management/v1/projects/{projectId}/templates/campaigns/{campaignTemplateId}/copy",
+                  "POST /management/v1/projects/{projectId}/stacking-rules",
+                  "GET /management/v1/projects/{projectId}/stacking-rules",
+                  "GET /management/v1/projects/{projectId}/stacking-rules/{stackingRulesId}",
+                  "PUT /management/v1/projects/{projectId}/stacking-rules/{stackingRulesId}",
+                  "DELETE /management/v1/projects/{projectId}/stacking-rules/{stackingRulesId}",
+                  "POST /management/v1/projects/{projectId}/metadata-schemas",
+                  "GET /management/v1/projects/{projectId}/metadata-schemas",
+                  "GET /management/v1/projects/{projectId}/metadata-schemas/{metadataSchemaId}",
+                  "PUT /management/v1/projects/{projectId}/metadata-schemas/{metadataSchemaId}",
+                  "DELETE /management/v1/projects/{projectId}/metadata-schemas/{metadataSchemaId}",
+                  "POST /management/v1/projects/{projectId}/custom-event-schemas",
+                  "GET /management/v1/projects/{projectId}/custom-event-schemas",
+                  "GET /management/v1/projects/{projectId}/custom-event-schemas/{customEventSchemaId}",
+                  "PUT /management/v1/projects/{projectId}/custom-event-schemas/{customEventSchemaId}",
+                  "DELETE /management/v1/projects/{projectId}/custom-event-schemas/{customEventSchemaId}",
+                  "POST /management/v1/projects/{projectId}/webhooks",
+                  "GET /management/v1/projects/{projectId}/webhooks",
+                  "GET /management/v1/projects/{projectId}/webhooks/{webhookId}",
+                  "PUT /management/v1/projects/{projectId}/webhooks/{webhookId}",
+                  "DELETE /management/v1/projects/{projectId}/webhooks/{webhookId}",
+                  "POST /management/v1/projects/{projectId}/branding",
+                  "GET /management/v1/projects/{projectId}/branding",
+                  "GET /management/v1/projects/{projectId}/branding/{brandingId}",
+                  "PUT /management/v1/projects/{projectId}/branding/{brandingId}",
+                  "DELETE /management/v1/projects/{projectId}/branding/{brandingId}"
+                ]
+              },
+              {
+                "group": "OAuth",
+                "openapi": "/reference/split-by-tags/oauth.json",
+                "pages": [
+                  "POST /v1/oauth/token",
+                  "POST /v1/oauth/introspect",
+                  "POST /v1/oauth/token/revoke"
+                ]
+              },
+              {
+                "group": "Client-side",
+                "openapi": "/reference/split-by-tags/client-side.json",
+                "pages": [
+                  "POST /client/v1/qualifications",
+                  "GET /client/v1/promotions/tiers",
+                  "POST /client/v1/redemptions",
+                  "POST /client/v1/validations",
+                  "POST /client/v1/events",
+                  "GET /client/v1/validate",
+                  "POST /client/v1/redeem",
+                  "POST /client/v1/publish"
                 ]
               }
             ]

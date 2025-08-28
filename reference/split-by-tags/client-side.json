@@ -2599,11 +2599,11 @@
             ]
           },
           "referral": {
-            "type": "null",
+            "type": "object",
             "description": "A `null` referral object."
           },
           "loyalty": {
-            "type": "null",
+            "type": "object",
             "description": "A `null` loyalty object."
           },
           "metadata": {
