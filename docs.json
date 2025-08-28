@@ -119,13 +119,6 @@
                 }
               ]
             ]
-          },
-          {
-            "group": "Events",
-            "openapi": {
-              "source": "/api-reference/OpenAPIWebhooks.json",
-              "directory": "api-reference"
-            }
           }
         ]
       }
