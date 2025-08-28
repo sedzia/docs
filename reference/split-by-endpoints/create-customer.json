@@ -1,0 +1,657 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/customers": {
+      "post": {
+        "operationId": "create-customer",
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Create Customer",
+        "description": "Creates a customer object.\n\n<!-- theme: info -->\n\n> 📘 Upsert Mode\n>\n> If you pass an `id` or a `source_id` that already exists in the customer database, Voucherify will return a related customer object with updated fields.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "customers"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Create a customer with specified parameters.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomersCreateRequestBody"
+              },
+              "examples": {
+                "Example": {
+                  "value": {
+                    "source_id": "source_123",
+                    "name": "Bob Smith",
+                    "description": "A frequent customer",
+                    "email": "bob.smith@email.com",
+                    "phone": "+1 933 222 3333",
+                    "address": {
+                      "city": "New York",
+                      "country": "United States",
+                      "line_1": "123 Main St.",
+                      "line_2": "APT 3 BLG 4",
+                      "postal_code": "10001",
+                      "state": "NY"
+                    },
+                    "metadata": {
+                      "lang": "en",
+                      "test": true
+                    },
+                    "birthdate": "2022-01-01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a customer object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomersCreateResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "id": "cust_CSnYd37MXmrbS19XCrghjBsv",
+                      "source_id": "source_123",
+                      "name": "Bob Smith",
+                      "description": "A frequent customer",
+                      "email": "bob.smith@email.com",
+                      "phone": "+1 933 222 3333",
+                      "birthdate": "2022-01-01",
+                      "address": {
+                        "city": "New York",
+                        "state": "NY",
+                        "line_1": "123 Main St.",
+                        "line_2": "APT 3 BLG 4",
+                        "country": "United States",
+                        "postal_code": "10001"
+                      },
+                      "summary": {
+                        "redemptions": {
+                          "total_redeemed": 0,
+                          "total_failed": 0,
+                          "total_succeeded": 0,
+                          "total_rolled_back": 0,
+                          "total_rollback_failed": 0,
+                          "total_rollback_succeeded": 0,
+                          "gift": {
+                            "redeemed_amount": 0,
+                            "amount_to_go": 0
+                          },
+                          "loyalty_card": {
+                            "redeemed_points": 0,
+                            "points_to_go": 0
+                          }
+                        },
+                        "orders": {
+                          "total_amount": 0,
+                          "total_count": 0,
+                          "average_amount": 0,
+                          "last_order_amount": 0
+                        }
+                      },
+                      "loyalty": {
+                        "points": 0,
+                        "referred_customers": 0,
+                        "campaigns": {}
+                      },
+                      "referrals": {
+                        "total": 0,
+                        "campaigns": []
+                      },
+                      "metadata": {
+                        "lang": "en",
+                        "test": true
+                      },
+                      "system_metadata": {},
+                      "created_at": "2022-08-30T06:32:07.380Z",
+                      "object": "customer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustomersCreateRequestBody": {
+        "title": "Customers Create Request Body",
+        "description": "Request body schema for **POST** `v1/customers`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Customer"
+          }
+        ]
+      },
+      "CustomersCreateResponseBody": {
+        "description": "Response body for **POST** `v1/customers`.",
+        "title": "Customers Create Response Body",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CustomerWithSummaryLoyaltyReferrals"
+          }
+        ]
+      },
+      "Customer": {
+        "title": "Customer",
+        "allOf": [
+          {
+            "type": "object",
+            "title": "Customer Id And Source Id",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID of an existing customer."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "A unique identifier of the customer who validates a voucher. It can be a customer ID or email from a CRM system, database, or a third-party service. If you also pass a customer ID (unique ID assigned by Voucherify), the source ID will be ignored."
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/CustomerBase"
+          }
+        ]
+      },
+      "CustomerWithSummaryLoyaltyReferrals": {
+        "title": "Customer With Summary Loyalty Referrals",
+        "allOf": [
+          {
+            "type": "object",
+            "title": "Customer Response Data",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID of an existing customer that will be linked to redemption in this request."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "A unique identifier of the customer who validates a voucher. It can be a customer ID or email from a CRM system, database, or a third-party service. If you also pass a customer ID (unique ID assigned by Voucherify), the source ID will be ignored."
+              },
+              "summary": {
+                "nullable": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CustomerSummary"
+                  }
+                ]
+              },
+              "loyalty": {
+                "nullable": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CustomerLoyalty"
+                  }
+                ]
+              },
+              "referrals": {
+                "nullable": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CustomerReferrals"
+                  }
+                ]
+              },
+              "system_metadata": {
+                "type": "object",
+                "description": "Object used to store system metadata information."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "Timestamp representing the date and time when the customer was created. The value is shown in the ISO 8601 format.",
+                "example": "2022-08-30T06:32:07.380Z",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "description": "Timestamp representing the date and time when the customer was updated. The value is shown in the ISO 8601 format.",
+                "example": "2022-08-31T06:32:07.380Z",
+                "format": "date-time"
+              },
+              "assets": {
+                "type": "object",
+                "description": "Contains information about the customer's cockpit.",
+                "properties": {
+                  "cockpit_url": {
+                    "type": "string",
+                    "description": "Customer's cockpit URL address."
+                  }
+                }
+              },
+              "object": {
+                "type": "string",
+                "description": "The type of the object represented by JSON.",
+                "default": "customer",
+                "enum": [
+                  "customer"
+                ]
+              }
+            },
+            "required": [
+              "summary",
+              "loyalty",
+              "referrals",
+              "object"
+            ]
+          },
+          {
+            "$ref": "#/components/schemas/CustomerBase"
+          }
+        ]
+      },
+      "CustomerBase": {
+        "title": "Customer Base",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Customer's first and last name."
+          },
+          "description": {
+            "type": "string",
+            "description": "An arbitrary string that you can attach to a customer object."
+          },
+          "email": {
+            "type": "string",
+            "description": "Customer's email address."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Customer's phone number. This parameter is mandatory when you try to send out codes to customers via an SMS channel."
+          },
+          "birthday": {
+            "type": "string",
+            "description": "`Deprecated`. ~~Customer's birthdate; format YYYY-MM-DD~~.",
+            "format": "date"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Customer's birthdate; format YYYY-MM-DD.",
+            "format": "date"
+          },
+          "address": {
+            "type": "object",
+            "nullable": true,
+            "description": "Customer's address.",
+            "properties": {
+              "city": {
+                "type": "string",
+                "description": "City"
+              },
+              "state": {
+                "type": "string",
+                "description": "State"
+              },
+              "line_1": {
+                "type": "string",
+                "description": "First line of address."
+              },
+              "line_2": {
+                "type": "string",
+                "description": "Second line of address."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Postal code."
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "A set of custom key/value pairs that you can attach to a customer. The metadata object stores all custom attributes assigned to the customer. It can be useful for storing additional information about the customer in a structured format. This metadata can be used for validating whether the customer qualifies for a discount or it can be used in building customer segments."
+          }
+        }
+      },
+      "CustomerSummary": {
+        "title": "Customer Summary",
+        "type": "object",
+        "properties": {
+          "redemptions": {
+            "$ref": "#/components/schemas/CustomerSummaryRedemptions"
+          },
+          "orders": {
+            "$ref": "#/components/schemas/CustomerSummaryOrders"
+          }
+        },
+        "required": [
+          "redemptions",
+          "orders"
+        ]
+      },
+      "CustomerLoyalty": {
+        "title": "Customer Loyalty",
+        "type": "object",
+        "properties": {
+          "points": {
+            "type": "integer",
+            "description": "Customer's loyalty points minus expired for all loyalty cards which the customer has."
+          },
+          "referred_customers": {
+            "type": "integer",
+            "description": "Total number of customers referred by the customer."
+          },
+          "campaigns": {
+            "type": "object",
+            "description": "Contains campaigns with details about point balances and how many customers were referred by the customer.",
+            "additionalProperties": {
+              "type": "object",
+              "description": "Contains details about the point balances left on loyalty cards and the number of referred customers in each campaign.",
+              "properties": {
+                "points": {
+                  "type": "integer",
+                  "description": "Remaining point balance in campaign."
+                },
+                "loyalty_tier": {
+                  "type": "string",
+                  "example": "ltr_UJ5Q54Q0OvEhua87Qfv2Ki5x",
+                  "description": "Customer's loyalty tier within the campaign."
+                },
+                "referred_customers": {
+                  "type": "integer",
+                  "description": "Number of customers referred by the customer in campaign."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "points",
+          "referred_customers",
+          "campaigns"
+        ]
+      },
+      "CustomerReferrals": {
+        "title": "Customer Referrals",
+        "type": "object",
+        "description": "Summary of customer's referrals, in this case, the customer being the referee, i.e. information about the source of referrals and number of times the customer was referred by other customers.",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total number of times this customer received a referral, i.e. was referred by another customer."
+          },
+          "campaigns": {
+            "type": "array",
+            "description": "Contains an array of campaigns that served as the source of a referral for the customer.",
+            "items": {
+              "title": "Customer Referrals Campaigns Item",
+              "type": "object",
+              "description": "Contains information about the source of the referral.",
+              "properties": {
+                "campaign_id": {
+                  "type": "string",
+                  "description": "Unique campaign ID, assigned by Voucherify.",
+                  "example": "camp_rRsfatlwN7unSeUIJDCYedal"
+                },
+                "referrer_id": {
+                  "type": "string",
+                  "example": "cust_sehkNIi8Uq2qQuRqSr7xn4Zi",
+                  "description": "Unique referrer ID, assigned by Voucherify. This is the customer ID of a customer that is referring this customer."
+                },
+                "related_object_id": {
+                  "type": "string",
+                  "description": "Related object id",
+                  "example": "r_0b9d4cc4aa164dd073"
+                },
+                "related_object_type": {
+                  "type": "string",
+                  "description": "Related object type, i.e. `redemption`."
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-08-30T10:19:39.196Z",
+                  "description": "Timestamp representing the date and time when the customer was referred in ISO 8601 format."
+                }
+              },
+              "required": [
+                "campaign_id",
+                "referrer_id",
+                "related_object_id",
+                "related_object_type",
+                "date"
+              ]
+            }
+          }
+        },
+        "required": [
+          "total",
+          "campaigns"
+        ]
+      },
+      "CustomerSummaryRedemptions": {
+        "title": "Customer Summary Redemptions",
+        "type": "object",
+        "properties": {
+          "total_redeemed": {
+            "type": "integer",
+            "description": "Total number of redemptions made by the customer."
+          },
+          "total_failed": {
+            "type": "integer",
+            "description": "Total number of redemptions that failed."
+          },
+          "total_succeeded": {
+            "type": "integer",
+            "description": "Total number of redemptions that succeeded."
+          },
+          "total_rolled_back": {
+            "type": "integer",
+            "description": "Total number of redemptions that were rolled back for the customer."
+          },
+          "total_rollback_failed": {
+            "type": "integer",
+            "description": "Total number of redemption rollbacks that failed."
+          },
+          "total_rollback_succeeded": {
+            "type": "integer",
+            "description": "Total number of redemption rollbacks that succeeded."
+          },
+          "gift": {
+            "type": "object",
+            "description": "Summary of gift card credits.",
+            "required": [
+              "redeemed_amount",
+              "amount_to_go"
+            ],
+            "properties": {
+              "redeemed_amount": {
+                "type": "integer",
+                "description": "Total amount of gift card credits redeemed by customer. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`.",
+                "default": 0
+              },
+              "amount_to_go": {
+                "type": "integer",
+                "description": "Remaining gift card balance across all gift cards. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`.",
+                "default": 0
+              }
+            }
+          },
+          "loyalty_card": {
+            "type": "object",
+            "description": "Summary of loyalty points.",
+            "required": [
+              "redeemed_points",
+              "points_to_go"
+            ],
+            "properties": {
+              "redeemed_points": {
+                "type": "integer",
+                "description": "Total number of loyalty points redeemed by the customer."
+              },
+              "points_to_go": {
+                "type": "integer",
+                "description": "Sum of remaining available point balance across all loyalty cards."
+              }
+            }
+          }
+        },
+        "required": [
+          "total_redeemed",
+          "total_failed",
+          "total_succeeded",
+          "total_rolled_back",
+          "total_rollback_failed",
+          "total_rollback_succeeded",
+          "gift",
+          "loyalty_card"
+        ]
+      },
+      "CustomerSummaryOrders": {
+        "title": "Customer Summary Orders",
+        "description": "Lists details about orders related to the customer. Lists only data for orders with the `PAID` or `FULFILLED` status. Data from orders with a `CREATED` or `CANCELED` status are not included. The data is updated also when an order changes status.",
+        "type": "object",
+        "properties": {
+          "total_amount": {
+            "type": "integer",
+            "description": "The total amount spent by the customer. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "Total number of orders made by the customer."
+          },
+          "average_amount": {
+            "type": "integer",
+            "description": "Average amount spent on orders. `total_amount` &divide; `total_count`. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+          },
+          "last_order_amount": {
+            "type": "integer",
+            "description": "Amount spent on last order. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+          },
+          "last_order_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-08-30T11:51:08.029Z",
+            "description": "Timestamp representing the date and time of the customer's last order in ISO 8601 format."
+          }
+        },
+        "required": [
+          "total_amount",
+          "total_count",
+          "average_amount",
+          "last_order_amount"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

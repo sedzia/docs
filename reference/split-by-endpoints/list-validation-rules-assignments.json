@@ -1,0 +1,375 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/validation-rules-assignments": {
+      "get": {
+        "operationId": "list-validation-rules-assignments",
+        "tags": [
+          "Validation Rules"
+        ],
+        "summary": "List Validation Rules' Assignment(s)",
+        "description": "List all validation rules' assignments or filter the results using the related object ID or the validation rule ID query parameters. \n\n## How to retrieve specific validation rule assignments(s)\n\n### Related object ID\n\nTo find an assignment for a particular resource, you can use the ID of the object to which the validation rule was assigned. This could be, for example, an ID of a: voucher, campaign, distribution, reward assignment, earning rule, promotion tier.  \n\n\n<!--\ntitle: \"Request\"\nlineNumbers: true\n-->\n```curl\ncurl -X **GET** \\\n  -H \"X-App-Id: c70a6f00-cf91-4756-9df5-47628850002b\" \\\n  -H \"X-App-Token: 3266b9f8-e246-4f79-bdf0-833929b1380c\" \\\n  -H \"Content-Type: application/json\" \\\n  https://api.voucherify.io/v1/validation-rules-assignments?related_object_id=promo_kJliy076IuJYtuYWSHE9fSuT\n```\n<!--\ntitle: \"Response\"\nlineNumbers: true\n-->\n```json\n{\n    \"object\": \"list\",\n    \"data_ref\": \"data\",\n    \"data\": [\n        {\n            \"id\": \"asgm_tZaqxeO8gP4q91jG\",\n            \"rule_id\": \"val_WB6ETAiFztw5\",\n            \"related_object_id\": \"promo_kJliy076IuJYtuYWSHE9fSuT\",\n            \"related_object_type\": \"promotion_tier\",\n            \"created_at\": \"2022-08-10T10:30:39.986Z\",\n            \"object\": \"validation_rules_assignment\"\n        }\n    ],\n    \"total\": 1\n}\n```\n\n### Validation rule ID\n\nYou can use the validation rule ID to find assignment(s) for a specific validation rule.\n\n\n<!--\ntitle: \"Request\"\nlineNumbers: true\n-->\n```curl\ncurl -X **GET** \\\n  -H \"X-App-Id: c70a6f00-cf91-4756-9df5-47628850002b\" \\\n  -H \"X-App-Token: 3266b9f8-e246-4f79-bdf0-833929b1380c\" \\\n  -H \"Content-Type: application/json\" \\\n  https://api.voucherify.io/v1/validation-rules-assignments?rule=val_ZEZmA9oit8aU\n```\n<!--\ntitle: \"Response\"\nlineNumbers: true\n-->\n```json\n{\n    \"object\": \"list\",\n    \"data_ref\": \"data\",\n    \"data\": [\n        {\n            \"id\": \"asgm_vef0G6d9Al0rABxq\",\n            \"rule_id\": \"val_ZEZmA9oit8aU\",\n            \"related_object_id\": \"camp_rRsfatlwN7unSeUIJDCYedal\",\n            \"related_object_type\": \"campaign\",\n            \"created_at\": \"2022-06-29T11:43:52.953Z\",\n            \"object\": \"validation_rules_assignment\"\n        },\n        {\n            \"id\": \"asgm_sFV4wEFvldwIvgfb\",\n            \"rule_id\": \"val_ZEZmA9oit8aU\",\n            \"related_object_id\": \"distr_9QKI02wqgjWyvZXeQkFEPmkkYe\",\n            \"related_object_type\": \"distribution\",\n            \"created_at\": \"2022-06-29T11:41:07.680Z\",\n            \"object\": \"validation_rules_assignment\"\n        },\n        {\n            \"id\": \"asgm_69Qifyv6UZynFIIQ\",\n            \"rule_id\": \"val_ZEZmA9oit8aU\",\n            \"related_object_id\": \"promo_g83qUzYZpfX0OMAFOVoQuOYG\",\n            \"related_object_type\": \"promotion_tier\",\n            \"created_at\": \"2022-06-29T11:29:41.906Z\",\n            \"object\": \"validation_rules_assignment\"\n        }\n    ],\n    \"total\": 3\n}\n```\n",
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/ParameterString"
+            },
+            "in": "query",
+            "name": "related_object_id",
+            "description": "The resource ID to which the validation rule was assigned; this could be, for example, a resource ID of a voucher, campaign, earning rule, reward assignment, promotion tier, or distribution."
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/ParameterValidationRuleId"
+            },
+            "in": "query",
+            "name": "rule",
+            "description": "Validation rule ID."
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/ParameterString"
+            },
+            "in": "query",
+            "description": "Sorts the results using one of the filtering options: `-created_at`, `created_at`, where the dash `-` preceding a sorting option means sorting in a descending order.",
+            "name": "order"
+          }
+        ],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "validation-rules-assignments"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a dictionary with a data property that contains an array of validation rule assignments. Each entry in the array is a separate object. If no more validation rule assignments are available, the resulting array will be empty. The result can be narrowed down according to default filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationRulesAssignmentsListResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "object": "list",
+                      "data_ref": "data",
+                      "data": [
+                        {
+                          "id": "asgm_2S7Xm4dab4UvYAgm",
+                          "rule_id": "val_5ix74ru7e",
+                          "related_object_id": "camp_YDsFdX8TgFtT0RUuKEFyhqs3",
+                          "related_object_type": "campaign",
+                          "created_at": "2022-02-08T10:49:30.534Z",
+                          "object": "validation_rules_assignment"
+                        },
+                        {
+                          "id": "asgm_sFV4wEFvldwIvgfb",
+                          "rule_id": "val_ZEZmA9oit8aU",
+                          "related_object_id": "distr_9QKI02wqgjWyvZXeQkFEPmkkYe",
+                          "related_object_type": "distribution",
+                          "created_at": "2022-06-29T11:41:07.680Z",
+                          "object": "validation_rules_assignment"
+                        },
+                        {
+                          "id": "asgm_8xelF5R4zB8ue168",
+                          "rule_id": "val_ggDODO6fakMs",
+                          "related_object_id": "ern_xrRuGEV7EW0X8wtMaze3HOfw",
+                          "related_object_type": "earning_rule",
+                          "created_at": "2022-02-28T12:25:56.783Z",
+                          "object": "validation_rules_assignment"
+                        },
+                        {
+                          "id": "asgm_tZaqxeO8gP4q91jG",
+                          "rule_id": "val_WB6ETAiFztw5",
+                          "related_object_id": "promo_kJliy076IuJYtuYWSHE9fSuT",
+                          "related_object_type": "promotion_tier",
+                          "created_at": "2022-08-10T10:30:39.986Z",
+                          "object": "validation_rules_assignment"
+                        },
+                        {
+                          "id": "asgm_xTMHiyPGSz3rp5m2",
+                          "rule_id": "val_2AxnWmW2ra6X",
+                          "related_object_id": "rewa_m9hEAu10KsPcLhGXiHG85aY0",
+                          "related_object_type": "reward_assignment",
+                          "created_at": "2021-12-10T11:38:35.922Z",
+                          "object": "validation_rules_assignment"
+                        },
+                        {
+                          "id": "asgm_DhlDn54JwqVFJzR6",
+                          "rule_id": "val_eR1c41hu0vUU",
+                          "related_object_id": "v_XuF7icVlUcVpHsSY9nG7n7yJa5wx27Va",
+                          "related_object_type": "voucher",
+                          "created_at": "2022-03-23T07:50:31.068Z",
+                          "object": "validation_rules_assignment"
+                        }
+                      ],
+                      "total": 6
+                    }
+                  },
+                  "No Assignments": {
+                    "value": {
+                      "object": "list",
+                      "data_ref": "data",
+                      "data": [],
+                      "total": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ParameterString": {
+        "type": "string"
+      },
+      "ParameterValidationRuleId": {
+        "type": "string",
+        "example": "val_TU4de3EP4dlL"
+      },
+      "ValidationRulesAssignmentsListResponseBody": {
+        "type": "object",
+        "title": "Validation Rules Assignments List Response Body",
+        "description": "Response body for **GET** `v1/validation-rules-assignments` and **GET** `v1/validation-rules/{validationRuleId}/assignments`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ValidationRuleAssignmentsList"
+          }
+        ]
+      },
+      "ParameterPage": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100
+      },
+      "ParameterLimit": {
+        "type": "integer",
+        "maximum": 100,
+        "minimum": 1
+      },
+      "ValidationRuleAssignmentsList": {
+        "type": "object",
+        "description": "Validation Rule Assignments List",
+        "title": "Validation Rule Assignments List",
+        "properties": {
+          "object": {
+            "type": "string",
+            "description": "The type of the object represented by JSON. This object stores information about validation rule assignments.",
+            "default": "list"
+          },
+          "data_ref": {
+            "type": "string",
+            "description": "Identifies the name of the JSON property that contains the array of validation rule assignments.",
+            "default": "data"
+          },
+          "data": {
+            "type": "array",
+            "description": "A dictionary that contains an array of validation rule assignments.",
+            "items": {
+              "$ref": "#/components/schemas/ValidationRuleAssignment"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of validation rule assignments."
+          }
+        },
+        "required": [
+          "object",
+          "data_ref",
+          "data",
+          "total"
+        ]
+      },
+      "ValidationRuleAssignment": {
+        "title": "Validation Rule Assignment",
+        "type": "object",
+        "description": "This is an object representing a validation rule assignment.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "asgm_74F7QZoYbUoljwQO",
+            "description": "Validation rule assignment ID."
+          },
+          "rule_id": {
+            "type": "string",
+            "example": "val_4j7DCRm2IS59",
+            "description": "Validation rule ID."
+          },
+          "related_object_id": {
+            "type": "string",
+            "example": "v_JtWunK6jUo7X2qOFj0SyRHq4p9tgENlT",
+            "description": "The resource ID to which the validation rule was assigned."
+          },
+          "related_object_type": {
+            "type": "string",
+            "description": "The type of resource to which the validation rule was assigned.",
+            "enum": [
+              "voucher",
+              "campaign",
+              "earning_rule",
+              "reward_assignment",
+              "promotion_tier",
+              "distribution"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2022-02-17T08:18:15.085Z",
+            "description": "Timestamp representing the date and time when the validation rule assignment was created. The value is shown in the ISO 8601 format.",
+            "format": "date-time"
+          },
+          "object": {
+            "type": "string",
+            "default": "validation_rules_assignment",
+            "description": "The type of the object represented by the ID.",
+            "enum": [
+              "validation_rules_assignment"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "rule_id",
+          "related_object_id",
+          "related_object_type",
+          "created_at",
+          "object"
+        ]
+      }
+    },
+    "parameters": {
+      "page": {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/ParameterPage"
+        },
+        "description": "Which page of results to return. The lowest value is `1`."
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/ParameterLimit"
+        },
+        "description": "Limits the number of objects to be returned. The limit can range between 1 and 100 items. If no limit is set, it returns 10 items."
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

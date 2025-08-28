@@ -1,0 +1,804 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/management/v1/projects/{projectId}": {
+      "put": {
+        "operationId": "update-project",
+        "tags": [
+          "Management"
+        ],
+        "summary": "Update Project",
+        "description": "Updates an existing project.\n\nYou can add or modify settings for timezone, currency, notifications, and other details.\n\nOnly the fields sent in the request will be updated.",
+        "parameters": [],
+        "security": [
+          {
+            "X-Management-Id": [],
+            "X-Management-Token": []
+          }
+        ],
+        "requestBody": {
+          "description": "Define the project details to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagementProjectsUpdateRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the details of an updated project.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementProjectsUpdateResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "id": "proj_V0uCh3RiFy",
+                      "name": "Voucherify Team Project",
+                      "currency": "EUR",
+                      "timezone": "Etc/GMT+1",
+                      "cluster_id": "eu1",
+                      "api_version": "v2018-08-01",
+                      "description": "Project for testing.",
+                      "case_sensitive_codes": true,
+                      "client_trusted_domains": [],
+                      "client_redeem_enabled": false,
+                      "client_publish_enabled": false,
+                      "client_list_vouchers_enabled": false,
+                      "client_create_customer_enabled": false,
+                      "client_loyalty_events_enabled": false,
+                      "client_set_voucher_expiration_date_enabled": false,
+                      "api_usage_notifications": {
+                        "messages": {
+                          "value": 80,
+                          "emails": [],
+                          "in_app": false,
+                          "enabled": false
+                        },
+                        "api_calls": {
+                          "value": 80,
+                          "emails": [
+                            "your.email@your.domain"
+                          ],
+                          "in_app": true,
+                          "enabled": true
+                        },
+                        "cycle_calls": {
+                          "value": 80,
+                          "emails": [
+                            "your.email@your.domain"
+                          ],
+                          "in_app": true,
+                          "enabled": true
+                        },
+                        "redemptions": {
+                          "value": 80,
+                          "emails": [],
+                          "in_app": false,
+                          "enabled": false
+                        },
+                        "webhook_calls": {
+                          "value": 80,
+                          "emails": [
+                            "your.email@your.domain"
+                          ],
+                          "in_app": true,
+                          "enabled": true
+                        },
+                        "bulk_api_calls": {
+                          "value": 80,
+                          "emails": [
+                            "your.email@your.domain"
+                          ],
+                          "in_app": true,
+                          "enabled": true
+                        }
+                      },
+                      "webhooks_callout_notifications": {
+                        "webhooks": {
+                          "email": true,
+                          "emails": [
+                            "your.email@your.domain"
+                          ],
+                          "in_app": true
+                        },
+                        "distributions": {
+                          "email": true,
+                          "emails": [
+                            "your.email@your.domain"
+                          ],
+                          "in_app": true
+                        }
+                      },
+                      "is_sandbox": false,
+                      "default_code_config": {
+                        "charset": "0123456789"
+                      },
+                      "webhook_version": "v2024-01-01"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns an error if the payload is invalid in the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                },
+                "examples": {
+                  "Invalid payload": {
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Invalid request payload JSON format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Returns an error if the current plan does not include the Management API feature.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPaymentRequired"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "code": 402,
+                      "message": "Payment required",
+                      "details": "Your current plan does not include a feature required to perform this operation.",
+                      "key": "missing_required_feature"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error when a resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "code": 404,
+                      "message": "Resource not found",
+                      "details": "Cannot find project with id proj_2F3txY7"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ManagementProjectsUpdateRequestBody": {
+        "type": "object",
+        "title": "Management Project Update Request Body",
+        "description": "Request body schema for **PUT** `/management/v1/projects/{projectId}`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProjectBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "api_usage_notifications": {
+                "type": "object",
+                "title": "API Usage Notifications",
+                "description": "Determines the notification settings.",
+                "properties": {
+                  "messages": {
+                    "type": "object",
+                    "description": "Determines the notification settings for distributed messages according to the day and month limit. The notification can be used as a warning that a limit will be reached soon.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "api_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for API calls made for the hourly limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum once per hour.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "bulk_api_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for bulk API calls made for the hourly limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum once per hour.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "webhook_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for webhook calls made for the daily limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum four times a day.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "cycle_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for API calls made for the billing cycle limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum once per the billing cycle.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "redemptions",
+                  "messages",
+                  "api_calls",
+                  "bulk_api_calls",
+                  "webhook_calls",
+                  "cycle_calls"
+                ]
+              },
+              "default_code_config": {
+                "type": "object",
+                "title": "Default Code Configuration",
+                "description": "Determines the character set that is used as default for vouchers. It is affected by the `\"case_sensitive_codes\"` setting.",
+                "properties": {
+                  "charset": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Lists all characters that are used as default for vouchers"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ManagementProjectsUpdateResponseBody": {
+        "type": "object",
+        "title": "Management Project Update Response Body",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProject"
+          }
+        ]
+      },
+      "BadRequest": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "error": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          }
+        }
+      },
+      "ErrorPaymentRequired": {
+        "title": "Payment Required Error",
+        "type": "object",
+        "description": "Error: Payment required - the current plan does not include the feature.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details",
+          "key"
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "ManagementProjectBase": {
+        "type": "object",
+        "title": "Management Project Base",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the project."
+          },
+          "description": {
+            "type": "string",
+            "description": "A user-defined description of the project, e.g. its purpose, scope, region."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "The time zone in which the project is established. It can be in the GMT format or in accordance with IANA time zone database."
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency used in the project. It is equal to a 3-letter ISO 4217 code."
+          },
+          "dial_code": {
+            "type": "string",
+            "nullable": true,
+            "description": "The country dial code for the project. It is equal to an ITU country code."
+          },
+          "webhook_version": {
+            "type": "string",
+            "description": "The webhook version used in the project.",
+            "default": "v2024-01-01",
+            "enum": [
+              "v2024-01-01"
+            ]
+          },
+          "client_trusted_domains": {
+            "type": "array",
+            "description": "An array of URL addresses that allow client requests.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "client_redeem_enabled": {
+            "type": "boolean",
+            "description": "Enables client-side redemption."
+          },
+          "client_publish_enabled": {
+            "type": "boolean",
+            "description": "Enables client-side publication."
+          },
+          "client_list_vouchers_enabled": {
+            "type": "boolean",
+            "description": "Enables client-side listing of vouchers."
+          },
+          "client_create_customer_enabled": {
+            "type": "boolean",
+            "description": "Enables client-side creation of customers."
+          },
+          "client_loyalty_events_enabled": {
+            "type": "boolean",
+            "description": "Enables client-side events for loyalty and referral programs."
+          },
+          "client_set_voucher_expiration_date_enabled": {
+            "type": "boolean",
+            "description": "Enables client-side setting of voucher expiration date."
+          },
+          "webhooks_callout_notifications": {
+            "type": "object",
+            "title": "Webhook callout notification details",
+            "description": "Determines the notification settings for webhook callouts configured in Distributions and Project settings.",
+            "properties": {
+              "distributions": {
+                "type": "object",
+                "description": "Determines the notification settings for webhooks sent through Distributions.",
+                "properties": {
+                  "email": {
+                    "type": "boolean",
+                    "description": "Enables the notification through an email."
+                  },
+                  "in_app": {
+                    "type": "boolean",
+                    "description": "Enables the notification through an email."
+                  },
+                  "emails": {
+                    "type": "array",
+                    "description": "An array of email addresses which will receive the notification.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "email",
+                  "in_app",
+                  "emails"
+                ]
+              },
+              "webhooks": {
+                "type": "object",
+                "description": "Determines the notification settings for webhooks sent as set out in the Project settings.",
+                "properties": {
+                  "email": {
+                    "type": "boolean",
+                    "description": "Enables the notification through an email."
+                  },
+                  "in_app": {
+                    "type": "boolean",
+                    "description": "Enables the notification through an email."
+                  },
+                  "emails": {
+                    "type": "array",
+                    "description": "An array of email addresses which will receive the notification.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "email",
+                  "in_app",
+                  "emails"
+                ]
+              }
+            },
+            "required": [
+              "distributions",
+              "webhooks"
+            ]
+          }
+        }
+      },
+      "UsageNotifications": {
+        "type": "object",
+        "title": "Usage notification details",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enables the notification."
+          },
+          "value": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 90,
+            "description": "The percent value of the limit which, when reached, triggers the notification."
+          },
+          "in_app": {
+            "type": "boolean",
+            "description": "Enables the notification in the application."
+          },
+          "emails": {
+            "type": "array",
+            "title": "Email address",
+            "description": "An array of email addresses which will receive the notification.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "enabled",
+          "value",
+          "emails",
+          "in_app"
+        ]
+      },
+      "ManagementProject": {
+        "title": "Management Project",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProjectBaseWithConfig"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "default_code_config": {
+                "type": "object",
+                "description": "Determines the character set that is used as default for vouchers. It is affected by the `\"case_sensitive_codes\"` setting.",
+                "properties": {
+                  "charset": {
+                    "type": "string",
+                    "description": "Lists all characters that are used as default for vouchers"
+                  }
+                },
+                "required": [
+                  "charset"
+                ]
+              },
+              "limits": {
+                "type": "object",
+                "description": "Determines additional limits set on a given project, e.g. the Sandbox project. If no limits are returned, the limits set for the whole organization apply.",
+                "properties": {
+                  "api_calls": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "Determines the limit of API calls per given unit time.",
+                      "properties": {
+                        "value": {
+                          "type": "integer",
+                          "description": "Determines the maximum number of API calls per time set in `\"duration\"`."
+                        },
+                        "duration": {
+                          "type": "string",
+                          "description": "Determines the amount of time during which the calls up to the number specified in the `value` can be made. The duration is presented in the ISO 8601 format, e.g. `PT1H` means one hour."
+                        }
+                      }
+                    }
+                  },
+                  "bulk_api_calls": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "value": {
+                          "type": "integer",
+                          "description": "Determines the maximum number of API calls per time set in `\"duration\"`."
+                        },
+                        "duration": {
+                          "type": "string",
+                          "description": "Determines the amount of time during which the calls up to the number specified in the `value` can be made. The duration is presented in the ISO 8601 format, e.g. `PT1H` means one hour."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ManagementProjectBaseWithConfig": {
+        "type": "object",
+        "description": "Object representing a project.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier of the project."
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ManagementProjectBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "api_usage_notifications": {
+                "type": "object",
+                "title": "API Usage Notifications",
+                "description": "Determines the notification settings.",
+                "properties": {
+                  "redemptions": {
+                    "type": "object",
+                    "description": "Determines the notification settings for redemptions. The notification can be used as a warning that a limit will be reached soon.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "messages": {
+                    "type": "object",
+                    "description": "Determines the notification settings for distributed messages according to the day and month limit. The notification can be used as a warning that a limit will be reached soon.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "api_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for API calls made for the hourly limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum once per hour.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "bulk_api_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for bulk API calls made for the hourly limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum once per hour.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "webhook_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for webhook calls made for the daily limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum four times a day.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  },
+                  "cycle_calls": {
+                    "type": "object",
+                    "description": "Determines the notification settings for API calls made for the billing cycle limit. The notification can be used as a warning that a limit will be reached soon. It is sent maximum once per the billing cycle.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/UsageNotifications"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "redemptions",
+                  "messages",
+                  "api_calls",
+                  "bulk_api_calls",
+                  "webhook_calls",
+                  "cycle_calls"
+                ]
+              },
+              "cluster_id": {
+                "type": "string",
+                "description": "The identifier of the cluster where the project will be created."
+              },
+              "case_sensitive_codes": {
+                "type": "boolean",
+                "description": "Determines if the vouchers in the project will be:\n- case sensitive - if `true`, `C0dE-cfV` is **not** equal to `c0de-cfv`),\n- case insensitive - if `false`, `C0dE-cfV` is equal to `c0de-cfv`."
+              },
+              "api_version": {
+                "type": "string",
+                "description": "The API version used in the project. Currently, the default and only value is `v2018-08-01`.",
+                "default": "v2018-08-01",
+                "enum": [
+                  "v2018-08-01"
+                ]
+              },
+              "is_sandbox": {
+                "type": "boolean",
+                "description": "Determines if the project is a sandbox project."
+              },
+              "webhook_token": {
+                "type": "string",
+                "description": "Webhook token used for authentication."
+              }
+            }
+          }
+        ],
+        "required": [
+          "id",
+          "name",
+          "description",
+          "currency",
+          "timezone",
+          "cluster_id",
+          "api_version",
+          "case_sensitive_codes",
+          "client_trusted_domains",
+          "client_redeem_enabled",
+          "client_publish_enabled",
+          "client_list_vouchers_enabled",
+          "client_create_customer_enabled",
+          "client_loyalty_events_enabled",
+          "client_set_voucher_expiration_date_enabled",
+          "api_usage_notifications",
+          "webhooks_callout_notifications",
+          "is_sandbox",
+          "webhook_version",
+          "webhook_token"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-Management-Id": {
+        "type": "apiKey",
+        "name": "X-Management-Id",
+        "in": "header"
+      },
+      "X-Management-Token": {
+        "type": "apiKey",
+        "name": "X-Management-Token",
+        "in": "header"
+      }
+    }
+  }
+}

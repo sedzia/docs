@@ -1,0 +1,549 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/management/v1/projects/{projectId}/metadata-schemas": {
+      "post": {
+        "operationId": "create-metadata-schema",
+        "tags": [
+          "Management"
+        ],
+        "summary": "Create Metadata Schema",
+        "description": "Creates a new metadata (custom attribute) schema for a given resource.\n\nThe schema consists of a set of key-value pairs to customize Voucherify resources. \n\nYou can nest your object within a standard metadata schema, e.g. within a campaign or customer schema. However, your nested object can't include another nested object. The standard metadata schemas are:\n- Campaign\n- Voucher\n- Publication\n- Redemption\n- Product\n- Customer\n- Order\n- Order line item\n- Loyalty Tier\n- Promotion Tier\n- Earning rule\n- Reward\n\nUse this endpoint to define a metadata schema of a given resource for the first time. Once you configure a metadata schema for a given `related_object`, use the PUT [Update metadata schema](ref:update-metadata-schema) endpoint to either update or add new metadata key-value pairs. For example, use this endpoint to define a metadata schema for `related_object: campaign` for the first time. If you want define a new metadata property for `campaign`, use the [PUT Update metadata schema](ref:update-metadata-schema) endpoint.\n\n> 📘 Metadata Documentation\n>\n> Read [the Getting Started with Metadata](https://support.voucherify.io/article/99-schema-validation-metadata) and [Metadata Mapping](doc:metadata-mapping) articles to learn how metadata work in Voucherify.",
+        "parameters": [],
+        "security": [
+          {
+            "X-Management-Id": [],
+            "X-Management-Token": []
+          }
+        ],
+        "requestBody": {
+          "description": "Defines the metadata schema.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagementProjectsMetadataSchemasCreateRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the details about the metadata schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementProjectsMetadataSchemasCreateResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "id": "ms_u3bIQLbdU0fi3rhqpTLiF26T",
+                      "related_object": "reward",
+                      "properties": {
+                        "region": {
+                          "type": "string",
+                          "array": true,
+                          "optional": false,
+                          "object_type": null,
+                          "eq": [
+                            "EMEA",
+                            "APAC",
+                            "LATAM",
+                            "NA"
+                          ]
+                        }
+                      },
+                      "allow_defined_only": null,
+                      "created_at": "2024-04-29T12:03:55.991Z",
+                      "updated_at": null,
+                      "object": "metadata_schema"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns an error if the payload has incorrect values.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/e_400_invalid_payload"
+                },
+                "examples": {
+                  "Invalid payload": {
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Invalid request payload JSON format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns an error if an invalid token was provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "value": {
+                      "code": 401,
+                      "message": "Unauthorized",
+                      "key": "unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Returns an error if the current plan does not include the Management API feature.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPaymentRequired"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "code": 402,
+                      "message": "Payment required",
+                      "details": "Your current plan does not include a feature required to perform this operation.",
+                      "key": "missing_required_feature"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error when a resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Resource not found": {
+                    "value": {
+                      "code": 404,
+                      "message": "Resource not found",
+                      "details": "Cannot find project with id proj_5itvmU7"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Returns an error if the resource has a duplicate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "code": 409,
+                      "key": "duplicate_found",
+                      "message": "Duplicated resource found",
+                      "details": "Duplicated metadata schema exists with related_object customer",
+                      "request_id": "v-0ea5a7618fc0293d81",
+                      "resource_id": "customer",
+                      "resource_type": "metadata schema"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ManagementProjectsMetadataSchemasCreateRequestBody": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "related_object": {
+                "type": "string",
+                "description": "The resource type. You can define custom metadata schemas, which have a custom `\"related_object\"` resource type, or you can use standard resource types: `\"campaign\"`, `\"customer\"`, `\"earning_rule\"`, `\"loyalty_tier\"`, `\"order\"`, `\"order_item\"`, `\"product\"`, `\"promotion_tier\"`, `\"publication\"`, `\"redemption\"`, `\"reward\"`, `\"voucher\"`."
+              },
+              "allow_defined_only": {
+                "type": "boolean",
+                "default": false,
+                "description": "Restricts the creation of metadata fields when set to `true`. In other words, it indicates whether or not you are allowed to create new metadata definitions; for example, in the campaign manager or publication manager. If it is set to true, then only the defined fields will be available for assigning values.\t"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "properties": {
+                "type": "object",
+                "description": "Contains metadata definitions. There can be many properties within this object.\n\nOnly the properties sent in the request will be created.",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ManagementProjectsMetadataSchemaDefinition"
+                }
+              }
+            },
+            "required": [
+              "properties"
+            ]
+          }
+        ],
+        "required": [
+          "related_object",
+          "properties"
+        ]
+      },
+      "ManagementProjectsMetadataSchemasCreateResponseBody": {
+        "type": "object",
+        "title": "Management Projects Metadata Schemas Update Response Body",
+        "description": "Response body schema for **POST** `management/v1/projects/{projectId}/metadata-schemas`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProjectsMetadataSchema"
+          }
+        ]
+      },
+      "e_400_invalid_payload": {
+        "title": "Invalid Payload",
+        "type": "object",
+        "description": "Error: Bad Request &rarr; Invalid Payload",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "default": 400,
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "default": "invalid_payload",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "default": "Invalid payload",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a884c6be8c3756f42",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          }
+        }
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "ErrorPaymentRequired": {
+        "title": "Payment Required Error",
+        "type": "object",
+        "description": "Error: Payment required - the current plan does not include the feature.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details",
+          "key"
+        ]
+      },
+      "ManagementProjectsMetadataSchemaDefinition": {
+        "type": "object",
+        "title": "Metadata Definitions",
+        "description": "Custom definition name. This is also shown in **Project Settings** > **Metadata Schema** in the Voucherify Dashboard.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Indicates the type of metadata. Note that `\"geopoint\"` type is a paid feature.",
+            "enum": [
+              "string",
+              "number",
+              "object",
+              "date",
+              "datetime",
+              "geopoint",
+              "boolean",
+              "image_url"
+            ]
+          },
+          "optional": {
+            "type": "boolean",
+            "description": "Indicates if this definition is optional or not for the resource."
+          },
+          "array": {
+            "type": "boolean",
+            "description": "Indicates if the definition is an array."
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "Indicates if the definition has been deleted from the schema."
+          },
+          "object_type": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the custom resource (i.e. a nested object) if the resource has been previously defined. Otherwise, it is `null` for other types."
+          },
+          "min_length": {
+            "type": "integer",
+            "description": "Value indicating the minimum length. Available only for the `string` type."
+          },
+          "max_length": {
+            "type": "integer",
+            "description": "Value indicating the maximum length. Available only for the `string` type."
+          },
+          "exact_length": {
+            "type": "integer",
+            "description": "Value indicating the exact length. Available only for the `string` type."
+          },
+          "eq": {
+            "type": "array",
+            "description": "Array of values that are allowed. Available only for the `string` and `number` types.",
+            "items": {
+              "oneOf": [
+                {
+                  "title": "Add number",
+                  "description": "Adds numbers to the array. The value should be up to two decimal places.",
+                  "type": "number"
+                },
+                {
+                  "title": "Add string",
+                  "description": "Adds strings to the array.",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "ne": {
+            "type": "array",
+            "description": "Array of values that are not allowed. Available only for the `number` type.",
+            "items": {
+              "description": "Adds number to the array. The value should be up to two decimal places.",
+              "type": "number"
+            }
+          },
+          "lt": {
+            "type": "number",
+            "description": "A property of the `number` type must have `less than` this value. The value should be up to two decimal places."
+          },
+          "lte": {
+            "type": "number",
+            "description": "A property of the `number` type must be `less than or equal` to this value. The value should be up to two decimal places."
+          },
+          "gt": {
+            "type": "number",
+            "description": "A property of `number` type must be `greater than` this value. The value should be up to two decimal places."
+          },
+          "gte": {
+            "type": "number",
+            "description": "A property of `number` type must be `greater than or equal` to this value. The value should be up to two decimal places."
+          }
+        },
+        "required": [
+          "type",
+          "optional",
+          "array"
+        ]
+      },
+      "ManagementProjectsMetadataSchema": {
+        "type": "object",
+        "description": "Object representing a metadata schema.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier of the metadata schema."
+              },
+              "related_object": {
+                "type": "string",
+                "description": "The resource type. You can define custom metadata schemas, which have a custom `\"related_object\"` resource type. The standard metadata schemas are: `\"campaign\"`, `\"customer\"`, `\"earning_rule\"`, `\"loyalty_tier\"`, `\"order\"`, `\"order_item\"`, `\"product\"`, `\"promotion_tier\"`, `\"publication\"`, `\"redemption\"`, `\"reward\"`, `\"voucher\"`."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "properties": {
+                "type": "object",
+                "description": "Contains metadata definitions.",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ManagementProjectsMetadataSchemaDefinition"
+                }
+              }
+            },
+            "required": [
+              "properties"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "allow_defined_only": {
+                "type": "boolean",
+                "nullable": true,
+                "description": "Restricts the creation of metadata fields when set to `true`. It indicates whether or not you can create new metadata definitions, e.g. in the campaign or publication manager. If set to `true`, then only the defined fields are available for assigning values."
+              },
+              "created_at": {
+                "type": "string",
+                "example": "2021-12-03T13:33:44.556Z",
+                "description": "Timestamp representing the date and time when the metadata schema was created. The value for this parameter is shown in the ISO 8601 format.",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "nullable": true,
+                "example": "2022-08-11T08:05:30.695Z",
+                "description": "Timestamp representing the date and time when the metadata schema was updated. The value for this parameter is shown in the ISO 8601 format.",
+                "format": "date-time"
+              },
+              "object": {
+                "type": "string",
+                "default": "metadata_schema",
+                "description": "The type of the object represented by the JSON. This object stores information about the metadata schema."
+              }
+            }
+          }
+        ],
+        "required": [
+          "id",
+          "related_object",
+          "properties",
+          "allow_defined_only",
+          "created_at",
+          "updated_at",
+          "object"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-Management-Id": {
+        "type": "apiKey",
+        "name": "X-Management-Id",
+        "in": "header"
+      },
+      "X-Management-Token": {
+        "type": "apiKey",
+        "name": "X-Management-Token",
+        "in": "header"
+      }
+    }
+  }
+}

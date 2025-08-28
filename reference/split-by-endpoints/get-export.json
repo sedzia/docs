@@ -1,0 +1,1623 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/exports/{exportId}": {
+      "get": {
+        "operationId": "get-export",
+        "tags": [
+          "Exports"
+        ],
+        "summary": "Get Export",
+        "description": "Retrieves the URL of the downloadable file, which was generated via the <!-- [Create Export](OpenAPI.json/paths/~1exports/post) -->[Create Export](ref:create-export) method.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "exports"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the export object if a valid identifier was provided in the path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportsGetResponseBody"
+                },
+                "examples": {
+                  "Get Export": {
+                    "value": {
+                      "id": "exp_CGnCVltmWjI9V1pGlnunw2Nf",
+                      "object": "export",
+                      "created_at": "2022-01-13T09:03:18.293Z",
+                      "status": "DONE",
+                      "channel": "API",
+                      "exported_object": "customer",
+                      "parameters": {
+                        "order": "",
+                        "fields": [
+                          "name",
+                          "id",
+                          "email",
+                          "source_id",
+                          "created_at"
+                        ],
+                        "filters": {
+                          "junction": "and"
+                        },
+                        "response_format": "CSV"
+                      },
+                      "result": {
+                        "url": "{{internalVoucherifyURL}}"
+                      },
+                      "user_id": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error indicating that the export with given ID was not found if an incorrect ID is provided in the path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find export with id exp_8fNoLwgVPuhoxNzVsr50kq0",
+                      "request_id": "v-0b029305af4524cf42",
+                      "resource_id": "exp_8fNoLwgVPuhoxNzVsr50kq0",
+                      "resource_type": "export"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExportsGetResponseBody": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Export"
+          }
+        ],
+        "description": "Response body schema for **GET** `v1/exports/{exportId}`.",
+        "title": "Exports Get Response Body"
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "Export": {
+        "title": "Export",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ExportVoucher"
+          },
+          {
+            "$ref": "#/components/schemas/ExportRedemption"
+          },
+          {
+            "$ref": "#/components/schemas/ExportCustomer"
+          },
+          {
+            "$ref": "#/components/schemas/ExportPublication"
+          },
+          {
+            "$ref": "#/components/schemas/ExportOrder"
+          },
+          {
+            "$ref": "#/components/schemas/ExportPointsExpiration"
+          },
+          {
+            "$ref": "#/components/schemas/ExportVoucherTransactions"
+          }
+        ]
+      },
+      "ExportVoucher": {
+        "title": "Export Voucher",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportVoucherBase"
+          }
+        ]
+      },
+      "ExportRedemption": {
+        "title": "Export Redemption",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportRedemptionBase"
+          }
+        ]
+      },
+      "ExportCustomer": {
+        "title": "Export Customers",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportCustomerBase"
+          }
+        ]
+      },
+      "ExportPublication": {
+        "title": "Export Publication",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportPublicationBase"
+          }
+        ]
+      },
+      "ExportOrder": {
+        "title": "Export Orders",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportOrderBase"
+          }
+        ]
+      },
+      "ExportPointsExpiration": {
+        "title": "Export Points Expiration",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportPointsExpirationBase"
+          }
+        ]
+      },
+      "ExportVoucherTransactions": {
+        "title": "Export Vouchers Transactions",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExportBase"
+          },
+          {
+            "$ref": "#/components/schemas/ExportVoucherTransactionsBase"
+          }
+        ]
+      },
+      "ExportBase": {
+        "title": "Export Base",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique export ID."
+          },
+          "object": {
+            "type": "string",
+            "default": "export",
+            "enum": [
+              "export"
+            ],
+            "description": "The type of object being represented. This object stores information about the export."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp representing the date and time when the export was scheduled in ISO 8601 format."
+          },
+          "status": {
+            "enum": [
+              "SCHEDULED",
+              "IN_PROGRESS",
+              "DONE",
+              "ERROR"
+            ],
+            "type": "string",
+            "description": "Status of the export. Informs you whether the export has already been completed, i.e. indicates whether the file containing the exported data has been generated."
+          },
+          "channel": {
+            "type": "string",
+            "description": "The channel through which the export was triggered."
+          },
+          "result": {
+            "type": "object",
+            "nullable": true,
+            "description": "Contains the URL of the CSV file.",
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "URL of the CSV file location. It contains the token used for authorization in the Download export method."
+              }
+            },
+            "required": [
+              "url"
+            ]
+          },
+          "user_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifies the specific user who initiated the export through the Voucherify Dashboard; returned when the channel value is WEBSITE."
+          }
+        },
+        "required": [
+          "id",
+          "object",
+          "created_at",
+          "status",
+          "result",
+          "user_id"
+        ]
+      },
+      "ExportVoucherBase": {
+        "title": "Export Vouchers",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "voucher",
+            "enum": [
+              "voucher"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportVoucherOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportVoucherFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportVoucherFilters"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportRedemptionBase": {
+        "title": "Export Redemptions",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "redemption",
+            "enum": [
+              "redemption"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportRedemptionOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportRedemptionFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportRedemptionFilters"
+                  }
+                ]
+              }
+            },
+            "description": "List of available fields and filters that can be exported with an order along with the sorting order of the returned data."
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportCustomerBase": {
+        "title": "Export Customers",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "customer",
+            "enum": [
+              "customer"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportCustomerOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportCustomerFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportCustomerFilters"
+                  }
+                ]
+              }
+            },
+            "description": "List of available fields and filters that can be exported with an order along with the sorting order of the returned data."
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportPublicationBase": {
+        "title": "Export Publications",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "publication",
+            "enum": [
+              "publication"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportPublicationOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportPublicationFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportPublicationFilters"
+                  }
+                ]
+              }
+            },
+            "description": "List of available fields and filters that can be exported with an order along with the sorting order of the returned data."
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportOrderBase": {
+        "title": "Export Orders",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "order",
+            "enum": [
+              "order"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportOrderOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportOrderFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportOrderFilters"
+                  }
+                ]
+              }
+            },
+            "description": "List of available fields and filters that can be exported with an order along with the sorting order of the returned data."
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportPointsExpirationBase": {
+        "title": "Export Points Expirations",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "points_expiration",
+            "enum": [
+              "points_expiration"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportPointsExpirationOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportPointsExpirationFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportPointsExpirationFilters"
+                  }
+                ]
+              }
+            },
+            "description": "List of available fields and filters that can be exported with an order along with the sorting order of the returned data."
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportVoucherTransactionsBase": {
+        "title": "Export Vouchers Transactions",
+        "type": "object",
+        "properties": {
+          "exported_object": {
+            "type": "string",
+            "default": "voucher_transactions",
+            "enum": [
+              "voucher_transactions"
+            ],
+            "description": "The type of object to be exported."
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "order": {
+                "description": "How the export is filtered, where the dash - preceding a sorting option means sorting in a descending order.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportVoucherTransactionsOrder"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "description": "Array of strings containing the data in the export. These fields define the headers in the CSV file.",
+                "items": {
+                  "$ref": "#/components/schemas/ExportVoucherTransactionsFields"
+                }
+              },
+              "filters": {
+                "description": "Filter conditions.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportVoucherTransactionsFilters"
+                  }
+                ]
+              }
+            },
+            "description": "List of available fields and filters that can be exported with an order along with the sorting order of the returned data."
+          }
+        },
+        "required": [
+          "exported_object"
+        ]
+      },
+      "ExportVoucherOrder": {
+        "title": "Export Voucher Order",
+        "type": "string",
+        "enum": [
+          "-created_at",
+          "created_at",
+          "-updated_at",
+          "updated_at",
+          "-code",
+          "code"
+        ]
+      },
+      "ExportVoucherFields": {
+        "title": "Export Voucher Fields",
+        "type": "string",
+        "enum": [
+          "code",
+          "voucher_type",
+          "value",
+          "formula",
+          "discount_type",
+          "campaign",
+          "category",
+          "start_date",
+          "expiration_date",
+          "gift_balance",
+          "loyalty_balance",
+          "redemption_quantity",
+          "redemption_count",
+          "active",
+          "qr_code",
+          "bar_code",
+          "metadata",
+          "id",
+          "is_referral_code",
+          "created_at",
+          "updated_at",
+          "validity_timeframe_interval",
+          "validity_timeframe_duration",
+          "validity_day_of_week",
+          "discount_amount_limit",
+          "campaign_id",
+          "additional_info",
+          "customer_id",
+          "discount_effect",
+          "discount_unit_type",
+          "discount_unit_effect",
+          "validation_rules_id",
+          "customer_source_id"
+        ]
+      },
+      "ExportVoucherFilters": {
+        "title": "Export Voucher Filters",
+        "description": "Allowed additional properties must start with \"metadata.\" or \"redemption.\"",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "description": "Filter by conditions set on the junction parameter indicating how the conditions should be accounted for in the query. An AND is an all-inclusive logical operator, meaning the AND operator displays a record if ALL the conditions separated by AND are TRUE, while an OR operator displays a record if ANY of the conditions separated by OR is TRUE.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Junction"
+              }
+            ]
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "updated_at": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "created_date": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "active": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "redemption_status": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "start_date": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "expiration_date": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "validity_day_of_week": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "code": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "categories": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "vouchers": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "holder_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "is_referral_code": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "published_for_customer_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "validity_timeframe": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "category_ids": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/FieldConditions"
+        }
+      },
+      "ExportRedemptionOrder": {
+        "title": "Export Redemption Order",
+        "type": "string",
+        "enum": [
+          "-id",
+          "id",
+          "-voucher_code",
+          "voucher_code",
+          "-tracking_id",
+          "tracking_id",
+          "-customer_id",
+          "customer_id",
+          "-created_at",
+          "created_at"
+        ]
+      },
+      "ExportRedemptionFields": {
+        "title": "Export Redemption Fields",
+        "type": "string",
+        "enum": [
+          "id",
+          "object",
+          "date",
+          "voucher_code",
+          "campaign",
+          "promotion_tier_id",
+          "customer_id",
+          "customer_source_id",
+          "customer_name",
+          "tracking_id",
+          "order_id",
+          "order_amount",
+          "gift_amount",
+          "loyalty_points",
+          "result",
+          "failure_code",
+          "failure_message",
+          "metadata"
+        ]
+      },
+      "ExportRedemptionFilters": {
+        "title": "Export Redemption Filters",
+        "description": "Allowed additional properties must start with \"metadata.\"",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "created_at": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$after": {
+                    "$ref": "#/components/schemas/Any"
+                  },
+                  "$before": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "campaign": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "voucher": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "related_object": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$in": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "voucher_code": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "related_object_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "related_object_parent_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "parent_redemption_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "failure_code": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "result": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "object": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "campaign_name": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "user_login": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/FieldConditions"
+        }
+      },
+      "ExportCustomerOrder": {
+        "title": "Export Customer Order",
+        "type": "string",
+        "enum": [
+          "-name",
+          "name",
+          "-id",
+          "id",
+          "-email",
+          "email",
+          "-source_id",
+          "source_id",
+          "-created_at",
+          "created_at",
+          "-updated_at",
+          "updated_at"
+        ]
+      },
+      "ExportCustomerFields": {
+        "type": "string",
+        "enum": [
+          "name",
+          "id",
+          "description",
+          "email",
+          "source_id",
+          "created_at",
+          "address_city",
+          "address_state",
+          "address_line_1",
+          "address_line_2",
+          "address_country",
+          "address_postal_code",
+          "redemptions_total_redeemed",
+          "redemptions_total_failed",
+          "redemptions_total_succeeded",
+          "redemptions_total_rolled_back",
+          "redemptions_total_rollback_failed",
+          "redemptions_total_rollback_succeeded",
+          "orders_total_amount",
+          "orders_total_count",
+          "orders_average_amount",
+          "orders_last_order_amount",
+          "orders_last_order_date",
+          "loyalty_points",
+          "loyalty_referred_customers",
+          "updated_at",
+          "phone",
+          "birthday",
+          "metadata",
+          "birthdate"
+        ],
+        "title": "Export Customer Fields"
+      },
+      "ExportCustomerFilters": {
+        "title": "Export Customer Filters",
+        "description": "Allowed additional properties must start with \"metadata.\" or \"address.\" or \"summary.\" or \"loyalty.\" or \"loyalty_tier.\" or \"loyalty_points.\" or \"system_metadata.\"",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "created_at": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$after": {
+                    "$ref": "#/components/schemas/Any"
+                  },
+                  "$before": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "updated_at": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$after": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "2020-12-28T12:49:16.272Z"
+                    }
+                  },
+                  "$before": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "2020-12-28T12:49:16.272Z"
+                    }
+                  },
+                  "$is": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "2020-12-28T12:49:16.272Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "email": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "name": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "city": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "phone": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "birthday": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "publications.created_at": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "publications.related_object_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/FieldConditions"
+        }
+      },
+      "ExportPublicationOrder": {
+        "title": "Export Publication Order",
+        "type": "string",
+        "enum": [
+          "-id",
+          "id",
+          "-voucher_code",
+          "voucher_code",
+          "-tracking_id",
+          "tracking_id",
+          "-customer_id",
+          "customer_id",
+          "-created_at",
+          "created_at",
+          "-channel",
+          "channel"
+        ]
+      },
+      "ExportPublicationFields": {
+        "title": "Export Publication Fields",
+        "type": "string",
+        "enum": [
+          "voucher_code",
+          "customer_id",
+          "customer_source_id",
+          "date",
+          "channel",
+          "campaign",
+          "is_winner",
+          "metadata"
+        ]
+      },
+      "ExportPublicationFilters": {
+        "title": "Export Publication Filters",
+        "description": "Allowed additional properties must start with \"metadata.\"",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "created_at": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$after": {
+                    "$ref": "#/components/schemas/Any"
+                  },
+                  "$before": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "campaign": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "voucher": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$is": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "failure_code": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "result": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "campaign_name": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "voucher_type": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "is_referral_code": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "parent_object_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "related_object_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/FieldConditions"
+        }
+      },
+      "ExportOrderOrder": {
+        "title": "Export Order Order",
+        "type": "string",
+        "enum": [
+          "-created_at",
+          "created_at",
+          "-updated_at",
+          "updated_at",
+          "-status",
+          "status"
+        ]
+      },
+      "ExportOrderFields": {
+        "title": "Export Order Fields",
+        "type": "string",
+        "enum": [
+          "id",
+          "source_id",
+          "created_at",
+          "updated_at",
+          "status",
+          "amount",
+          "discount_amount",
+          "items_discount_amount",
+          "total_discount_amount",
+          "total_amount",
+          "customer_id",
+          "referrer_id",
+          "metadata"
+        ]
+      },
+      "ExportOrderFilters": {
+        "title": "Export Order Filters",
+        "description": "Allowed additional properties must start with \"metadata.\"",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "created_at": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$after": {
+                    "$ref": "#/components/schemas/Any"
+                  },
+                  "$before": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "updated_at": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "title": "Filters Condition",
+                "type": "object",
+                "properties": {
+                  "$after": {
+                    "$ref": "#/components/schemas/Any"
+                  },
+                  "$before": {
+                    "$ref": "#/components/schemas/Any"
+                  }
+                }
+              }
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "total_amount": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "discount_amount": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "total_discount_amount": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "items_discount_amount": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/FieldConditions"
+        }
+      },
+      "ExportPointsExpirationOrder": {
+        "title": "Export Points Expiration Order",
+        "type": "string",
+        "enum": [
+          "-expires_at",
+          "expires_at"
+        ]
+      },
+      "ExportPointsExpirationFields": {
+        "title": "Export Points Expiration Fields",
+        "type": "string",
+        "enum": [
+          "id",
+          "campaign_id",
+          "voucher_id",
+          "points",
+          "status",
+          "expires_at"
+        ]
+      },
+      "ExportPointsExpirationFilters": {
+        "title": "Export Points Expiration Filters",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "campaign_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "voucher_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        }
+      },
+      "ExportVoucherTransactionsOrder": {
+        "title": "Export Voucher Transactions Order",
+        "type": "string",
+        "enum": [
+          "-created_at",
+          "created_at"
+        ]
+      },
+      "ExportVoucherTransactionsFields": {
+        "title": "Export Voucher Transactions Fields",
+        "type": "string",
+        "enum": [
+          "id",
+          "campaign_id",
+          "voucher_id",
+          "type",
+          "source_id",
+          "reason",
+          "source",
+          "balance",
+          "amount",
+          "related_transaction_id",
+          "created_at",
+          "details"
+        ]
+      },
+      "ExportVoucherTransactionsFilters": {
+        "title": "Export Voucher Transactions Filters",
+        "type": "object",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "voucher_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          },
+          "campaign_id": {
+            "$ref": "#/components/schemas/FieldConditions"
+          }
+        }
+      },
+      "Junction": {
+        "title": "Junction",
+        "description": "Logical Operator Between Filters. Filter by conditions set on the `junction` parameter indicating how the `conditions` should be accounted for in the query. An `AND` is an all-inclusive logical operator, meaning the `AND` operator displays a record if **ALL** the conditions separated by AND are TRUE, while  an `OR` operator displays a record if **ANY** of the conditions separated by OR is TRUE.",
+        "enum": [
+          "and",
+          "or"
+        ],
+        "type": "string"
+      },
+      "FieldConditions": {
+        "title": "Field Conditions",
+        "type": "object",
+        "properties": {
+          "conditions": {
+            "description": "Data filters used to narrow down the data records to be returned in the result.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FiltersCondition"
+              }
+            ]
+          }
+        }
+      },
+      "Any": {
+        "title": "Any",
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "title": "string",
+              "type": "string"
+            },
+            {
+              "title": "string - date",
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "title": "string - date-time",
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "title": "number",
+              "type": "number"
+            },
+            {
+              "title": "object",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "FiltersCondition": {
+        "title": "Filters Condition",
+        "type": "object",
+        "properties": {
+          "$in": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$not_in": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$is": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$is_days_ago": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$is_days_in_future": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$is_not": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$has_value": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$is_unknown": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$contains": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$not_contain": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$starts_with": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$ends_with": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$more_than": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$less_than": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$more_than_ago": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$less_than_ago": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$more_than_future": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$less_than_future": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$more_than_equal": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$less_than_equal": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$after": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$before": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$count": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$count_less": {
+            "$ref": "#/components/schemas/Any"
+          },
+          "$count_more": {
+            "$ref": "#/components/schemas/Any"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

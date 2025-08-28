@@ -1,0 +1,440 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/management/v1/projects/{projectId}/custom-event-schemas/{customEventSchemaId}": {
+      "put": {
+        "operationId": "update-custom-event-schema",
+        "tags": [
+          "Management"
+        ],
+        "summary": "Update Custom Event Schema",
+        "description": "Updates a custom event schema.\n\nWith this request, you can:\n- Add a nonexistent property to a custom event schema.\n- Update an existing property.\n\nIn the request, you can provide only those properties you want to add or update. Definitions omitted in the request remain unchanged.\n\n> 👍 Additional Notes\n>\n>- You can change the type of an existing property, e.g. from `\"string\"` to `\"number\"`.\n>\n>- You can remove a custom property with this endpoint by providing `\"deleted\": true` in the request. However, you cannot permanently remove an event definition or its property with this endpoint.\n\n> 📘 Custom Event Documentation\n>\n> Read [Custom Events](https://support.voucherify.io/article/111-custom-events) article to learn how custom events work in Voucherify.\n>\n>Read also the details about the [Track Custom Event](ref:track-custom-event) endpoint and the [Custom Event Object](ref:custom-event-object).",
+        "parameters": [],
+        "security": [
+          {
+            "X-Management-Id": [],
+            "X-Management-Token": []
+          }
+        ],
+        "requestBody": {
+          "description": "Defines the custom event schema to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagementProjectsCustomEventSchemasUpdateRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the details about the updated custom event schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementProjectsCustomEventSchemasUpdateResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "id": "ms_u3bIQLbdU0fi3rhqpTLiF26T",
+                      "related_object": "reward",
+                      "properties": {
+                        "region": {
+                          "type": "string",
+                          "array": true,
+                          "optional": false,
+                          "object_type": null,
+                          "eq": [
+                            "EMEA",
+                            "APAC",
+                            "LATAM",
+                            "NA",
+                            "EU"
+                          ]
+                        }
+                      },
+                      "allow_defined_only": false,
+                      "created_at": "2024-04-29T12:03:55.991Z",
+                      "updated_at": "2024-04-29T12:06:20.866Z",
+                      "object": "metadata_schema"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns an error if the payload includes incorrect details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/e_400_invalid_payload"
+                },
+                "examples": {
+                  "Invalid payload": {
+                    "value": {
+                      "code": 400,
+                      "key": "invalid_payload",
+                      "message": "Invalid payload",
+                      "details": "Property .properties.Size.eq.0 must be number",
+                      "request_id": "v-0ea5a9b9b3402940a9"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns an error if an invalid token was provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "value": {
+                      "code": 401,
+                      "message": "Unauthorized",
+                      "key": "unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Returns an error if the current plan does not include the Management API feature.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPaymentRequired"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "code": 402,
+                      "message": "Payment required",
+                      "details": "Your current plan does not include a feature required to perform this operation.",
+                      "key": "missing_required_feature"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error when a resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "code": 404,
+                      "message": "Resource not found",
+                      "details": "Cannot find project with id proj_2F3txY7"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ManagementProjectsCustomEventSchemasUpdateRequestBody": {
+        "type": "object",
+        "title": "Update Custom Event Schema Request Body",
+        "description": "Request body schema for **POST** `/management/v1/projects/{projectId}/custom-event-schema/{customEventSchemaId}`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProjectsCustomEventSchemaBase"
+          }
+        ]
+      },
+      "ManagementProjectsCustomEventSchemasUpdateResponseBody": {
+        "type": "object",
+        "title": "Update Custom Event Schema Response Body",
+        "description": "Response body schema for **POST** `/management/v1/projects/{projectId}/custom-event-schema/{customEventSchemaId}`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProjectsCustomEventSchema"
+          }
+        ]
+      },
+      "e_400_invalid_payload": {
+        "title": "Invalid Payload",
+        "type": "object",
+        "description": "Error: Bad Request &rarr; Invalid Payload",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "default": 400,
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "default": "invalid_payload",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "default": "Invalid payload",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a884c6be8c3756f42",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          }
+        }
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "ErrorPaymentRequired": {
+        "title": "Payment Required Error",
+        "type": "object",
+        "description": "Error: Payment required - the current plan does not include the feature.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details",
+          "key"
+        ]
+      },
+      "ManagementProjectsCustomEventSchemaBase": {
+        "type": "object",
+        "title": "Custom Event Schema",
+        "description": "Object representing a custom event schema.",
+        "properties": {
+          "schema": {
+            "type": "object",
+            "description": "Object containing custom event schema and its custom attributes (metadata).",
+            "properties": {
+              "properties": {
+                "type": "object",
+                "description": "Defines custom event custom attributes (metadata).",
+                "additionalProperties": {
+                  "type": "object",
+                  "title": "Custom Event Properties",
+                  "description": "Custom event metadata name.",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "Indicates the type of the custom event.",
+                      "enum": [
+                        "string",
+                        "number",
+                        "date",
+                        "datetime",
+                        "boolean"
+                      ]
+                    },
+                    "optional": {
+                      "type": "boolean",
+                      "description": "Indicates if this property is optional or not for the resource."
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "Indicates if the property has been deleted from the schema. A deleted schema is inactive, but it can be restored."
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "optional"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "properties"
+            ]
+          }
+        }
+      },
+      "ManagementProjectsCustomEventSchema": {
+        "type": "object",
+        "title": "Management Projects Custom Event Schema",
+        "description": "Object containing the response to creating a custom event schema.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier of the custom event schema.",
+                "example": "ms_oA8CawM07Q8i05Cx62U6euTK"
+              },
+              "name": {
+                "type": "string",
+                "title": "Custom Event Name",
+                "description": "User-defined name of the custom event. This is also shown in **Project Settings** > **Event Schema** in the Voucherify Dashboard."
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ManagementProjectsCustomEventSchemaBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "created_at": {
+                "type": "string",
+                "description": "Timestamp representing the date and time when the custom event schema was created. The value is shown in the ISO 8601 format.",
+                "format": "date-time",
+                "example": "2024-03-27T08:00:09.472Z"
+              },
+              "updated_at": {
+                "type": "string",
+                "description": "Timestamp representing the date and time when the custom event schema was updated. The value is shown in the ISO 8601 format.",
+                "format": "date-time",
+                "example": "2024-03-27T08:00:09.472Z"
+              },
+              "object": {
+                "type": "string",
+                "description": "The type of the object represented by JSON.",
+                "example": "custom-event-schema",
+                "default": "custom-event-schema",
+                "enum": [
+                  "custom-event-schema"
+                ]
+              }
+            }
+          }
+        ],
+        "required": [
+          "id",
+          "name",
+          "schema",
+          "created_at",
+          "object"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-Management-Id": {
+        "type": "apiKey",
+        "name": "X-Management-Id",
+        "in": "header"
+      },
+      "X-Management-Token": {
+        "type": "apiKey",
+        "name": "X-Management-Token",
+        "in": "header"
+      }
+    }
+  }
+}

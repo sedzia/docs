@@ -1,0 +1,371 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/loyalties/members/{memberId}/balance": {
+      "post": {
+        "operationId": "update-loyalty-card-balance",
+        "tags": [
+          "Loyalties"
+        ],
+        "summary": "Adjust Loyalty Card Balance",
+        "description": "This method gives adds or removes balance to an existing loyalty card that is assigned to a holder. The removal of points will consume the points that expire the soonest. \n\n<!-- theme: info -->\n\n >🚧 Async Action\n> \n> This is an async action. If you want to perform several add or remove loyalty card balance actions in a short time and their order matters, set up sufficient time-out between the calls.\n\n\n> 📘 Alternative endpoint\n> This endpoint is an alternative to this <!-- [endpoint](OpenAPI.json/paths/~1loyalties~1{campaignId}~1members~1{memberId}~1balance) -->[endpoint](ref:update-loyalty-card-balance-1). The URL was re-designed to allow you to add or remove loyalty card balance without having to provide the `campaignId` as a path parameter.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "loyalties"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Specify the point adjustment along with the expiration mechanism.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoyaltiesMembersBalanceUpdateRequestBody"
+              },
+              "examples": {
+                "Subtract points": {
+                  "value": {
+                    "points": -100
+                  }
+                },
+                "Add Points": {
+                  "value": {
+                    "points": 100,
+                    "expiration_type": "CUSTOM_DATE",
+                    "expiration_date": "2023-05-30"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a balance object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoyaltiesMembersBalanceUpdateResponseBody"
+                },
+                "examples": {
+                  "Subtract Points": {
+                    "value": {
+                      "points": 100,
+                      "total": 13436,
+                      "balance": 13136,
+                      "type": "loyalty_card",
+                      "object": "balance",
+                      "related_object": {
+                        "type": "voucher",
+                        "id": "v_0aMj6Mdp0i3zuXrd9NnBKboc7746mlgF"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns an error if the expiration date was specified incorrectly in the request payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Invalid payload": {
+                    "value": {
+                      "code": 400,
+                      "key": "invalid_payload",
+                      "message": "Invalid payload",
+                      "details": "Property .expiration_date cannot be recognized as a ISO-8601 compliant date",
+                      "request_id": "v-0c118c6f7c0e6751ab"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoyaltiesMembersBalanceUpdateRequestBody": {
+        "description": "Request Body schema for **POST** `v1/loyalties/members/{memberId}/balance` and **POST** `v1/loyalties/{campaignId}/members/{memberId}/balance`.",
+        "title": "Loyalties Members Balance Update Request Body",
+        "type": "object",
+        "properties": {
+          "points": {
+            "type": "integer",
+            "description": "Incremental balance to be added to/subtracted from the loyalty card.\n\n- To add points: 100\n- To subtract points, add a minus: -100"
+          },
+          "expiration_type": {
+            "description": "Set the type of expiration for added points.\n\n`PROGRAM_RULES`: Inherit rules from campaign.\n`NON_EXPIRING`: Points never expire.\n`CUSTOM_DATE`: Points expire on a particular date. Requires expiration_date parameter.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PointsExpirationTypes"
+              }
+            ]
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Set expiration date for added points, i.e. `YYYY-MM-DD`. This parameter is required only when expiration_type is set to `CUSTOM_DATE`."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for the transfer."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The merchant's transaction ID if it is different from the Voucherify transaction ID. It is really useful in case of an integration between multiple systems. It can be a transaction ID from a CRM system, database or 3rd-party service."
+          }
+        },
+        "required": [
+          "points"
+        ]
+      },
+      "LoyaltiesMembersBalanceUpdateResponseBody": {
+        "title": "Loyalties Members Balance Update Response Body",
+        "type": "object",
+        "description": "Response schema for **POST** `v1/loyalties/members/{memberId}/balance` and for **POST** `v1/loyalties/{campaignId}/members/{memberId}/balance`.",
+        "properties": {
+          "points": {
+            "type": "integer",
+            "description": "The incremental points removed or added to the current balance on the loyalty card."
+          },
+          "total": {
+            "type": "integer",
+            "description": "The total of points accrued over the lifetime of the loyalty card."
+          },
+          "balance": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The balance after adding/removing points."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "loyalty_card",
+              "gift_voucher"
+            ],
+            "description": "The type of voucher being modified."
+          },
+          "object": {
+            "type": "string",
+            "pattern": "balance",
+            "default": "balance",
+            "enum": [
+              "balance"
+            ],
+            "description": "The type of the object represented by JSON. Default is balance."
+          },
+          "related_object": {
+            "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
+            "description": "Defines the object that is being modified with the values that are returned in the balance object.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "default": "voucher",
+                "enum": [
+                  "voucher"
+                ],
+                "description": "The object being modified."
+              },
+              "id": {
+                "type": "string",
+                "description": "Identifies the loyalty card that is being modified, this is the ID that was assigned by the Voucherify API."
+              }
+            }
+          },
+          "operation_type": {
+            "type": "string",
+            "description": "The type of operation being performed.",
+            "enum": [
+              "MANUAL",
+              "AUTOMATIC"
+            ]
+          }
+        },
+        "required": [
+          "points",
+          "total",
+          "balance",
+          "type",
+          "object",
+          "related_object"
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "PointsExpirationTypes": {
+        "title": "Points Expiration Types",
+        "type": "string",
+        "enum": [
+          "PROGRAM_RULES",
+          "CUSTOM_DATE",
+          "NON_EXPIRING"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

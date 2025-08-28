@@ -1,0 +1,381 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/promotions/{campaignId}/stacks": {
+      "post": {
+        "operationId": "create-promotion-stack",
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Create Promotion Stack",
+        "description": "This method creates one promotion stack. The sequence of promotion tier IDs will determine the promotion stacking order.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "promotions"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Specify the order of promotion tiers for the promotion stack.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromotionsStacksCreateRequestBody"
+              },
+              "examples": {
+                "Example": {
+                  "value": {
+                    "name": "Fifth Stack",
+                    "tiers": {
+                      "ids": [
+                        "promo_aaAF8mVAzA0PF1igia2OC63d",
+                        "promo_t9zdL6XMFk7B8fQ23zxELtdE",
+                        "promo_dJNhAEeV5sR5oPQq1UrUdnMC"
+                      ],
+                      "hierarchy_mode": "MANUAL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a new stack object if a valid promotion campaign identifier was provided in the path and available promotion IDs in the payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionsStacksCreateResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "id": "stack_q2AmzFvOMCmg4Wdu5bDBlME6",
+                      "name": "Fifth Stack",
+                      "created_at": "2022-09-23T07:44:53.888Z",
+                      "campaign_id": "camp_99HUWI53bVyLzPN1Fg5TBLWX",
+                      "object": "promotion_stack",
+                      "tiers": {
+                        "ids": [
+                          "promo_aaAF8mVAzA0PF1igia2OC63d",
+                          "promo_t9zdL6XMFk7B8fQ23zxELtdE",
+                          "promo_dJNhAEeV5sR5oPQq1UrUdnMC"
+                        ],
+                        "hierarchy_mode": "MANUAL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error if the campaign or promotion tier cannot be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Campaign Not Found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find campaign with id camp_99HUWI53bVyLzPN1Fg5TBLW",
+                      "request_id": "v-0bbc10de5886137afd",
+                      "resource_id": "camp_99HUWI53bVyLzPN1Fg5TBLW",
+                      "resource_type": "campaign"
+                    }
+                  },
+                  "Promotion Tier Not Found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find promotion_tier with id promo_dJNhAEeV5sR5oPQq1UrUdnM",
+                      "request_id": "v-0bbc11186303fa288a",
+                      "resource_id": "promo_dJNhAEeV5sR5oPQq1UrUdnM",
+                      "resource_type": "promotion_tier"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PromotionsStacksCreateRequestBody": {
+        "title": "Promotions Stacks Create Request Body",
+        "description": "Request body schema for **POST** `v1/promotions/{campaignId}/stacks`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PromotionStackBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "category_id": {
+                "type": "string",
+                "description": "Promotion stack category ID."
+              }
+            }
+          }
+        ]
+      },
+      "PromotionsStacksCreateResponseBody": {
+        "title": "Promotions Stacks Create Response Body",
+        "description": "Response body schema for **POST** `v1/promotions/{campaignId}/stacks`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PromotionStackBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique promotion stack ID."
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp representing the date and time when the promotion stack was created. The value is shown in the ISO 8601 format."
+              },
+              "campaign_id": {
+                "type": "string",
+                "description": "Promotion stack's parent campaign's unique ID."
+              },
+              "object": {
+                "type": "string",
+                "default": "promotion_stack",
+                "enum": [
+                  "promotion_stack"
+                ],
+                "description": "The type of the object represented by JSON."
+              },
+              "category_id": {
+                "type": "string",
+                "nullable": true,
+                "description": "Promotion stack category ID."
+              },
+              "categories": {
+                "type": "array",
+                "description": "Details about the category assigned to the promotion stack.",
+                "items": {
+                  "$ref": "#/components/schemas/PromotionStackBase"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "created_at",
+              "campaign_id",
+              "object",
+              "category_id",
+              "categories"
+            ]
+          }
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "PromotionStackBase": {
+        "title": "Promotion Stack Base",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Promotion stack name."
+          },
+          "tiers": {
+            "type": "object",
+            "required": [
+              "ids"
+            ],
+            "description": "Contains the tier configuration. A promotion stack can include up to 30 tiers.",
+            "properties": {
+              "ids": {
+                "type": "array",
+                "minItems": 1,
+                "description": "Contains the list of tiers in a pre-defined sequence.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "hierarchy_mode": {
+                "type": "string",
+                "default": "MANUAL",
+                "enum": [
+                  "MANUAL"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "tiers"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

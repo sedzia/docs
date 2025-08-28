@@ -1,0 +1,1718 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/customers/{customerId}/redeemables": {
+      "get": {
+        "operationId": "list-customer-redeemables",
+        "tags": [
+          "Customers"
+        ],
+        "summary": "List Customer's Redeemables",
+        "description": "Retrieves all the redeemables that have been assigned to the customer.\n\nTo use this endpoint, you must have the following permissions:\n\n- Read Customers (`customers.details.read`)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/ParameterOrderListRedeemables"
+            },
+            "in": "query",
+            "name": "order",
+            "description": "Sorts the results using one of the filtering options, where the dash - preceding a sorting option means sorting in a descending order."
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/ParameterString"
+            },
+            "in": "query",
+            "name": "starting_after_id",
+            "description": "A cursor for pagination. It retrieves the events starting after an event with the given ID."
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ParameterFiltersListCustomerRedeemables"
+            },
+            "description": "Filters for listing customer redeemables.",
+            "style": "deepObject",
+            "explode": true
+          }
+        ],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "customers"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The method returns redeemable(s) to which the given customer is assigned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomersRedeemablesListResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "object": "list",
+                      "data_ref": "data",
+                      "data": [
+                        {
+                          "id": "rh_0e7b8db4700106a852",
+                          "created_at": "2024-03-22T17:48:25.910Z",
+                          "redeemable_id": "v_GXVguPhq2khgFxH7GrRXWA91gDr1LiA1",
+                          "redeemable_object": "voucher",
+                          "customer_id": "cust_p1ufreYbVbwZ1x70nFkH9rF9",
+                          "holder_role": "OWNER",
+                          "campaign_id": "camp_weer1c3p5ZgktqfW56RfoNaG",
+                          "campaign_type": "DISCOUNT_COUPONS",
+                          "voucher_type": "DISCOUNT_VOUCHER",
+                          "redeemable": {
+                            "type": "voucher",
+                            "voucher": {
+                              "id": "v_GXVguPhq2khgFxH7GrRXWA91gDr1LiA1",
+                              "code": "3xRUnMVG",
+                              "campaign": "Gaz6Q29w1d",
+                              "campaign_id": "camp_weer1c3p5ZgktqfW56RfoNaG",
+                              "category": null,
+                              "category_id": null,
+                              "categories": [],
+                              "type": "DISCOUNT_VOUCHER",
+                              "discount": {
+                                "type": "AMOUNT",
+                                "amount_off": 1000
+                              },
+                              "gift": null,
+                              "loyalty_card": null,
+                              "start_date": null,
+                              "expiration_date": null,
+                              "validity_timeframe": null,
+                              "validity_hours": null,
+                              "validity_day_of_week": null,
+                              "active": true,
+                              "additional_info": null,
+                              "metadata": {},
+                              "assets": {
+                                "qr": {
+                                  "id": "fa250fcd-8d51-41e7-9dda-9288ce2799a7",
+                                  "url": "{{internalVoucherifyURL}}"
+                                },
+                                "barcode": {
+                                  "id": "1b876033-ad88-4e74-8344-27fca1767006",
+                                  "url": "{{internalVoucherifyURL}}"
+                                }
+                              },
+                              "is_referral_code": false,
+                              "created_at": "2024-03-22T17:48:18.57+00:00",
+                              "updated_at": "2024-03-22T17:48:25.910974+00:00",
+                              "holder_id": "cust_p1ufreYbVbwZ1x70nFkH9rF9",
+                              "redemption": {
+                                "quantity": null,
+                                "redeemed_quantity": 0,
+                                "object": "list",
+                                "url": "/v1/vouchers/3xRUnMVG/redemptions?page=1&limit=10"
+                              },
+                              "publish": {
+                                "object": "list",
+                                "count": 1,
+                                "url": "/v1/vouchers/3xRUnMVG/publications?page=1&limit=10"
+                              },
+                              "object": "voucher"
+                            },
+                            "status": "ACTIVE"
+                          }
+                        },
+                        {
+                          "id": "rh_0e79fe37e4926cafd6",
+                          "created_at": "2024-03-21T12:43:02.915Z",
+                          "redeemable_id": "v_nnxc1aFzFZCAhRlG6sm0kSO4jKUohc9b",
+                          "redeemable_object": "voucher",
+                          "customer_id": "cust_p1ufreYbVbwZ1x70nFkH9rF9",
+                          "holder_role": "REFERRER",
+                          "campaign_id": "camp_ixXNxP8kRoV15RoyZU4HqqYJ",
+                          "campaign_type": "REFERRAL_PROGRAM",
+                          "voucher_type": "DISCOUNT_VOUCHER",
+                          "redeemable": {
+                            "type": "voucher",
+                            "voucher": {
+                              "id": "v_nnxc1aFzFZCAhRlG6sm0kSO4jKUohc9b",
+                              "code": "PBF3ZYfS",
+                              "campaign": "REFER_2",
+                              "campaign_id": "camp_ixXNxP8kRoV15RoyZU4HqqYJ",
+                              "category": null,
+                              "category_id": null,
+                              "categories": [],
+                              "type": "DISCOUNT_VOUCHER",
+                              "discount": {
+                                "type": "AMOUNT",
+                                "amount_off": 88800,
+                                "effect": "APPLY_TO_ORDER"
+                              },
+                              "gift": null,
+                              "loyalty_card": null,
+                              "start_date": null,
+                              "expiration_date": null,
+                              "validity_timeframe": null,
+                              "validity_hours": null,
+                              "validity_day_of_week": null,
+                              "active": true,
+                              "additional_info": null,
+                              "metadata": {},
+                              "assets": {
+                                "qr": {
+                                  "id": "fc0471bf-0c7b-443f-9532-303437041eea",
+                                  "url": "{{internalVoucherifyURL}}"
+                                },
+                                "barcode": {
+                                  "id": "5b2f2007-494b-40c3-9d4c-ad27269a0cd0",
+                                  "url": "{{internalVoucherifyURL}}"
+                                }
+                              },
+                              "is_referral_code": true,
+                              "created_at": "2024-03-21T12:42:49.771+00:00",
+                              "updated_at": "2024-03-21T12:43:02.915953+00:00",
+                              "holder_id": "cust_p1ufreYbVbwZ1x70nFkH9rF9",
+                              "referrer_id": "cust_p1ufreYbVbwZ1x70nFkH9rF9",
+                              "redemption": {
+                                "quantity": null,
+                                "redeemed_quantity": 0,
+                                "object": "list",
+                                "url": "/v1/vouchers/PBF3ZYfS/redemptions?page=1&limit=10"
+                              },
+                              "publish": {
+                                "object": "list",
+                                "count": 1,
+                                "url": "/v1/vouchers/PBF3ZYfS/publications?page=1&limit=10"
+                              },
+                              "object": "voucher"
+                            },
+                            "status": "ACTIVE"
+                          }
+                        }
+                      ],
+                      "total": 2,
+                      "has_more": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error if a resource is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Resource not found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find customer with id cstmr_15071410",
+                      "request_id": "v-0eed8c98734a6e8706",
+                      "resource_id": "cstmr_15071410",
+                      "resource_type": "customer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/ParameterLimit"
+        },
+        "description": "Limits the number of objects to be returned. The limit can range between 1 and 100 items. If no limit is set, it returns 10 items."
+      }
+    },
+    "schemas": {
+      "ParameterOrderListRedeemables": {
+        "type": "string",
+        "enum": [
+          "id",
+          "-id"
+        ]
+      },
+      "ParameterString": {
+        "type": "string"
+      },
+      "ParameterFiltersListCustomerRedeemables": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "object",
+            "description": "Unique redeemable holder ID, i.e. `rh_0e77502f84f0f4a6a8`.",
+            "properties": {
+              "conditions": {
+                "$ref": "#/components/schemas/FilterConditionsString"
+              }
+            }
+          },
+          "created_at": {
+            "description": "Timestamp representing the date and time when the customer redeemable was created. The value is shown in the ISO 8601 format.",
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "$ref": "#/components/schemas/FilterConditionsDateTime"
+              }
+            }
+          },
+          "redeemable_id": {
+            "type": "object",
+            "description": "Unique redeemable ID, e.g. `v_hS8JFl8S6lNcd1L69wLIoXgTio7eWEgk`.",
+            "properties": {
+              "conditions": {
+                "$ref": "#/components/schemas/FilterConditionsString"
+              }
+            }
+          },
+          "redeemable_object": {
+            "type": "object",
+            "description": "Unique related object, i.e. `voucher`.",
+            "properties": {
+              "conditions": {
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "voucher"
+                      ]
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "voucher"
+                      ]
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Value is exactly this value (single value).",
+                    "enum": [
+                      "voucher"
+                    ]
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results omit this value (single value).",
+                    "enum": [
+                      "voucher"
+                    ]
+                  },
+                  "$has_value": {
+                    "type": "string",
+                    "description": "Value is NOT null. The value for this parameter is an empty string."
+                  },
+                  "$is_unknown": {
+                    "type": "string",
+                    "description": "Value is null. The value for this parameter is an empty string."
+                  },
+                  "$starts_with": {
+                    "type": "string",
+                    "description": "Value starts with the specified string."
+                  },
+                  "$ends_with": {
+                    "type": "string",
+                    "description": "Value ends with the specified string."
+                  }
+                }
+              }
+            }
+          },
+          "holder_role": {
+            "type": "object",
+            "description": "Holder role of the redeemable. Allowed values:\n`OWNER`,\n`REFEREE`,\n`REFERRER`.",
+            "properties": {
+              "conditions": {
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "OWNER",
+                        "REFEREE",
+                        "REFERRER"
+                      ]
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "OWNER",
+                        "REFEREE",
+                        "REFERRER"
+                      ]
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Value is exactly this value (single value).",
+                    "enum": [
+                      "OWNER",
+                      "REFEREE",
+                      "REFERRER"
+                    ]
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results omit this value (single value).",
+                    "enum": [
+                      "OWNER",
+                      "REFEREE",
+                      "REFERRER"
+                    ]
+                  },
+                  "$has_value": {
+                    "type": "string",
+                    "description": "Value is NOT null. The value for this parameter is an empty string."
+                  },
+                  "$is_unknown": {
+                    "type": "string",
+                    "description": "Value is null. The value for this parameter is an empty string."
+                  },
+                  "$starts_with": {
+                    "type": "string",
+                    "description": "Value starts with the specified string."
+                  },
+                  "$ends_with": {
+                    "type": "string",
+                    "description": "Value ends with the specified string."
+                  }
+                }
+              }
+            }
+          },
+          "campaign_id": {
+            "type": "object",
+            "description": "Unique campaign identifer, e.g. `camp_bfrwAVsP6Q1EM1ZjgHwheKYr`.",
+            "properties": {
+              "conditions": {
+                "$ref": "#/components/schemas/FilterConditionsString"
+              }
+            }
+          },
+          "campaign_type": {
+            "type": "object",
+            "description": "Type of the campaign. Allowed values:\n`DISCOUNT_COUPONS`,\n`REFERRAL_PROGRAM`,\n`GIFT_VOUCHERS`,\n`LOYALTY_PROGRAM`",
+            "properties": {
+              "conditions": {
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "LOYALTY_PROGRAM",
+                        "GIFT_VOUCHERS",
+                        "DISCOUNT_COUPONS",
+                        "REFERRAL_PROGRAM"
+                      ]
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "LOYALTY_PROGRAM",
+                        "GIFT_VOUCHERS",
+                        "DISCOUNT_COUPONS",
+                        "REFERRAL_PROGRAM"
+                      ]
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Value is exactly this value (single value).",
+                    "enum": [
+                      "LOYALTY_PROGRAM",
+                      "GIFT_VOUCHERS",
+                      "DISCOUNT_COUPONS",
+                      "REFERRAL_PROGRAM"
+                    ]
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results omit this value (single value).",
+                    "enum": [
+                      "LOYALTY_PROGRAM",
+                      "GIFT_VOUCHERS",
+                      "DISCOUNT_COUPONS",
+                      "REFERRAL_PROGRAM"
+                    ]
+                  },
+                  "$has_value": {
+                    "type": "string",
+                    "description": "Value is NOT null. The value for this parameter is an empty string."
+                  },
+                  "$is_unknown": {
+                    "type": "string",
+                    "description": "Value is null. The value for this parameter is an empty string."
+                  },
+                  "$starts_with": {
+                    "type": "string",
+                    "description": "Value starts with the specified string."
+                  },
+                  "$ends_with": {
+                    "type": "string",
+                    "description": "Value ends with the specified string."
+                  }
+                }
+              }
+            }
+          },
+          "voucher_type": {
+            "type": "object",
+            "description": "Type of the voucher. Allowed values:\n`DISCOUNT_VOUCHER`,\n`GIFT_VOUCHER`,\n`LOYALTY_CARD`.",
+            "properties": {
+              "conditions": {
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "GIFT_VOUCHER",
+                        "DISCOUNT_VOUCHER",
+                        "LOYALTY_CARD"
+                      ]
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of resource values that should be included in the results (multiple values).",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "GIFT_VOUCHER",
+                        "DISCOUNT_VOUCHER",
+                        "LOYALTY_CARD"
+                      ]
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Value is exactly this value (single value).",
+                    "enum": [
+                      "GIFT_VOUCHER",
+                      "DISCOUNT_VOUCHER",
+                      "LOYALTY_CARD"
+                    ]
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results omit this value (single value).",
+                    "enum": [
+                      "GIFT_VOUCHER",
+                      "DISCOUNT_VOUCHER",
+                      "LOYALTY_CARD"
+                    ]
+                  },
+                  "$has_value": {
+                    "type": "string",
+                    "description": "Value is NOT null. The value for this parameter is an empty string."
+                  },
+                  "$is_unknown": {
+                    "type": "string",
+                    "description": "Value is null. The value for this parameter is an empty string."
+                  },
+                  "$starts_with": {
+                    "type": "string",
+                    "description": "Value starts with the specified string."
+                  },
+                  "$ends_with": {
+                    "type": "string",
+                    "description": "Value ends with the specified string."
+                  }
+                }
+              }
+            }
+          },
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          }
+        }
+      },
+      "CustomersRedeemablesListResponseBody": {
+        "type": "object",
+        "title": "Customers Redeemables List Response Body",
+        "description": "Response body schema for **GET** `v1/customers/{customerId}/redeemables`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CustomerRedeemablesList"
+          }
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "ParameterLimit": {
+        "type": "integer",
+        "maximum": 100,
+        "minimum": 1
+      },
+      "FilterConditionsString": {
+        "title": "Filter by conditions",
+        "type": "object",
+        "description": "Data filters used to narrow down the data records to be returned in the result.",
+        "properties": {
+          "$in": {
+            "type": "array",
+            "description": "Array of resource values that should be included in the results (multiple values).",
+            "items": {
+              "type": "string"
+            }
+          },
+          "$not_in": {
+            "type": "array",
+            "description": "Array of resource values that should be included in the results (multiple values).",
+            "items": {
+              "type": "string"
+            }
+          },
+          "$is": {
+            "type": "string",
+            "description": "Value is exactly this value (single value)."
+          },
+          "$is_not": {
+            "type": "string",
+            "description": "Results omit this value (single value)."
+          },
+          "$has_value": {
+            "type": "string",
+            "description": "Value is NOT null. The value for this parameter is an empty string."
+          },
+          "$is_unknown": {
+            "type": "string",
+            "description": "Value is null. The value for this parameter is an empty string."
+          },
+          "$starts_with": {
+            "type": "string",
+            "description": "Value starts with the specified string."
+          },
+          "$ends_with": {
+            "type": "string",
+            "description": "Value ends with the specified string."
+          },
+          "$contains": {
+            "type": "string",
+            "description": "Value includes the specified string."
+          },
+          "$not_contain": {
+            "type": "string",
+            "description": "Value does NOT include the specified string."
+          }
+        }
+      },
+      "FilterConditionsDateTime": {
+        "title": "Filter by conditions",
+        "type": "object",
+        "description": "Data filters used to narrow down the data records to be returned in the result.",
+        "properties": {
+          "$after": {
+            "type": "string",
+            "description": "Value is after this date. The value for this parameter is shown in the ISO 8601 format.",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "$before": {
+            "type": "string",
+            "description": "Value is before this date. The value for this parameter is shown in the ISO 8601 format.",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "$has_value": {
+            "type": "string",
+            "description": "Value is NOT null. The value for this parameter is an empty string."
+          },
+          "$is_unknown": {
+            "type": "string",
+            "description": "Value is null. The value for this parameter is an empty string."
+          },
+          "$more_than": {
+            "type": "integer",
+            "description": "Value is more days ago before the current date and time, e.g. more than `10` days ago."
+          },
+          "$less_than": {
+            "type": "integer",
+            "description": "Value is less days before the current date and time, e.g. less than `10` days ago."
+          }
+        }
+      },
+      "Junction": {
+        "title": "Junction",
+        "description": "Logical Operator Between Filters. Filter by conditions set on the `junction` parameter indicating how the `conditions` should be accounted for in the query. An `AND` is an all-inclusive logical operator, meaning the `AND` operator displays a record if **ALL** the conditions separated by AND are TRUE, while  an `OR` operator displays a record if **ANY** of the conditions separated by OR is TRUE.",
+        "enum": [
+          "and",
+          "or"
+        ],
+        "type": "string"
+      },
+      "CustomerRedeemablesList": {
+        "type": "object",
+        "title": "Customer Redeemables List",
+        "description": "List of customer's redeemables",
+        "properties": {
+          "object": {
+            "type": "string",
+            "description": "The type of the object represented by JSON. This object stores information about customer redeemables.",
+            "default": "list"
+          },
+          "data_ref": {
+            "type": "string",
+            "description": "Identifies the name of the JSON property that contains the array of redeemables.",
+            "default": "data"
+          },
+          "data": {
+            "type": "array",
+            "description": "A dictionary that contains an array of redeemables.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerRedeemable"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of results returned."
+          },
+          "has_more": {
+            "type": "boolean",
+            "description": "As query results are always limited (by the limit parameter), the `has_more` flag indicates if there are more records for given filter parameters. This lets you know if you can run another request with a `starting_after_id` query or a different limit to get more records returned in the results."
+          },
+          "more_starting_after": {
+            "type": "string",
+            "description": "Returns an ID that can be used to return another page of results. Use the ID in the `starting_after_id` query parameter to display another page of the results occuring after the field with that ID."
+          }
+        },
+        "required": [
+          "object",
+          "data_ref",
+          "data",
+          "total",
+          "has_more"
+        ]
+      },
+      "CustomerRedeemable": {
+        "type": "object",
+        "title": "Customer Redeemable",
+        "description": "Single customer's redeemable",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique redeemable holder identifier.",
+            "example": "rh_0e7b8db4700106a852"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp representing the date and time when the redeemable was assigned. The value is shown in the ISO 8601 format.",
+            "example": "2024-03-22T17:48:25.910Z"
+          },
+          "redeemable_id": {
+            "type": "string",
+            "description": "Identifier of the redeemable item.",
+            "example": "v_GXVguPhq2khgFxH7GrRXWA91gDr1LiA1"
+          },
+          "redeemable_object": {
+            "type": "string",
+            "description": "Type of the redeemable.",
+            "example": "voucher"
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Identifier of the customer.",
+            "example": "cust_p1ufreYbVbwZ1x70nFkH9rF9"
+          },
+          "holder_role": {
+            "type": "string",
+            "description": "Role of the holder.",
+            "enum": [
+              "OWNER",
+              "REFERRER",
+              "REFEREE"
+            ],
+            "default": "OWNER",
+            "example": "OWNER"
+          },
+          "campaign_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unique campaign identifier, assigned by Voucherify.",
+            "example": "camp_weer1c3p5ZgktqfW56RfoNaG"
+          },
+          "campaign_type": {
+            "type": "string",
+            "nullable": true,
+            "description": "Defines the type of the campaign.",
+            "enum": [
+              "LOYALTY_PROGRAM",
+              "GIFT_VOUCHERS",
+              "DISCOUNT_COUPONS",
+              "PROMOTION",
+              "REFERRAL_PROGRAM"
+            ],
+            "example": "DISCOUNT_COUPONS",
+            "default": "DISCOUNT_COUPONS"
+          },
+          "voucher_type": {
+            "type": "string",
+            "description": "Defines the type of the voucher.",
+            "enum": [
+              "GIFT_VOUCHER",
+              "DISCOUNT_VOUCHER",
+              "LOYALTY_CARD"
+            ],
+            "default": "DISCOUNT_VOUCHER",
+            "example": "DISCOUNT_VOUCHER"
+          },
+          "redeemable": {
+            "type": "object",
+            "description": "Detailed information about the customer's redeemable item",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of the redeemable.",
+                "example": "voucher"
+              },
+              "voucher": {
+                "description": "Defines the details of the voucher.",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/RedeemableVoucher"
+                  }
+                ]
+              },
+              "status": {
+                "type": "string",
+                "description": "Status of the redeemable.",
+                "enum": [
+                  "ACTIVE",
+                  "USED",
+                  "DISABLED",
+                  "NOT_ACTIVE_YET",
+                  "EXPIRED",
+                  "NO_BALANCE"
+                ],
+                "default": "ACTIVE",
+                "example": "ACTIVE"
+              }
+            },
+            "required": [
+              "type",
+              "voucher",
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "redeemable_id",
+          "redeemable_object",
+          "customer_id",
+          "holder_role",
+          "campaign_id",
+          "campaign_type",
+          "voucher_type",
+          "redeemable"
+        ]
+      },
+      "RedeemableVoucher": {
+        "title": "Voucher",
+        "type": "object",
+        "description": "This is an object representing a voucher.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "v_mkZN9v7vjYUadXnHrMza8W5c34fE5KiV",
+            "description": "Assigned by the Voucherify API, identifies the voucher."
+          },
+          "code": {
+            "type": "string",
+            "example": "WVPblOYX",
+            "description": "A code that identifies a voucher. Pattern can use all letters of the English alphabet, Arabic numerals, and special characters."
+          },
+          "campaign": {
+            "type": "string",
+            "example": "Gift Card Campaign",
+            "description": "A unique campaign name, identifies the voucher's parent campaign."
+          },
+          "campaign_id": {
+            "type": "string",
+            "example": "camp_FNYR4jhqZBM9xTptxDGgeNBV",
+            "description": "Assigned by the Voucherify API, identifies the voucher's parent campaign."
+          },
+          "category": {
+            "type": "string",
+            "nullable": true,
+            "description": "The value is null."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Unique category ID assigned by Voucherify.",
+            "example": "cat_0bb343dee3cdb5ec0c"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Contains an empty array."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "GIFT_VOUCHER",
+              "DISCOUNT_VOUCHER",
+              "LOYALTY_CARD"
+            ],
+            "description": "Defines the type of the voucher. "
+          },
+          "discount": {
+            "$ref": "#/components/schemas/Discount"
+          },
+          "gift": {
+            "type": "object",
+            "description": "Object representing gift parameters. Child attributes are present only if `type` is `GIFT_VOUCHER`. Defaults to `null`.",
+            "properties": {
+              "amount": {
+                "type": "integer",
+                "example": 10000,
+                "description": "Total gift card income over the lifetime of the card. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+              },
+              "subtracted_amount": {
+                "type": "integer",
+                "description": "Total amount of subtracted credits over the gift card lifetime. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+              },
+              "balance": {
+                "type": "integer",
+                "example": 500,
+                "description": "Available funds. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`. `balance` = `amount` - `subtracted_amount` - `redemption.redeemed_amount`."
+              },
+              "effect": {
+                "type": "string",
+                "enum": [
+                  "APPLY_TO_ORDER",
+                  "APPLY_TO_ITEMS"
+                ],
+                "description": "Defines how the credits are applied to the customer's order."
+              }
+            }
+          },
+          "loyalty_card": {
+            "type": "object",
+            "description": "Object representing loyalty card parameters. Child attributes are present only if `type` is `LOYALTY_CARD`. Defaults to `null`.",
+            "properties": {
+              "points": {
+                "type": "integer",
+                "example": 7000,
+                "description": "Total number of points added to the loyalty card over its lifespan."
+              },
+              "balance": {
+                "type": "integer",
+                "example": 6970,
+                "description": "Points available for reward redemption. This is calculated as follows: `balance` = `points` - `expired_points` - `subtracted_points` - `redemption.redeemed_points`."
+              },
+              "next_expiration_date": {
+                "type": "string",
+                "format": "date",
+                "example": "2023-05-30",
+                "description": "The next closest date when the next set of points are due to expire."
+              },
+              "next_expiration_points": {
+                "type": "integer",
+                "description": "The amount of points that are set to expire next."
+              },
+              "pending_points": {
+                "type": "integer",
+                "description": "Shows the number of pending points that will be added to the loyalty card when they are activated automatically or manually."
+              },
+              "expired_points": {
+                "type": "integer",
+                "description": "Shows the total number of expired points over the lifetime of the loyalty card."
+              },
+              "subtracted_points": {
+                "type": "integer",
+                "description": "Shows the total number of subtracted points over the lifetime of the loyalty card."
+              }
+            }
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2021-12-01T00:00:00.000Z",
+            "format": "date-time",
+            "description": "Activation timestamp defines when the code starts to be active in ISO 8601 format. Voucher is *inactive before* this date. "
+          },
+          "expiration_date": {
+            "type": "string",
+            "example": "2021-12-31T00:00:00.000Z",
+            "format": "date-time",
+            "description": "Expiration timestamp defines when the code expires in ISO 8601 format.  Voucher is *inactive after* this date."
+          },
+          "validity_timeframe": {
+            "$ref": "#/components/schemas/ValidityTimeframe"
+          },
+          "validity_day_of_week": {
+            "$ref": "#/components/schemas/ValidityDayOfWeek"
+          },
+          "validity_hours": {
+            "$ref": "#/components/schemas/ValidityHours"
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "A flag to toggle the voucher on or off. You can disable a voucher even though it's within the active period defined by the `start_date` and `expiration_date`.  \n\n- `true` indicates an *active* voucher\n- `false` indicates an *inactive* voucher"
+          },
+          "additional_info": {
+            "type": "string",
+            "description": "An optional field to keep any extra textual information about the code such as a code description and details."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "The metadata object stores all custom attributes assigned to the code. A set of key/value pairs that you can attach to a voucher object. It can be useful for storing additional information about the voucher in a structured format."
+          },
+          "assets": {
+            "$ref": "#/components/schemas/VoucherAssets"
+          },
+          "is_referral_code": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Flag indicating whether this voucher is a referral code; `true` for campaign type `REFERRAL_PROGRAM`."
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2021-12-22T10:13:06.487Z",
+            "description": "Timestamp representing the date and time when the voucher was created. The value is shown in the ISO 8601 format.",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2021-12-22T10:14:45.316Z",
+            "format": "date-time",
+            "description": "Timestamp representing the date and time when the voucher was last updated in ISO 8601 format."
+          },
+          "referrer_id": {
+            "type": "string",
+            "description": "Unique identifier of the referring person.",
+            "example": "cust_Vzck5i8U3OhcEUFY6MKhN9Rv"
+          },
+          "holder_id": {
+            "type": "string",
+            "example": "cust_eWgXlBBiY6THFRJwX45Iakv4",
+            "description": "Unique customer identifier of the redeemable holder. It equals to the customer ID assigned by Voucherify."
+          },
+          "object": {
+            "type": "string",
+            "description": "The type of the object represented by JSON. Default is `voucher`.",
+            "default": "voucher"
+          },
+          "publish": {
+            "type": "object",
+            "description": "This object stores a summary of publish events: an events counter and an endpoint which can be called to return details of each event.  A publication is required for loyalty cards and referral codes. This object gets updated whenever a voucher has been published. Publication means assigning a code to a particular customer. Typically, a publication is made by distributing your codes to your customers, e.g. through Export to MailChimp or <!-- [publish voucher](OpenAPI.json/paths/~1publications/post) -->[publish voucher](ref:create-publication) API method. \n\n<!-- title: My Table Title -->\n\n| Required | Optional |\n| -------- | :------: |\n| `type`:`LOYALTY_CARD` |  `type`:`DISCOUNT_VOUCHER`   | \n| `is_referral_code`:`true`      |    `type`:`GIFT_VOUCHER`   |\n",
+            "properties": {
+              "object": {
+                "type": "string",
+                "default": "list",
+                "description": "The type of the object represented is by default `list`. To get this list, you need to make a call to the endpoint returned in the `url` attribute."
+              },
+              "count": {
+                "type": "integer",
+                "example": 0,
+                "description": "Publication events counter."
+              },
+              "url": {
+                "type": "string",
+                "example": "/v1/vouchers/WVPblOYX/publications?page=1&limit=10",
+                "description": "The endpoint where this list of publications can be accessed using a **GET** method. `/v1/vouchers/{voucher_code}/publications`"
+              }
+            }
+          },
+          "redemption": {
+            "type": "object",
+            "description": "Stores a summary of redemptions that have been applied to the voucher.",
+            "properties": {
+              "quantity": {
+                "type": "integer",
+                "description": "How many times a voucher can be redeemed. A `null` value means unlimited."
+              },
+              "redeemed_quantity": {
+                "type": "integer",
+                "example": 1,
+                "description": "How many times a voucher has already been redeemed."
+              },
+              "redeemed_points": {
+                "type": "integer",
+                "example": 100000,
+                "description": "Total loyalty points redeemed."
+              },
+              "object": {
+                "type": "string",
+                "default": "list",
+                "description": "The type of the object represented is by default `list`. To get this list, you need to make a call to the endpoint returned in the url attribute."
+              },
+              "url": {
+                "type": "string",
+                "example": "/v1/vouchers/WVPblOYX/redemptions?page=1&limit=10",
+                "description": "The endpoint where this list of redemptions can be accessed using a **GET** method. `/v1/vouchers/{voucher_code}/redemptions`"
+              }
+            }
+          }
+        }
+      },
+      "Discount": {
+        "title": "Discount",
+        "type": "object",
+        "description": "Contains information about discount.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DiscountAmount"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountUnit"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountUnitMultiple"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountPercent"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountFixed"
+          }
+        ]
+      },
+      "ValidityTimeframe": {
+        "title": "Validity Timeframe",
+        "type": "object",
+        "description": "Set recurrent time periods when the earning rule is valid. For example, valid for 1 hour every other day.`start_date` **required** when including the `validity_timeframe`.",
+        "properties": {
+          "duration": {
+            "type": "string",
+            "description": "Defines the amount of time an earning rule will be active in ISO 8601 format. For example, an earning rule with a `duration` of `PT1H` will be valid for a duration of one hour.",
+            "example": "PT1H"
+          },
+          "interval": {
+            "type": "string",
+            "description": "Defines the intervening time between two time points in ISO 8601 format, expressed as a duration. For example, an earning rule with an `interval` of `P2D` will be valid every other day.",
+            "example": "P2D"
+          }
+        }
+      },
+      "ValidityDayOfWeek": {
+        "title": "Validity Day Of Week",
+        "type": "array",
+        "description": "Integer array corresponding to the particular days of the week in which the voucher is valid.\n\n- `0` Sunday\n- `1` Monday\n- `2` Tuesday\n- `3` Wednesday\n- `4` Thursday\n- `5` Friday\n- `6` Saturday",
+        "items": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      },
+      "ValidityHours": {
+        "title": "Validity Hours",
+        "type": "object",
+        "description": "Determines the hours of validity, e.g. to create a happy hours scenario.",
+        "properties": {
+          "daily": {
+            "type": "array",
+            "description": "Defines the reccuring period(s) when the resource is active. The periods should not overlap.",
+            "items": {
+              "type": "object",
+              "description": "Defines the reccuring period(s) when the resource will be active.",
+              "properties": {
+                "start_time": {
+                  "type": "string",
+                  "format": "time",
+                  "description": "Defines the starting hour of validity in the HH:mm format. The resource is *inactive before* this time.",
+                  "example": "12:00"
+                },
+                "days_of_week": {
+                  "type": "array",
+                  "description": "Integer array corresponding to the particular days of the week in which the resource is valid.\n\n- `0` Sunday\n- `1` Monday\n- `2` Tuesday\n- `3`  Wednesday\n- `4` Thursday\n- `5` Friday\n- `6` Saturday",
+                  "items": {
+                    "type": "integer",
+                    "enum": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
+                  }
+                },
+                "expiration_time": {
+                  "type": "string",
+                  "format": "time",
+                  "description": "Defines the ending hour of validity in the HH:mm format. The resource is *inactive after* this time.",
+                  "example": "14:00"
+                }
+              }
+            }
+          }
+        }
+      },
+      "VoucherAssets": {
+        "title": "Voucher Assets",
+        "type": "object",
+        "description": "Stores links to images of QR and barcode that correspond to an encrypted voucher code.",
+        "properties": {
+          "qr": {
+            "type": "object",
+            "description": "Stores Quick Response (QR) representation of encrypted code.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "U2FsdGVkX19ucFhvVmBVpVYG5KoswTsjSIaqoKg5L9ie4BK+t4pp7U7oFzjGJzj9q/bmuMOj9mEFiVKDMIkSaruKedMvHbKoPX5Sg+BaZk5QwXMf8k/OzSlOEVybpwSq+AiqPoNtjeuqtIgkDyvT6Q==",
+                "description": "Encrypted voucher code ID."
+              },
+              "url": {
+                "type": "string",
+                "example": "https://dev.dl.voucherify.io/api/v1/assets/qr/U2FsdGVkX19ucFhvVmBVpVYG5KoswTsjSIaqoKg5L9ie4BK%2Bt4pp7U7oFzjGJzj9q%2FbmuMOj9mEFiVKDMIkSaruKedMvHbKoPX5Sg%2BBaZk5QwXMf8k%2FOzSlOEVybpwSq%2BAiqPoNtjeuqtIgkDyvT6Q%3D%3D",
+                "description": "URL to QR code  \n\n*Optional:* Attach query parameters to base URL to customize the image of the encrypted voucher code.  \n\n- `size`: integer value from `1` to `100`  \n- `format`: string, either `png` (default) or `svg`"
+              }
+            }
+          },
+          "barcode": {
+            "type": "object",
+            "description": "Stores barcode representation of encrypted code.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "U2FsdGVkX19eJhGfWwUrH9+tulBkON+AnMktic+N6CVWzZ9+fHVxuVx22WakrzxiWXy0skuvvEHSeZIw9HlgyIJ+kJ1iPdUKpyENuNYJKzoZlO0mmTf6WQM6/pFs61apEn9SJx32ttCF6d3oxKISQQ==",
+                "description": "Encrypted voucher code ID."
+              },
+              "url": {
+                "type": "string",
+                "example": "https://dev.dl.voucherify.io/api/v1/assets/barcode/U2FsdGVkX19eJhGfWwUrH9%2BtulBkON%2BAnMktic%2BN6CVWzZ9%2BfHVxuVx22WakrzxiWXy0skuvvEHSeZIw9HlgyIJ%2BkJ1iPdUKpyENuNYJKzoZlO0mmTf6WQM6%2FpFs61apEn9SJx32ttCF6d3oxKISQQ%3D%3D",
+                "description": "URL to barcode  \n\n*Optional:* Attach query parameters to base URL to customize the image of the encrypted voucher code.  \n\n- `size`: integer value from `1` to `100`  \n- `format`: string, either `png` (default) or `svg`"
+              }
+            }
+          }
+        }
+      },
+      "DiscountAmount": {
+        "type": "object",
+        "title": "Amount",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "AMOUNT",
+            "enum": [
+              "AMOUNT"
+            ],
+            "description": "Defines the type of the voucher."
+          },
+          "amount_off": {
+            "type": "number",
+            "description": "Amount taken off the subtotal of a price. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 discount is written as 1000."
+          },
+          "amount_off_formula": {
+            "type": "string"
+          },
+          "aggregated_amount_limit": {
+            "type": "integer",
+            "description": "Maximum discount amount per order."
+          },
+          "effect": {
+            "description": "Defines how the discount is applied to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountAmountVouchersEffectTypes"
+              }
+            ]
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "amount_off"
+        ]
+      },
+      "DiscountUnit": {
+        "type": "object",
+        "title": "Unit",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "enum": [
+              "UNIT"
+            ],
+            "description": "Discount type."
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_off_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the number of units."
+          },
+          "effect": {
+            "description": "Defines how the unit is added to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountUnitVouchersEffectTypes"
+              }
+            ]
+          },
+          "unit_type": {
+            "type": "string",
+            "description": "The product deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "product": {
+            "description": "Contains information about the product.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimpleProductDiscountUnit"
+              }
+            ]
+          },
+          "sku": {
+            "$ref": "#/components/schemas/SimpleSkuDiscountUnit"
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "unit_type"
+        ]
+      },
+      "DiscountUnitMultiple": {
+        "type": "object",
+        "title": "Unit Multiple",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "enum": [
+              "UNIT"
+            ],
+            "description": "Discount type."
+          },
+          "effect": {
+            "type": "string",
+            "default": "ADD_MANY_ITEMS",
+            "enum": [
+              "ADD_MANY_ITEMS"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiscountUnitMultipleOneUnit"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "units"
+        ]
+      },
+      "DiscountPercent": {
+        "type": "object",
+        "title": "Percent",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "PERCENT",
+            "enum": [
+              "PERCENT"
+            ],
+            "description": "Defines the type of the voucher."
+          },
+          "percent_off": {
+            "type": "number",
+            "description": "The percent discount that the customer will receive."
+          },
+          "percent_off_formula": {
+            "type": "string"
+          },
+          "amount_limit": {
+            "type": "number",
+            "description": "Upper limit allowed to be applied as a discount. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $6 maximum discount is written as 600."
+          },
+          "aggregated_amount_limit": {
+            "type": "integer",
+            "description": "Maximum discount amount per order."
+          },
+          "effect": {
+            "description": "Defines how the discount is applied to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountPercentVouchersEffectTypes"
+              }
+            ]
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "percent_off"
+        ]
+      },
+      "DiscountFixed": {
+        "title": "Fixed",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "FIXED",
+            "enum": [
+              "FIXED"
+            ],
+            "description": "Defines the type of the voucher."
+          },
+          "fixed_amount": {
+            "type": "number",
+            "description": "Sets a fixed value for an order total or the item price. The value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 discount is written as 1000. If the fixed amount is calculated by the formula, i.e. the `fixed_amount_formula` parameter is present in the fixed amount definition, this value becomes the **fallback value**. As a result, if the formula cannot be calculated due to missing metadata, for example, this value will be used as the fixed value."
+          },
+          "fixed_amount_formula": {
+            "type": "string"
+          },
+          "effect": {
+            "description": "Defines how the discount is applied to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountFixedVouchersEffectTypes"
+              }
+            ]
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "fixed_amount"
+        ]
+      },
+      "DiscountAmountVouchersEffectTypes": {
+        "title": "Discount Amount Vouchers Effect Types",
+        "enum": [
+          "APPLY_TO_ORDER",
+          "APPLY_TO_ITEMS",
+          "APPLY_TO_ITEMS_PROPORTIONALLY",
+          "APPLY_TO_ITEMS_PROPORTIONALLY_BY_QUANTITY",
+          "APPLY_TO_ITEMS_BY_QUANTITY"
+        ],
+        "type": "string"
+      },
+      "DiscountUnitVouchersEffectTypes": {
+        "title": "Discount Unit Vouchers Effect Types",
+        "enum": [
+          "ADD_MISSING_ITEMS",
+          "ADD_NEW_ITEMS",
+          "ADD_MANY_ITEMS"
+        ],
+        "type": "string"
+      },
+      "SimpleProductDiscountUnit": {
+        "type": "object",
+        "title": "Simple Product Discount Unit",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique product ID, assigned by Voucherify."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "Product's source ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "Product name."
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "SimpleSkuDiscountUnit": {
+        "type": "object",
+        "title": "Simple Sku Discount Unit",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique SKU ID, assigned by Voucherify."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "Product variant's source ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "Sku name"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "DiscountUnitMultipleOneUnit": {
+        "type": "object",
+        "title": "One Unit",
+        "properties": {
+          "unit_off": {
+            "type": "number",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_off_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the number of units."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "ADD_NEW_ITEMS",
+              "ADD_MISSING_ITEMS"
+            ],
+            "description": "Defines how the unit is added to the customer's order.\n\n"
+          },
+          "unit_type": {
+            "type": "string",
+            "description": "The product deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "product": {
+            "description": "Contains information about the product.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimpleProductDiscountUnit"
+              }
+            ]
+          },
+          "sku": {
+            "description": "Contains information about the sku.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimpleSkuDiscountUnit"
+              }
+            ]
+          }
+        },
+        "required": [
+          "effect",
+          "unit_type"
+        ]
+      },
+      "DiscountPercentVouchersEffectTypes": {
+        "title": "Discount Percent Vouchers Effect Types",
+        "enum": [
+          "APPLY_TO_ORDER",
+          "APPLY_TO_ITEMS"
+        ],
+        "type": "string"
+      },
+      "DiscountFixedVouchersEffectTypes": {
+        "title": "Discount Fixed Vouchers Effect Types",
+        "enum": [
+          "APPLY_TO_ORDER",
+          "APPLY_TO_ITEMS"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

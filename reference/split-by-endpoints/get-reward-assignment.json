@@ -1,0 +1,326 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/rewards/{rewardId}/assignments/{assignmentId}": {
+      "get": {
+        "operationId": "get-reward-assignment",
+        "tags": [
+          "Rewards"
+        ],
+        "summary": "Get Reward Assignment",
+        "description": "Retrieve a reward assignment.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "rewards"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a reward assignment object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RewardsAssignmentsGetResponseBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error indicating that the reward assignment with given ID was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Reward Assignment Not Found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find reward_assignment with id rewa_pJYQBXSitK2OVPK3XMXZK76X",
+                      "request_id": "v-0b95b596e98ad5da24",
+                      "resource_id": "rewa_pJYQBXSitK2OVPK3XMXZK76X",
+                      "resource_type": "reward_assignment"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RewardsAssignmentsGetResponseBody": {
+        "type": "object",
+        "title": "Rewards Assignments Get Response Body",
+        "description": "Response body schema for **GET** `v1/rewards/{rewardId}/assignments/{assignmentId}`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RewardAssignment"
+          }
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "RewardAssignment": {
+        "title": "Reward Assignment",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RewardAssignmentBase"
+          },
+          {
+            "$ref": "#/components/schemas/RewardAssignmentParameters"
+          }
+        ],
+        "type": "object"
+      },
+      "RewardAssignmentBase": {
+        "title": "Reward Assignment Base",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "rewa_PbIRoMXpwe5QhobW4JKu0VjH",
+            "description": "Unique reward assignment ID, assigned by Voucherify."
+          },
+          "reward_id": {
+            "type": "string",
+            "description": "Associated reward ID.",
+            "example": "rew_C7wS9eHFDN4CIbXI5PpLSkGY"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Timestamp representing the date and time when the reward assignment was created. The value is shown in the ISO 8601 format.",
+            "example": "2022-08-11T14:49:22.586Z",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "nullable": true,
+            "description": "Timestamp representing the date and time when the reward assignment was updated. The value is shown in the ISO 8601 format.",
+            "example": "2022-08-11T16:01:34.885Z",
+            "format": "date-time"
+          },
+          "object": {
+            "type": "string",
+            "description": "The type of the object represented by the JSON. This object stores information about the reward assignment.",
+            "default": "reward_assignment",
+            "enum": [
+              "reward_assignment"
+            ]
+          },
+          "related_object_id": {
+            "type": "string",
+            "description": "Related object ID to which the reward was assigned.",
+            "example": "camp_wciTvaOfYmAa3EmIIW3QpXXZ"
+          },
+          "related_object_type": {
+            "type": "string",
+            "description": "Related object type to which the reward was assigned.",
+            "default": "campaign",
+            "enum": [
+              "campaign"
+            ]
+          }
+        },
+        "required": [
+          "related_object_id",
+          "related_object_type",
+          "id",
+          "reward_id",
+          "created_at",
+          "updated_at",
+          "object"
+        ]
+      },
+      "RewardAssignmentParameters": {
+        "title": "Digital or Material Reward - Parameters",
+        "type": "object",
+        "properties": {
+          "parameters": {
+            "description": "Defines the cost of the reward.",
+            "type": "object",
+            "properties": {
+              "loyalty": {
+                "type": "object",
+                "description": "Defines the equivalent points value of the reward.",
+                "properties": {
+                  "points": {
+                    "type": "integer",
+                    "description": "The number of points required to redeem the reward."
+                  },
+                  "auto_redeem": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Determines if the reward is redeemed automatically when the customer reaches the sufficient number of points to redeem it. Value `true` means that the automatic reward redemption is active. Only one reward can be set to be redeemed automatically in a loyalty campaign, i.e. only one can have the value `true`."
+                  }
+                }
+              }
+            },
+            "required": [
+              "loyalty"
+            ]
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

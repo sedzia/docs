@@ -1,0 +1,364 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/loyalties/members/{memberId}/pending-points/{pendingPointsId}/balance": {
+      "post": {
+        "operationId": "adjust-member-pending-points",
+        "tags": [
+          "Loyalties"
+        ],
+        "summary": "Adjust Member Pending Points",
+        "description": "Adjusts the pending points with a given ID. You can add or subtract the number of points.\n\n>👍 Configuring pending points\n>\n>Pending points are configured as part of an earning rule with [POST Create earning rule](ref:create-earning-rule) or [PUT Update earning rule](ref:update-earning-rule).",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "loyalties"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Define the number of pending points to be added or subtracted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoyaltiesMembersPendingPointsBalanceRequestBody"
+              },
+              "examples": {
+                "Add pending points": {
+                  "value": {
+                    "points": 10
+                  }
+                },
+                "Subtract pending points": {
+                  "value": {
+                    "points": -10
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the details about the balance adjustment of the pending points with a given ID for a loyalty card.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoyaltiesMembersPendingPointsBalanceResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "points": 5,
+                      "total": 16,
+                      "object": "balance",
+                      "related_object": {
+                        "type": "voucher",
+                        "id": "v_abCdEfghI1JKLMNPqRS2Tu3vWXyza4bc"
+                      },
+                      "operation_type": "MANUAL"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns an error if the pending points have been already activated (manually or automatically), canceled, or the value would be 0 or negative.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Invalid state of pending points": {
+                    "value": {
+                      "code": 400,
+                      "key": "invalid_pending_points_state",
+                      "message": "Invalid pending points state",
+                      "details": "Only pending points in 'PENDING' status can be updated. Current status: 'ACTIVATED'.",
+                      "request_id": "v-1038ed567c12003d7c"
+                    }
+                  },
+                  "Results in 0 pending points": {
+                    "value": {
+                      "code": 400,
+                      "key": "invalid_amount",
+                      "message": "Invalid Amount",
+                      "details": "Amount has to be a valid positive number",
+                      "request_id": "v-0ffe8a8ca1e4bd52f9"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error if the member or pending point ID could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Pending point ID not found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find pending_points with id lopp_1234a56b789cd012e",
+                      "request_id": "v-1038ed92ce61bc45c4",
+                      "resource_id": "lopp_1234a56b789cd012e",
+                      "resource_type": "pending_points"
+                    }
+                  },
+                  "Loyalty card not found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find voucher with id NoSuchLoyaltyCard",
+                      "request_id": "v-1038edd6e1e1bc4628",
+                      "resource_id": "NoSuchLoyaltyCard",
+                      "resource_type": "voucher"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoyaltiesMembersPendingPointsBalanceRequestBody": {
+        "title": "Loyalties Members Pending Points Balance Request Body",
+        "type": "object",
+        "description": "Request body schema for **POST** `v1/loyalties/members/{memberId}/pending-points/{pendingPointsId}/balance`.",
+        "properties": {
+          "points": {
+            "type": "integer",
+            "description": "Add or subtract pending points with a given ID. A negative value subtracts the points."
+          }
+        }
+      },
+      "LoyaltiesMembersPendingPointsBalanceResponseBody": {
+        "title": "Loyalties Members Pending Points Balance Response Body",
+        "type": "object",
+        "description": "Response body schema for **POST** `/loyalties/members/{memberId}/pending-points/{pendingPointsId}/balance`.",
+        "properties": {
+          "points": {
+            "type": "integer",
+            "description": "The number of pending points added to or subtracted from the loyalty card."
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of pending points currently on a loyalty card."
+          },
+          "object": {
+            "type": "string",
+            "description": "The type of the object represented by JSON. Default is `balance`.",
+            "default": "balance",
+            "enum": [
+              "balance"
+            ]
+          },
+          "related_object": {
+            "type": "object",
+            "description": "Defines the resource that is being modified.",
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "The object being modified, i.e. `voucher`.",
+                "default": "voucher",
+                "enum": [
+                  "voucher"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "description": "Identifies the voucher that is being modified. This is the unique identifer that was assigned by Voucherify.",
+                "example": "v_abCdEfghI1JKLMNPqRS2Tu3vWXyza4bc"
+              }
+            }
+          },
+          "operation_type": {
+            "type": "string",
+            "description": "The type of the operation being performed.",
+            "default": "MANUAL",
+            "enum": [
+              "MANUAL"
+            ]
+          }
+        },
+        "required": [
+          "points",
+          "total",
+          "object",
+          "related_object",
+          "operation_type"
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

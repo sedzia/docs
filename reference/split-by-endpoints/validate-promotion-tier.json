@@ -1,0 +1,2608 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/promotions/tiers/{tierId}/validation": {
+      "post": {
+        "operationId": "validate-promotion-tier",
+        "deprecated": true,
+        "tags": [
+          "Validations"
+        ],
+        "summary": "Validate Promotion Tier [Deprecated]",
+        "description": "<!-- theme: danger -->\n> ❗️ Deprecated  \n>\n> This endpoint represents the deprecated version of the API responsible for promotion tier redemption, and we do not recommend using it. The new [Stackable Discounts API](ref:validate-stacked-discounts) introduces additional features and improvements while maintaining backward compatibility, including applying a combination of coupon codes and promotion tiers. Developers are encouraged to migrate to the latest version to take advantage of the latest enhancements and bug fixes. No updates will be provided to the deprecated endpoint. \n\nTo verify whether the promotion tier discount can be applied to an order. This method is designed for server side integration which means that it is accessible only through private keys.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "promotions"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Provide the customer and order context.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/6_req_validate_promotion_tier"
+              },
+              "examples": {
+                "Using IDs": {
+                  "value": {
+                    "customer": {
+                      "source_id": "test-user@email.io"
+                    },
+                    "order": {
+                      "id": "ord_71uW6qnB5CFZlLHCeCNC4qtS"
+                    }
+                  }
+                },
+                "Using Redemption Metadata": {
+                  "value": {
+                    "customer": {
+                      "source_id": "test-user@email.com"
+                    },
+                    "order": {
+                      "amount": 200000,
+                      "items": [
+                        {
+                          "product_id": "prod_anJ03RZZq74z4v",
+                          "quantity": 2
+                        },
+                        {
+                          "sku_id": "sku_0KtP4rvwEECQ2U",
+                          "related_object": "sku",
+                          "quantity": 1
+                        }
+                      ]
+                    },
+                    "metadata": {
+                      "store_names": "Store 1 - New York - Broadway"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns validation result in `valid` key of the promotion tier object. Returns `true` if the promotion tier rules and validation rules are satisfied given the request body parameters. Returns `false` if the data provided in the payload does not meet validation rules or promotion tier requirements.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/6_res_validate_promotion_tier"
+                },
+                "examples": {
+                  "Promotion Valid": {
+                    "value": {
+                      "valid": true,
+                      "applicable_to": {
+                        "data": [],
+                        "total": 0,
+                        "data_ref": "data",
+                        "object": "list"
+                      },
+                      "inapplicable_to": {
+                        "data": [],
+                        "total": 0,
+                        "data_ref": "data",
+                        "object": "list"
+                      },
+                      "tracking_id": "track_OWyBVb1mg1qnieLLNygh19A0Ia7FsJck",
+                      "order": {
+                        "id": "ord_71uW6qnB5CFZlLHCeCNC4qtS",
+                        "source_id": null,
+                        "created_at": "2022-11-17T12:17:55.096Z",
+                        "updated_at": null,
+                        "status": "CREATED",
+                        "amount": 9918200,
+                        "initial_amount": 468200,
+                        "items_discount_amount": 9450000,
+                        "total_discount_amount": 9450000,
+                        "total_amount": 468200,
+                        "items_applied_discount_amount": 9450000,
+                        "total_applied_discount_amount": 9450000,
+                        "items": [
+                          {
+                            "object": "order_item",
+                            "source_id": "webinar_BF_sweater_pink_sweater",
+                            "related_object": "product",
+                            "quantity": 1,
+                            "amount": 6500,
+                            "price": 6500,
+                            "subtotal_amount": 6500
+                          },
+                          {
+                            "object": "order_item",
+                            "source_id": "webinar_BF_pants_navy_sweat_pants",
+                            "related_object": "product",
+                            "quantity": 1,
+                            "amount": 6000,
+                            "price": 6000,
+                            "subtotal_amount": 6000
+                          },
+                          {
+                            "object": "order_item",
+                            "source_id": "5h1pp1ng",
+                            "related_object": "product",
+                            "quantity": 1,
+                            "amount": 2000,
+                            "price": 2000,
+                            "subtotal_amount": 2000,
+                            "product": {
+                              "id": "prod_5h1pp1ng",
+                              "source_id": "5h1pp1ng",
+                              "name": "Shipping"
+                            }
+                          },
+                          {
+                            "object": "order_item",
+                            "source_id": "webinar_BF_pants_gray_sweat_pants",
+                            "related_object": "product",
+                            "quantity": 2,
+                            "amount": 10000,
+                            "price": 5000,
+                            "subtotal_amount": 10000
+                          },
+                          {
+                            "object": "order_item",
+                            "source_id": "webinar_BF_sweater_pearl",
+                            "related_object": "product",
+                            "quantity": 2,
+                            "amount": 22000,
+                            "price": 11000,
+                            "subtotal_amount": 22000
+                          },
+                          {
+                            "object": "order_item",
+                            "product_id": "prod_0b7d7dfb05cbe5c616",
+                            "sku_id": "sku_0b7d7dfb090be5c619",
+                            "quantity": 1,
+                            "amount": 1700,
+                            "price": 1700,
+                            "subtotal_amount": 1700,
+                            "product": {
+                              "id": "prod_0b7d7dfb05cbe5c616",
+                              "source_id": "Books",
+                              "name": "Comic Books1",
+                              "price": 2100
+                            },
+                            "sku": {
+                              "id": "sku_0b7d7dfb090be5c619",
+                              "source_id": "ComicBook_1",
+                              "sku": "Comics1",
+                              "price": 1700
+                            }
+                          },
+                          {
+                            "object": "order_item",
+                            "product_id": "prod_0bae32322150fd0546",
+                            "quantity": 2,
+                            "amount": 420000,
+                            "price": 210000,
+                            "subtotal_amount": 420000,
+                            "product": {
+                              "id": "prod_0bae32322150fd0546",
+                              "name": "Samsung Phone",
+                              "price": 210000
+                            }
+                          },
+                          {
+                            "object": "order_item",
+                            "product_id": "prod_0bae2dc5a090fd0184",
+                            "sku_id": "sku_0bae3b28f610fd0da1",
+                            "quantity": 45,
+                            "discount_quantity": 45,
+                            "initial_quantity": 0,
+                            "amount": 9450000,
+                            "discount_amount": 9450000,
+                            "initial_amount": 0,
+                            "applied_discount_amount": 9450000,
+                            "price": 210000,
+                            "subtotal_amount": 0,
+                            "product": {
+                              "id": "prod_0bae2dc5a090fd0184",
+                              "source_id": "first_product",
+                              "name": "Samsung Phone 1",
+                              "price": 220000
+                            },
+                            "sku": {
+                              "id": "sku_0bae3b28f610fd0da1",
+                              "source_id": "first_product_sku_1",
+                              "sku": "Samsung phone 256GB",
+                              "price": 210000
+                            }
+                          }
+                        ],
+                        "metadata": {},
+                        "customer_id": null,
+                        "referrer_id": null,
+                        "object": "order"
+                      },
+                      "id": "promo_ZWkx6R0I1Ts3N9HL4kfTdxOm",
+                      "name": "Add new SKU",
+                      "discount": {
+                        "type": "UNIT",
+                        "effect": "ADD_NEW_ITEMS",
+                        "unit_off": 45,
+                        "unit_type": "sku_0bae3b28f610fd0da1",
+                        "sku": {
+                          "id": "sku_0bae3b28f610fd0da1",
+                          "source_id": "first_product_sku_1",
+                          "sku": "Samsung phone 256GB"
+                        },
+                        "product": {
+                          "id": "prod_0bae2dc5a090fd0184",
+                          "source_id": "first_product",
+                          "name": "Samsung Phone 1"
+                        }
+                      },
+                      "campaign": {
+                        "id": "camp_40LC42P5NFbkkD4RWoJ4btks",
+                        "start_date": null,
+                        "expiration_date": null,
+                        "active": true,
+                        "object": "campaign"
+                      },
+                      "hierarchy": 4,
+                      "discount_amount": 9450000,
+                      "applied_discount_amount": 9450000,
+                      "metadata": {},
+                      "object": "promotion_tier"
+                    }
+                  },
+                  "Promotion Invalid with Error Message": {
+                    "value": {
+                      "valid": false,
+                      "reason": "redemption does not match validation rules",
+                      "error": {
+                        "code": 400,
+                        "key": "redemption_rules_violated",
+                        "message": "redemption does not match validation rules",
+                        "details": "Promotion Tier cannot be redeemed because of violated validation rules: val_eqSA1dXOv491",
+                        "request_id": "v-0c034585fd16cf6958"
+                      },
+                      "tracking_id": "track_OWyBVb1mg1oMY1lADmgwuXCw/qYHp5h0",
+                      "id": "promo_R50x0A66V6jmPhM7YYOcFZfL",
+                      "name": "Add missing order items",
+                      "banner": "Add Boho Vintage",
+                      "discount": {
+                        "type": "UNIT",
+                        "effect": "ADD_MISSING_ITEMS",
+                        "unit_off": 5,
+                        "unit_type": "prod_0b72b0bd64d198e3ae"
+                      },
+                      "campaign": {
+                        "id": "camp_40LC42P5NFbkkD4RWoJ4btks",
+                        "start_date": null,
+                        "expiration_date": null,
+                        "active": true,
+                        "object": "campaign"
+                      },
+                      "hierarchy": 1,
+                      "metadata": {
+                        "has_budget": true
+                      },
+                      "object": "promotion_tier"
+                    }
+                  },
+                  "Promotion Invalid with Custom Message": {
+                    "value": {
+                      "valid": false,
+                      "reason": "Inactive Promotion",
+                      "error": {
+                        "message": "Promotion is inactive this weekend."
+                      },
+                      "tracking_id": "track_OWyBVb1mg1oMY1lADmgwuXCw/qYHp5h0",
+                      "id": "promo_R50x0A66V6jmPhM7YYOcFZfL",
+                      "name": "Add missing order items",
+                      "banner": "Add Boho Vintage",
+                      "discount": {
+                        "type": "UNIT",
+                        "effect": "ADD_MISSING_ITEMS",
+                        "unit_off": 5,
+                        "unit_type": "prod_0b72b0bd64d198e3ae"
+                      },
+                      "campaign": {
+                        "id": "camp_40LC42P5NFbkkD4RWoJ4btks",
+                        "start_date": null,
+                        "expiration_date": null,
+                        "active": true,
+                        "object": "campaign"
+                      },
+                      "hierarchy": 1,
+                      "metadata": {
+                        "has_budget": true
+                      },
+                      "object": "promotion_tier"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "6_req_validate_promotion_tier": {
+        "title": "Validate Promotion Tier Request Body",
+        "type": "object",
+        "description": "Request schema model for validating a promotion using **POST** `v1/promotions/tiers/{tierId}/validation`.",
+        "properties": {
+          "customer": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/6_req_validate_voucher_customer_id"
+              },
+              {
+                "$ref": "#/components/schemas/6_req_validate_voucher_customer_source_id"
+              },
+              {
+                "$ref": "#/components/schemas/9_req_create_customer"
+              }
+            ],
+            "description": "Customer's information."
+          },
+          "order": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/6_req_validate_voucher_order_id"
+              },
+              {
+                "$ref": "#/components/schemas/6_req_validate_voucher_order_source_id"
+              },
+              {
+                "$ref": "#/components/schemas/OrdersCreateRequestBody"
+              }
+            ],
+            "description": "Order information."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "A set of key/value pairs that you can send in the request body to check against vouchers requiring **redemption** metadata validation rules to be satisfied. The validation runs against rules that are defined through the <!-- [Create Validation Rules](https://docs.voucherify.io/reference/create-validation-rules) -->[Create Validation Rules](ref:create-validation-rules) endpoint or via the Dashboard; in the _Advanced Rule Builder_ &rarr; _Advanced_ &rarr; _Redemption metadata satisfy_ or _Basic Builder_ &rarr; _Attributes match_ &rarr; _REDEMPTION METADATA_. [Read more](https://support.voucherify.io/article/148-how-to-build-a-rule)."
+          }
+        }
+      },
+      "6_res_validate_promotion_tier": {
+        "title": "Validate Promotion Tier Response Body",
+        "description": "Response schema model for validating a promotion using **POST** `v1/promotions/tiers/{tierId}/validation`.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/6_res_validate_promotion_tier_true"
+          },
+          {
+            "$ref": "#/components/schemas/6_res_validate_promotion_tier_false"
+          }
+        ]
+      },
+      "6_req_validate_voucher_customer_id": {
+        "title": "Customer ID",
+        "description": "You can pass the unique customer ID that was assigned by Voucherify.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of an existing customer that will be linked to redemption in this request.",
+            "example": "cust_Vzck5i8U3OhcEUFY6MKhN9Rv"
+          }
+        }
+      },
+      "6_req_validate_voucher_customer_source_id": {
+        "title": "Customer Source ID",
+        "description": "You can send the source ID that you used to create the customer in Voucherify.",
+        "type": "object",
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "description": "A unique identifier of the customer who validates a voucher. It can be a customer ID or email from a CRM system, database, or a third-party service. If you also pass a customer ID (unique ID assigned by Voucherify), the source ID will be ignored."
+          }
+        }
+      },
+      "9_req_create_customer": {
+        "type": "object",
+        "title": "Customer",
+        "description": "This is an object containing information about the customer.",
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "description": "The merchant's customer ID if it is different from the Voucherify customer ID. It is really useful in case of an integration between multiple systems. It can be a customer ID from a CRM system, database or 3rd-party service. \n\nPlease note that if you would like your data to sync based on the `source_id` of the customer, you need to define the `source_id` upfront. You will not be able to change or update the `source_id` later on."
+          },
+          "name": {
+            "type": "string",
+            "description": "Customer's first and last name."
+          },
+          "description": {
+            "type": "string",
+            "description": "An arbitrary string that you can attach to a customer object."
+          },
+          "email": {
+            "type": "string",
+            "description": "Customer's email address."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Customer's phone number.  This parameter is mandatory when you try to send out codes to customers via an SMS channel."
+          },
+          "address": {
+            "type": "object",
+            "description": "Customer's address.",
+            "properties": {
+              "city": {
+                "type": "string",
+                "description": "City"
+              },
+              "state": {
+                "type": "string",
+                "description": "State"
+              },
+              "line_1": {
+                "type": "string",
+                "description": "First line of address."
+              },
+              "line_2": {
+                "type": "string",
+                "description": "Second line of address."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Postal code."
+              }
+            }
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Customer's birthdate; format `YYYY-MM-DD`.",
+            "format": "date"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "`Deprecated`. ~~Customer's birthdate; format `YYYY-MM-DD`~~.",
+            "format": "date"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "A set of custom key/value pairs that you can attach to a customer. The metadata object stores all custom attributes assigned to the customer. It can be useful for storing additional information about the customer in a structured format. This metadata can be used for validating whether the customer qualifies for a discount or it can be used in building customer segments. "
+          }
+        }
+      },
+      "6_req_validate_voucher_order_id": {
+        "title": "Order ID",
+        "description": "You can pass the unique order ID that was assigned by Voucherify.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID assigned by Voucherify of an existing order that will be linked to the redemption of this request."
+          }
+        }
+      },
+      "6_req_validate_voucher_order_source_id": {
+        "title": "Order Source ID",
+        "description": "You can send the source ID that you used to create the order in Voucherify.",
+        "type": "object",
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "description": "Unique source ID of an existing order that will be linked to the redemption of this request."
+          }
+        }
+      },
+      "OrdersCreateRequestBody": {
+        "title": "Orders Create Request Body",
+        "type": "object",
+        "description": "Request body schema for **POST** `v1/orders`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Order"
+          },
+          {
+            "title": "Order Customer And Referrer Ids Objects",
+            "type": "object",
+            "description": "Order information.",
+            "properties": {
+              "created_at": {
+                "type": "string",
+                "example": "2021-12-22T10:13:06.487Z",
+                "description": "Timestamp representing the date and time when the order was created. The value is shown in the ISO 8601 format.",
+                "format": "date-time"
+              },
+              "referrer_id": {
+                "type": "string",
+                "nullable": true,
+                "description": "Unique referrer ID.",
+                "example": "cust_nM4jqPiaXUvQdVSA6vTRUnix"
+              },
+              "customer": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                ]
+              },
+              "referrer": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Referrer"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "6_res_validate_promotion_tier_true": {
+        "title": "Promotion Tier Valid",
+        "type": "object",
+        "description": "Response schema model for valid promotion tier when validating a promotion using **POST** `v1/promotions/tiers/{tierId}/validation`.",
+        "properties": {
+          "valid": {
+            "type": "string",
+            "description": "Indicates whether the promotion is valid within the context of the parameters provided in the request body and filters in the query parameters."
+          },
+          "applicable_to": {
+            "$ref": "#/components/schemas/6_res_applicable_to_object"
+          },
+          "inapplicable_to": {
+            "$ref": "#/components/schemas/6_res_inapplicable_to_object"
+          },
+          "tracking_id": {
+            "type": "string",
+            "description": "Hashed customer source ID."
+          },
+          "order": {
+            "$ref": "#/components/schemas/6_obj_order_object"
+          },
+          "id": {
+            "type": "string",
+            "example": "promo_4TqHr24boFISDrcOHSlfAxwm",
+            "description": "Unique promotion tier ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "Custom promotion tier name."
+          },
+          "banner": {
+            "type": "string",
+            "description": "Text to be displayed to your customers on your website.",
+            "example": "Get 45% off items"
+          },
+          "discount": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_amount"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_percent"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_fixed"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit_multiple"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_shipping"
+              }
+            ],
+            "description": "Contains information about the discount to be applied to the order."
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-11-02T00:00:00.000Z",
+            "description": "Activation timestamp defines when the promotion tier starts to be active in ISO 8601 format. Campaign is *inactive* before this date."
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-11-04T00:00:00.000Z",
+            "description": "Activation timestamp defines when the promotion tier expires in ISO 8601 format. Promotion tier is *inactive* after this date."
+          },
+          "campaign": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "camp_h8RyP6FV94F3Ev2odP24j5p1",
+                "description": "Unique promotion tier ID."
+              },
+              "start_date": {
+                "type": "string",
+                "description": "Activation timestamp defines when the campaign starts to be active in ISO 8601 format. Campaign is *inactive* before this date.",
+                "example": "2022-11-01T00:00:00.000Z",
+                "format": "date-time"
+              },
+              "expiration_date": {
+                "type": "string",
+                "description": "Activation timestamp defines when the campaign expires in ISO 8601 format. Promotion tier is *inactive* after this date.",
+                "example": "2022-11-30T00:00:00.000Z",
+                "format": "date-time"
+              },
+              "active": {
+                "type": "boolean",
+                "description": "A flag indicating whether the campaign is active or not active. A campaign can be disabled even though it's within the active period defined by the `start_date` and `expiration_date`.  \n\n- `true` indicates an *active* campaign\n- `false` indicates an *inactive* campaign"
+              },
+              "categories": {
+                "$ref": "#/components/schemas/Category"
+              },
+              "object": {
+                "type": "string",
+                "default": "campaign",
+                "description": "The type of the object represented by the campaign object. This object stores information about the campaign."
+              }
+            }
+          },
+          "hierarchy": {
+            "type": "integer",
+            "description": "The promotions hierarchy defines the order in which the discounts from different tiers will be applied to a customer's order. If a customer qualifies for discounts from more than one tier, discounts will be applied in the order defined in the hierarchy."
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "The calculated discount amount based on the discount type and effect."
+          },
+          "applied_discount_amount": {
+            "type": "integer",
+            "description": "The effective discount amount that would be applied to the order."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "The metadata object stores all custom attributes assigned to the promotion tier. A set of key/value pairs that you can attach to a promotion tier object. It can be useful for storing additional information about the promotion tier in a structured format."
+          },
+          "object": {
+            "type": "string",
+            "default": "promotion_tier",
+            "description": "The type of the object represented by JSON. This object stores information about the promotion tier."
+          }
+        }
+      },
+      "6_res_validate_promotion_tier_false": {
+        "type": "object",
+        "description": "Response schema model for a non-valid promotion tier when validating a promotion using **POST** `v1/promotions/tiers/{tierId}/validation`.",
+        "title": "Promotion Tier Not Valid",
+        "properties": {
+          "valid": {
+            "type": "boolean",
+            "description": "Response schema for a voucher that is not valid."
+          },
+          "reason": {
+            "type": "string",
+            "description": "System generated cause for the voucher being invalid in the context of the provided parameters."
+          },
+          "error": {
+            "description": "Detailed failure cause for the invalid voucher if the reason has a translation defined in the Dashboard &rarr; Project Settings &rarr; Error Messages.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/6_res_validate_promotion_tier_false_custom_message"
+              },
+              {
+                "$ref": "#/components/schemas/Error"
+              }
+            ]
+          },
+          "tracking_id": {
+            "type": "string",
+            "description": "Hashed customer source ID."
+          },
+          "id": {
+            "type": "string",
+            "example": "promo_ByIIAHC1Mz9ouJsitzAWsush",
+            "description": "Promotion tier ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "Custom promotion tier name."
+          },
+          "banner": {
+            "type": "string",
+            "description": "Text to be displayed to your customers on your website.",
+            "example": "Get 25% off"
+          },
+          "discount": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_amount"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_percent"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_fixed"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit_multiple"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_shipping"
+              }
+            ],
+            "description": "Contains information about the discount to be applied to the order."
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Activation timestamp defines when the promotion tier starts to be active in ISO 8601 format. Campaign is *inactive* before this date.",
+            "format": "date-time",
+            "example": "2022-11-02T00:00:00.000Z"
+          },
+          "expiration_date": {
+            "type": "string",
+            "description": "Activation timestamp defines when the promotion tier expires in ISO 8601 format. Promotion tier is *inactive* after this date.",
+            "format": "date-time",
+            "example": "2022-11-04T00:00:00.000Z"
+          },
+          "campaign": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique promotion tier ID."
+              },
+              "start_date": {
+                "type": "string",
+                "description": "Activation timestamp defines when the campaign starts to be active in ISO 8601 format. Campaign is *inactive* before this date.",
+                "format": "date-time",
+                "example": "2022-11-01T00:00:00.000Z"
+              },
+              "expiration_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation timestamp defines when the campaign expires in ISO 8601 format. Promotion tier is *inactive* after this date.",
+                "example": "2022-11-30T00:00:00.000Z"
+              },
+              "active": {
+                "type": "boolean",
+                "description": "A flag indicating whether the campaign is active or not active. A campaign can be disabled even though it's within the active period defined by the `start_date` and `expiration_date`.  \n\n- `true` indicates an *active* campaign\n- `false` indicates an *inactive* campaign"
+              },
+              "object": {
+                "type": "string",
+                "description": "The type of the object represented by the campaign object. This object stores information about the campaign.",
+                "default": "campaign"
+              }
+            }
+          },
+          "hierarchy": {
+            "type": "integer",
+            "description": "The promotions hierarchy defines the order in which the discounts from different tiers will be applied to a customer's order. If a customer qualifies for discounts from more than one tier, discounts will be applied in the order defined in the hierarchy."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "The metadata object stores all custom attributes assigned to the promotion tier. A set of key/value pairs that you can attach to a promotion tier object. It can be useful for storing additional information about the promotion tier in a structured format."
+          },
+          "object": {
+            "type": "string",
+            "description": "The type of the object represented by JSON. This object stores information about the promotion tier.",
+            "default": "promotion_tier"
+          }
+        }
+      },
+      "Order": {
+        "title": "Order",
+        "type": "object",
+        "description": "Order information.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique ID assigned by Voucherify of an existing order that will be linked to the redemption of this request."
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/OrderBase"
+          }
+        ]
+      },
+      "Customer": {
+        "title": "Customer",
+        "allOf": [
+          {
+            "type": "object",
+            "title": "Customer Id And Source Id",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID of an existing customer."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "A unique identifier of the customer who validates a voucher. It can be a customer ID or email from a CRM system, database, or a third-party service. If you also pass a customer ID (unique ID assigned by Voucherify), the source ID will be ignored."
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/CustomerBase"
+          }
+        ]
+      },
+      "Referrer": {
+        "title": "Referrer",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Customer"
+          }
+        ]
+      },
+      "6_res_applicable_to_object": {
+        "title": "Included  Items",
+        "type": "object",
+        "description": "Contains list of items that qualify in the scope of the discount. These are definitions of included products, SKUs, and product collections. These can be discounted.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "Contains array of items to which the discount can apply.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/6_res_product_collection"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_product_collection_unit"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_product_collection_fixed_amount"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_product"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_product_unit"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_product_fixed_amount"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_sku"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_sku_unit"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_sku_unit_fixed_amount"
+                }
+              ]
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of objects defining included products, SKUs, or product collections."
+          },
+          "data_ref": {
+            "type": "string",
+            "default": "data",
+            "description": "Identifies the name of the attribute that contains the array of included objects."
+          },
+          "object": {
+            "type": "string",
+            "default": "list",
+            "description": "The type of the object represented by JSON. This object stores information about included products, SKUs, or product collections in a dictionary."
+          }
+        }
+      },
+      "6_res_inapplicable_to_object": {
+        "title": "Excluded Items",
+        "type": "object",
+        "description": "Contains list of items that **do not** qualify in the scope of the discount. These are definitions of excluded products, SKUs, and product collections. These **CANNOT** be discounted.",
+        "properties": {
+          "data": {
+            "description": "Contains array of items to which the discount cannot apply.",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/6_res_product_collection_excluded"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_product_excluded"
+                },
+                {
+                  "$ref": "#/components/schemas/6_res_sku_excluded"
+                }
+              ]
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of objects defining excluded products, SKUs, or product collections."
+          },
+          "data_ref": {
+            "type": "string",
+            "default": "data",
+            "description": "Identifies the name of the attribute that contains the array of excluded objects."
+          },
+          "object": {
+            "type": "string",
+            "default": "list",
+            "description": "The type of the object represented by JSON. This object stores information about excluded products, SKUs, or product collections in a dictionary."
+          }
+        }
+      },
+      "6_obj_order_object": {
+        "title": "Order object",
+        "description": "This is an object representing an order with calculated discounts applied using the voucher code.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/6_obj_order_object_apply_to_order"
+          },
+          {
+            "$ref": "#/components/schemas/6_obj_order_object_apply_to_items"
+          }
+        ]
+      },
+      "6_res_validate_voucher_discount_amount": {
+        "title": "Amount Discount",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "AMOUNT",
+            "description": "Defines the type of the voucher."
+          },
+          "effect": {
+            "type": "string",
+            "description": "Defines how the discount is applied to the customer's order.",
+            "enum": [
+              "APPLY_TO_ORDER",
+              "APPLY_TO_ITEMS",
+              "APPLY_TO_ITEMS_PROPORTIONALLY",
+              "APPLY_TO_ITEMS_PROPORTIONALLY_BY_QUANTITY",
+              "APPLY_TO_ITEMS_BY_QUANTITY"
+            ]
+          },
+          "amount_off": {
+            "type": "integer",
+            "description": "Amount taken off the subtotal of a price. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 discount is written as 1000. "
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_percent": {
+        "title": "Percent Discount",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "PERCENT",
+            "description": "Defines the type of the voucher."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_ORDER",
+              "APPLY_TO_ITEMS"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "percent_off": {
+            "type": "integer",
+            "description": "The percent discount that the customer will receive."
+          },
+          "amount_limit": {
+            "type": "integer",
+            "description": "Upper limit allowed to be applied as a discount. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $6 maximum discount is written as 600."
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_fixed": {
+        "title": "Fixed Discount",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value. A fixed discounts sets a fixed total on cart or item(s) and then calculates the discount to apply.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "FIXED",
+            "description": "Type of discount."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_ORDER",
+              "APPLY_TO_ITEMS"
+            ],
+            "description": "Defines how the discount is applied to the customer's order.    \n    \n| **Effect** | **Definition** |\n|---|---|\n| **APPLY_TO_ORDER** | Sets the order total amount to the value of the fixed amount. The discount value is calculated during the redemption as it's a difference between the total amount of the customer's order and the fixed amount. |\n| **APPLY_TO_ITEMS** | Sets a new price on items. The total discount amount is calculated during the redemption and it's a difference between the initial item price and the fixed amount. |"
+          },
+          "fixed_amount": {
+            "type": "integer",
+            "description": "Sets a fixed value for an order total or the item price. The value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 discount is written as 1000. If the fixed amount is calculated by the formula, i.e. the `fixed_amount_formula` parameter is present in the fixed amount definition, this value becomes the **fallback value**. As a result, if the formula cannot be calculated due to missing metadata, for example, this value will be used as the fixed value."
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_unit": {
+        "title": "Unit Discount, single item",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit_product"
+          },
+          {
+            "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit_sku"
+          }
+        ]
+      },
+      "6_res_validate_voucher_discount_unit_multiple": {
+        "title": "Unit Discount, multiple items",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "description": "Discount type."
+          },
+          "effect": {
+            "type": "string",
+            "default": "ADD_MANY_ITEMS",
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "units": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit_product_multiple"
+              },
+              {
+                "$ref": "#/components/schemas/6_res_validate_voucher_discount_unit_sku_multiple"
+              }
+            ]
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_shipping": {
+        "title": "Shipping Discount",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "description": "Discount type."
+          },
+          "effect": {
+            "type": "string",
+            "description": "Defines how the unit is added to the customer's order.",
+            "default": "ADD_MISSING_ITEMS"
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount.",
+            "default": 1
+          },
+          "unit_type": {
+            "type": "string",
+            "description": "The shipping \"product\" deemed as free.",
+            "default": "prod_5h1pp1ng"
+          },
+          "product": {
+            "type": "object",
+            "description": "Contains information about the shipping \"product\".",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique shipping \"product\" ID, assigned by Voucherify.",
+                "default": "prod_5h1pp1ng"
+              },
+              "source_id": {
+                "type": "string",
+                "description": "\"Product's\" source ID.",
+                "default": "5h1pp1ng"
+              },
+              "name": {
+                "type": "string",
+                "description": "\"Product\" name.",
+                "default": "Shipping"
+              }
+            }
+          }
+        }
+      },
+      "Category": {
+        "title": "Category",
+        "description": "This is an object representing a category.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique category ID assigned by Voucherify."
+          },
+          "name": {
+            "type": "string",
+            "description": "Category name."
+          },
+          "hierarchy": {
+            "type": "integer",
+            "description": "Category hierarchy. Categories with lower hierarchy are processed before categories with higher hierarchy value.",
+            "minimum": 0
+          },
+          "object": {
+            "type": "string",
+            "default": "category",
+            "enum": [
+              "category"
+            ],
+            "description": "The type of the object represented by the JSON. This object stores information about the category."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Timestamp representing the date and time when the category was created. The value is shown in the ISO 8601 format.",
+            "example": "2022-07-14T10:45:13.156Z",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2022-08-16T10:52:08.094Z",
+            "description": "Timestamp representing the date and time when the category was updated. The value is shown in the ISO 8601 format.",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "hierarchy",
+          "created_at",
+          "object"
+        ]
+      },
+      "6_res_validate_promotion_tier_false_custom_message": {
+        "type": "object",
+        "description": "Custom Error Message",
+        "title": "Custom Message",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Customized error message."
+          }
+        }
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "OrderBase": {
+        "title": "Order Base",
+        "type": "object",
+        "description": "Order information.",
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unique source ID of an existing order that will be linked to the redemption of this request."
+          },
+          "status": {
+            "type": "string",
+            "description": "The order status.",
+            "enum": [
+              "CREATED",
+              "PAID",
+              "CANCELED",
+              "FULFILLED"
+            ]
+          },
+          "amount": {
+            "type": "integer",
+            "description": "A positive integer in the smallest currency unit (e.g. 100 cents for $1.00) representing the total amount of the order. This is the sum of the order items' amounts."
+          },
+          "initial_amount": {
+            "type": "integer",
+            "description": "A positive integer in the smallest currency unit (e.g. 100 cents for $1.00) representing the total amount of the order. This is the sum of the order items' amounts."
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "Sum of all order-level discounts applied to the order. It is expressed as an integer in the smallest currency unit (e.g. 100 cents for $1.00)."
+          },
+          "items": {
+            "type": "array",
+            "description": "Array of items applied to the order. It can include up to 500 items.",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "A set of custom key/value pairs that you can attach to an order. It can be useful for storing additional information about the order in a structured format. It can be used to define business validation rules or discount formulas."
+          }
+        }
+      },
+      "CustomerBase": {
+        "title": "Customer Base",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Customer's first and last name."
+          },
+          "description": {
+            "type": "string",
+            "description": "An arbitrary string that you can attach to a customer object."
+          },
+          "email": {
+            "type": "string",
+            "description": "Customer's email address."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Customer's phone number. This parameter is mandatory when you try to send out codes to customers via an SMS channel."
+          },
+          "birthday": {
+            "type": "string",
+            "description": "`Deprecated`. ~~Customer's birthdate; format YYYY-MM-DD~~.",
+            "format": "date"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Customer's birthdate; format YYYY-MM-DD.",
+            "format": "date"
+          },
+          "address": {
+            "type": "object",
+            "nullable": true,
+            "description": "Customer's address.",
+            "properties": {
+              "city": {
+                "type": "string",
+                "description": "City"
+              },
+              "state": {
+                "type": "string",
+                "description": "State"
+              },
+              "line_1": {
+                "type": "string",
+                "description": "First line of address."
+              },
+              "line_2": {
+                "type": "string",
+                "description": "Second line of address."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Postal code."
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "A set of custom key/value pairs that you can attach to a customer. The metadata object stores all custom attributes assigned to the customer. It can be useful for storing additional information about the customer in a structured format. This metadata can be used for validating whether the customer qualifies for a discount or it can be used in building customer segments."
+          }
+        }
+      },
+      "6_res_product_collection": {
+        "title": "Product Collection",
+        "type": "object",
+        "description": "Contains definition for a product collection.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "products_collection",
+            "description": "This object stores information about the product collection."
+          },
+          "id": {
+            "type": "string",
+            "example": "pc_4ndRXAsTOzwSdHcQcxf489uU",
+            "description": "Unique product collection ID assigned by Voucherify."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_product_collection_unit": {
+        "title": "Product Collection for Unit Discount",
+        "type": "object",
+        "description": "Contains definition for a product collection.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "products_collection",
+            "description": "This object stores information about the product collection."
+          },
+          "id": {
+            "type": "string",
+            "example": "pc_4ndRXAsTOzwSdHcQcxf489uU",
+            "description": "Unique product collection ID assigned by Voucherify."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "quantity_limit": {
+            "type": "integer",
+            "description": "The maximum number of units allowed to be discounted per order line item."
+          },
+          "aggregated_quantity_limit": {
+            "type": "integer",
+            "description": "The maximum number of units allowed to be discounted combined across all matched order line items."
+          }
+        }
+      },
+      "6_res_product_collection_fixed_amount": {
+        "title": "Product Collection for Fixed Amount Discount",
+        "type": "object",
+        "description": "Contains definition for a product collection.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "products_collection",
+            "description": "This object stores information about the product collection."
+          },
+          "id": {
+            "type": "string",
+            "example": "pc_4ndRXAsTOzwSdHcQcxf489uU",
+            "description": "Unique product collection ID assigned by Voucherify."
+          },
+          "price": {
+            "type": "integer",
+            "description": "New fixed price of an item. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 price is written as 1000. In case of the fixed price being calculated by the formula, i.e. the `price_formula` parameter is present in the fixed price definition, this value becomes the **fallback value**. Such that in a case where the formula cannot be calculated due to missing metadata, for example, this value will be used as the fixed price."
+          },
+          "price_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the discounted price of an item.",
+            "example": "\"IF(ORDER_AMOUNT > 300;ORDER_ITEM_PRICE * 0.8;ORDER_ITEM_PRICE)"
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_product": {
+        "title": "Product",
+        "type": "object",
+        "description": "Contains definition for a product.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "product",
+            "description": "This object stores information about the product."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique product ID assigned by Voucherify.",
+            "example": "prod_0bae2dc5a090fd0184"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The product ID from your inventory system."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_product_unit": {
+        "title": "Product for Unit Discount",
+        "type": "object",
+        "description": "Contains definition for a product.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "product",
+            "description": "This object stores information about the product."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique product ID assigned by Voucherify.",
+            "example": "prod_0bae2dc5a090fd0184"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The product ID from your inventory system."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "quantity_limit": {
+            "type": "integer",
+            "description": "The maximum number of units allowed to be discounted per order line item."
+          },
+          "aggregated_quantity_limit": {
+            "type": "integer",
+            "description": "The maximum number of units allowed to be discounted combined across all matched order line items."
+          }
+        }
+      },
+      "6_res_product_fixed_amount": {
+        "title": "Product for Fixed Amount Discount",
+        "type": "object",
+        "description": "Contains definition for a product.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "product",
+            "description": "This object stores information about the product."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique product ID assigned by Voucherify.",
+            "example": "prod_0bae2dc5a090fd0184"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The product ID from your inventory system."
+          },
+          "price": {
+            "type": "integer",
+            "description": "New fixed price of an item. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 price is written as 1000. In case of the fixed price being calculated by the formula, i.e. the `price_formula` parameter is present in the fixed price definition, this value becomes the **fallback value**. Such that in a case where the formula cannot be calculated due to missing metadata, for example, this value will be used as the fixed price."
+          },
+          "price_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the discounted price of an item.",
+            "example": "IF(ORDER_AMOUNT > 300;ORDER_ITEM_PRICE * 0.8;ORDER_ITEM_PRICE)"
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_sku": {
+        "title": "SKU",
+        "type": "object",
+        "description": "Contains definition for a product variant.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "sku",
+            "description": "This object stores information about the product variant."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique SKU ID assigned by Voucherify.",
+            "example": "sku_0b7d7dfb090be5c619"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The source ID from your inventory system."
+          },
+          "product_id": {
+            "type": "string",
+            "description": "Parent product's unique ID assigned by Voucherify."
+          },
+          "product_source_id": {
+            "type": "string",
+            "description": "Parent product's source ID from your inventory system."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_sku_unit": {
+        "title": "SKU for Unit Discount",
+        "type": "object",
+        "description": "Contains definition for a product variant.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "sku",
+            "description": "This object stores information about the product variant."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique SKU ID assigned by Voucherify.",
+            "example": "sku_0b7d7dfb090be5c619"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The source ID from your inventory system."
+          },
+          "product_id": {
+            "type": "string",
+            "description": "Parent product's unique ID assigned by Voucherify."
+          },
+          "product_source_id": {
+            "type": "string",
+            "description": "Parent product's source ID from your inventory system."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "quantity_limit": {
+            "type": "integer",
+            "description": "The maximum number of units allowed to be discounted per order line item."
+          },
+          "aggregated_quantity_limit": {
+            "type": "integer",
+            "description": "The maximum number of units allowed to be discounted combined across all matched order line items."
+          }
+        }
+      },
+      "6_res_sku_unit_fixed_amount": {
+        "title": "SKU for Amount Discount",
+        "type": "object",
+        "description": "Contains definition for a product variant.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "sku",
+            "description": "This object stores information about the product variant."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique SKU ID assigned by Voucherify.",
+            "example": "sku_0b7d7dfb090be5c619"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The source ID from your inventory system."
+          },
+          "product_id": {
+            "type": "string",
+            "description": "Parent product's unique ID assigned by Voucherify."
+          },
+          "product_source_id": {
+            "type": "string",
+            "description": "Parent product's source ID from your inventory system."
+          },
+          "price": {
+            "type": "integer",
+            "description": "New fixed price of an item. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 price is written as 1000. In case of the fixed price being calculated by the formula, i.e. the `price_formula` parameter is present in the fixed price definition, this value becomes the **fallback value**. Such that in a case where the formula cannot be calculated due to missing metadata, for example, this value will be used as the fixed price."
+          },
+          "price_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the discounted price of an item.",
+            "example": "IF(ORDER_AMOUNT > 200;ORDER_ITEM_PRICE * 0.2;6)"
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "APPLY_TO_EVERY",
+              "APPLY_TO_CHEAPEST",
+              "APPLY_TO_MOST_EXPENSIVE"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_product_collection_excluded": {
+        "title": "Product Collection",
+        "type": "object",
+        "description": "Contains definition for a product collection.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "products_collection",
+            "description": "This object stores information about the product collection."
+          },
+          "id": {
+            "type": "string",
+            "example": "pc_4ndRXAsTOzwSdHcQcxf489uU",
+            "description": "Unique product collection ID assigned by Voucherify."
+          },
+          "effect": {
+            "type": "string",
+            "default": "APPLY_TO_EVERY",
+            "enum": [
+              "APPLY_TO_EVERY"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_product_excluded": {
+        "title": "Product",
+        "type": "object",
+        "description": "Contains definition for a product.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "product",
+            "description": "This product stores information about the product."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique product ID assigned by Voucherify.",
+            "example": "prod_0bae2dc5a090fd0184"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The product ID from your inventory system."
+          },
+          "effect": {
+            "type": "string",
+            "default": "APPLY_TO_EVERY",
+            "enum": [
+              "APPLY_TO_EVERY"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_res_sku_excluded": {
+        "title": "SKU",
+        "type": "object",
+        "description": "Contains definition for a product variant.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "default": "sku",
+            "description": "This object stores information about the product variant."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique SKU ID assigned by Voucherify.",
+            "example": "sku_0b7d7dfb090be5c619"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The source ID from your inventory system."
+          },
+          "effect": {
+            "type": "string",
+            "default": "APPLY_TO_EVERY",
+            "enum": [
+              "APPLY_TO_EVERY"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          }
+        }
+      },
+      "6_obj_order_object_apply_to_order": {
+        "type": "object",
+        "title": "Order object - Effect: Apply to order",
+        "description": "This is an object representing an order with calculated discounts applied using the voucher code.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "ord_OLWs41pBk7VFn6ZTyX9U6keh",
+            "description": "Unique order ID, assigned by Voucherify. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The merchant's order ID if it is different from the Voucherify order ID. It is really useful in case of integration between multiple systems. It can be an order ID from CRM, database or 3rd party service. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-10-06T11:40:48.705Z",
+            "description": "Timestamp representing the date and time when the order was created. The value is shown in the ISO 8601 format. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-10-06T11:47:20.760Z",
+            "description": "Timestamp representing the date and time when the order was updated. The value is shown in the ISO 8601 format. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "status": {
+            "type": "string",
+            "description": "Order status. This parameter is returned if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body or if you send the request body parameter when defining an order in the request body. This parameter can be passed but it's not required for validation at all. It's used in the redemption process. Normally after the redemption is done, the order is automatically to a `PAID` status. To avoid such default behaviour, the user can pass any of the other status options and it will be set the order status after the redemption instead of the default `PAID`.",
+            "enum": [
+              "CREATED",
+              "PAID",
+              "CANCELED",
+              "FULFILLED"
+            ]
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Order amount before applying any discount."
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "Sum of all order-level discounts applied to the order."
+          },
+          "total_discount_amount": {
+            "type": "integer",
+            "description": "Sum of all order-level discounts."
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "Order amount after applying all the discounts.  \n`total_amount` = `amount` - `total_discount_amount`"
+          },
+          "applied_discount_amount": {
+            "type": "integer",
+            "description": "This field shows the order-level discount applied."
+          },
+          "total_applied_discount_amount": {
+            "type": "integer",
+            "description": "This field sums up all order-level discounts applied to the order."
+          },
+          "items": {
+            "type": "array",
+            "description": "Array of order items that have been applied to the order. Each order item can show the effects of particular discounts on the item-level.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "object": {
+                  "type": "string",
+                  "default": "order_item",
+                  "description": "The type of the object represented by JSON. This object stores information about the `order_item`."
+                },
+                "product_id": {
+                  "type": "string",
+                  "example": "prod_5h0wc453_1",
+                  "description": "A unique identifier that represents the product and is assigned by Voucherify."
+                },
+                "sku_id": {
+                  "type": "string",
+                  "example": "sku_prod_5h0wc453_1_1",
+                  "description": "A unique identifier that represents the SKU and is assigned by Voucherify."
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Quantity of the item in the cart."
+                },
+                "amount": {
+                  "type": "integer",
+                  "description": "Represents a total pre-discount amount of order item (`price` * `quantity`)."
+                },
+                "price": {
+                  "type": "integer",
+                  "description": "Unit price of an item. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+                },
+                "subtotal_amount": {
+                  "type": "integer",
+                  "description": "Final order item amount after the applied item-level discount.  If there are no item-level discounts applied, this item is equal to the `amount`.   \n`subtotal_amount`=`amount`-`discount_amount`"
+                },
+                "product": {
+                  "type": "object",
+                  "description": "This object stores more information about the related product.",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "prod_5h0wc453_1",
+                      "description": "A unique identifier that represents the product and is assigned by Voucherify."
+                    },
+                    "source_id": {
+                      "type": "string",
+                      "description": "A unique product identifier from your inventory system.",
+                      "example": "illy-arabica"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Brewing System",
+                      "description": "Product name."
+                    },
+                    "price": {
+                      "type": "integer",
+                      "description": "Unit price of a product. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+                    }
+                  }
+                },
+                "sku": {
+                  "type": "object",
+                  "description": "This object stores more information about the related SKU.",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "sku_prod_5h0wc453_1_1",
+                      "description": "A unique identifier that represents the SKU and is assigned by Voucherify."
+                    },
+                    "source_id": {
+                      "type": "string",
+                      "example": "illy-arabica-250g",
+                      "description": "A unique SKU identifier from your inventory system."
+                    },
+                    "sku": {
+                      "type": "string",
+                      "description": "SKU name."
+                    },
+                    "price": {
+                      "type": "integer",
+                      "description": "Unit price of a SKU. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "The metadata object stores all custom attributes assigned to the order. A set of key/value pairs that are att to an order object. Stores additional information about the order in a structured format."
+          },
+          "customer": {
+            "type": "object",
+            "description": "Object containing information about the customer that is making the purchase.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "cust_7iUa6ICKyU6gH40dBU25kQU1",
+                "description": "Unique customer identifier of the customer making the purchase. The ID is assigned by Voucherify."
+              },
+              "object": {
+                "type": "string",
+                "default": "customer",
+                "description": "Type of object represented by the `customer` object."
+              }
+            }
+          },
+          "referrer": {
+            "type": "object",
+            "description": "Object containing information about the referrer.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "cust_7iUa6ICKyU6gH40dBU25kQU1",
+                "description": "Unique referrer ID, who referred the customer making the purchase."
+              },
+              "object": {
+                "type": "string",
+                "default": "customer",
+                "description": "Type of object represented by the `referrer` object."
+              }
+            }
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Unique customer identifier of the customer making the purchase. The ID is assigned by Voucherify.",
+            "example": "cust_7iUa6ICKyU6gH40dBU25kQU1"
+          },
+          "referrer_id": {
+            "type": "string",
+            "example": "cust_nM4jqPiaXUvQdVSA6vTRUnix",
+            "description": "Unique referrer ID."
+          },
+          "object": {
+            "type": "string",
+            "default": "order",
+            "description": "The type of the object represented by JSON. This object stores information about the `order`."
+          }
+        }
+      },
+      "6_obj_order_object_apply_to_items": {
+        "type": "object",
+        "title": "Order object - Effect: Apply to items",
+        "description": "This is an object representing an order with calculated discounts applied using the voucher code.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "ord_OLWs41pBk7VFn6ZTyX9U6keh",
+            "description": "Unique order ID, assigned by Voucherify. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The merchant's order ID if it is different from the Voucherify order ID. It is really useful in case of integration between multiple systems. It can be an order ID from CRM, database or 3rd party service. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-10-06T11:40:48.705Z",
+            "description": "Timestamp representing the date and time when the order was created. The value is shown in the ISO 8601 format. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-10-06T11:47:20.760Z",
+            "description": "Timestamp representing the date and time when the order was updated. The value is shown in the ISO 8601 format. This parameter is returned only if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body."
+          },
+          "status": {
+            "type": "string",
+            "description": "Order status. This parameter is returned if you use the order ID parameter of an already created and synced order in the Voucherify application, i.e by sending the `order.id` parameter in the request body or if you send the request body parameter when defining an order in the request body. This parameter can be passed but it's not required for validation at all. It's used in the redemption process. Normally after the redemption is done, the order is automatically to a `PAID` status. To avoid such default behaviour, the user can pass any of the other status options and it will be set the order status after the redemption instead of the default `PAID`.",
+            "enum": [
+              "CREATED",
+              "PAID",
+              "CANCELED",
+              "FULFILLED"
+            ]
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Order amount before applying any discount."
+          },
+          "items_discount_amount": {
+            "type": "integer",
+            "description": "Sum of all product-specific discounts applied.  \n`sum(items, i => i.discount_amount)`"
+          },
+          "total_discount_amount": {
+            "type": "integer",
+            "description": "Sum of all product-specific discounts applied."
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "Order amount after applying all the discounts.  \n`total_amount` = `amount` - `total_discount_amount`"
+          },
+          "items_applied_discount_amount": {
+            "type": "integer",
+            "description": "Product-specifc discounts applied to all the items."
+          },
+          "total_applied_discount_amount": {
+            "type": "integer",
+            "description": "Product-specific discounts applied in the order."
+          },
+          "items": {
+            "type": "array",
+            "description": "Array of order items that have been applied to the order. Each order item can show the effects of particular discounts on the item-level.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "object": {
+                  "type": "string",
+                  "default": "order_item",
+                  "description": "The type of the object represented by JSON. This object stores information about the `order_item`."
+                },
+                "product_id": {
+                  "type": "string",
+                  "example": "prod_5h0wc453_1",
+                  "description": "A unique identifier that represents the product and is assigned by Voucherify."
+                },
+                "sku_id": {
+                  "type": "string",
+                  "example": "sku_prod_5h0wc453_1_1",
+                  "description": "A unique identifier that represents the SKU and is assigned by Voucherify."
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Quantity of the item in the cart."
+                },
+                "amount": {
+                  "type": "integer",
+                  "description": "Represents a total pre-discount amount of order item (`price` * `quantity`)."
+                },
+                "discount_amount": {
+                  "type": "integer",
+                  "description": "The item-level discount applied to the item."
+                },
+                "applied_discount_amount": {
+                  "type": "integer",
+                  "description": "The item-level discount applied to the item."
+                },
+                "price": {
+                  "type": "integer",
+                  "description": "Unit price of an item. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+                },
+                "subtotal_amount": {
+                  "type": "integer",
+                  "description": "Final order item amount after the applied item-level discount.  If there are no item-level discounts applied, this item is equal to the `amount`.   \n`subtotal_amount`=`amount`-`discount_amount`"
+                },
+                "product": {
+                  "type": "object",
+                  "description": "This object stores more information about the related product.",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "prod_5h0wc453_1",
+                      "description": "A unique identifier that represents the product and is assigned by Voucherify."
+                    },
+                    "source_id": {
+                      "type": "string",
+                      "description": "A unique product identifier from your inventory system.",
+                      "example": "illy-arabica"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Brewing System",
+                      "description": "Product name."
+                    },
+                    "price": {
+                      "type": "integer",
+                      "description": "Unit price of a product. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+                    }
+                  }
+                },
+                "sku": {
+                  "type": "object",
+                  "description": "This object stores more information about the related SKU.",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "sku_prod_5h0wc453_1_1",
+                      "description": "A unique identifier that represents the SKU and is assigned by Voucherify."
+                    },
+                    "source_id": {
+                      "type": "string",
+                      "example": "illy-arabica-250g",
+                      "description": "A unique SKU identifier from your inventory system."
+                    },
+                    "sku": {
+                      "type": "string",
+                      "description": "SKU name."
+                    },
+                    "price": {
+                      "type": "integer",
+                      "description": "Unit price of a SKU. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "The metadata object stores all custom attributes assigned to the order. A set of key/value pairs that are att to an order object. Stores additional information about the order in a structured format."
+          },
+          "customer": {
+            "type": "object",
+            "description": "Object containing information about the customer that is making the purchase.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "cust_7iUa6ICKyU6gH40dBU25kQU1",
+                "description": "Unique customer identifier of the customer making the purchase. The ID is assigned by Voucherify."
+              },
+              "object": {
+                "type": "string",
+                "default": "customer",
+                "description": "Type of object represented by the `customer` object."
+              }
+            }
+          },
+          "referrer": {
+            "type": "object",
+            "description": "Object containing information about the referrer.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "cust_7iUa6ICKyU6gH40dBU25kQU1",
+                "description": "Unique referrer ID, who referred the customer making the purchase."
+              },
+              "object": {
+                "type": "string",
+                "default": "customer",
+                "description": "Type of object represented by the `referrer` object."
+              }
+            }
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Unique customer identifier of the customer making the purchase. The ID is assigned by Voucherify.",
+            "example": "cust_7iUa6ICKyU6gH40dBU25kQU1"
+          },
+          "referrer_id": {
+            "type": "string",
+            "example": "cust_nM4jqPiaXUvQdVSA6vTRUnix",
+            "description": "Unique referrer ID."
+          },
+          "object": {
+            "type": "string",
+            "default": "order",
+            "description": "The type of the object represented by JSON. This object stores information about the `order`."
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_unit_product": {
+        "title": "Unit Discount, Product",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "description": "Discount type."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "ADD_MISSING_ITEMS",
+              "ADD_NEW_ITEMS"
+            ],
+            "description": "Defines how the unit is added to the customer's order."
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_type": {
+            "type": "string",
+            "example": "prod_0a9f9ab4ab019a42d5",
+            "description": "The product deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "product": {
+            "type": "object",
+            "description": "Contains information about the product.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique product ID, assigned by Voucherify."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "Product's source ID."
+              },
+              "name": {
+                "type": "string",
+                "description": "Product name."
+              }
+            }
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_unit_sku": {
+        "title": "Unit Discount, SKU",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "description": "Discount type."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "ADD_MISSING_ITEMS",
+              "ADD_NEW_ITEMS"
+            ],
+            "description": "Defines how the unit is added to the customer's order."
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_type": {
+            "type": "string",
+            "example": "sku_0bae3b28f610fd0da1",
+            "description": "The product variant deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "sku": {
+            "type": "object",
+            "description": "Contains information about the SKU.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "sku_0bae3b28f610fd0da1",
+                "description": "Unique SKU ID, assigned by Voucherify."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "Product variant's source ID."
+              },
+              "sku": {
+                "type": "string",
+                "description": "Product varient's name."
+              }
+            }
+          },
+          "product": {
+            "type": "object",
+            "description": "Contains information about the parent product.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique parent product ID, assigned by Voucherify.",
+                "example": "prod_0bae2dc5a090fd0184"
+              },
+              "source_id": {
+                "type": "string",
+                "description": "Source ID of parent product."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of parent product."
+              }
+            }
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_unit_product_multiple": {
+        "title": "Product Item",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "effect": {
+            "type": "string",
+            "enum": [
+              "ADD_MISSING_ITEMS",
+              "ADD_NEW_ITEMS"
+            ],
+            "description": "Defines how the unit is added to the customer's order."
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_type": {
+            "type": "string",
+            "example": "prod_0a9f9ab4ab019a42d5",
+            "description": "The product deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "product": {
+            "type": "object",
+            "description": "Contains information about the product.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique product ID, assigned by Voucherify.",
+                "example": "prod_0a9f9ab4ab019a42d5"
+              },
+              "source_id": {
+                "type": "string",
+                "description": "Product's source ID."
+              },
+              "name": {
+                "type": "string",
+                "description": "Product name."
+              }
+            }
+          }
+        }
+      },
+      "6_res_validate_voucher_discount_unit_sku_multiple": {
+        "title": "SKU Item",
+        "type": "object",
+        "description": "This is an object representing the discount that the customer would receive in the context of the provided request body parameters. If the discount is calculated based on a formula, this object will return either the discount calculated based on the formula or the fallback value.",
+        "properties": {
+          "effect": {
+            "type": "string",
+            "enum": [
+              "ADD_MISSING_ITEMS",
+              "ADD_NEW_ITEMS"
+            ],
+            "description": "Defines how the unit is added to the customer's order."
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_type": {
+            "type": "string",
+            "example": "sku_0bae3b28f610fd0da1",
+            "description": "The product variant deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "sku": {
+            "type": "object",
+            "description": "Contains information about the SKU.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "sku_0bae3b28f610fd0da1",
+                "description": "Unique SKU ID, assigned by Voucherify."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "Product variant's source ID."
+              },
+              "sku": {
+                "type": "string",
+                "description": "Product varient's name."
+              }
+            }
+          },
+          "product": {
+            "type": "object",
+            "description": "Contains information about the parent product.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique parent product ID, assigned by Voucherify.",
+                "example": "prod_0b7d7dfb05cbe5c616"
+              },
+              "source_id": {
+                "type": "string",
+                "description": "Source ID of parent product."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of parent product."
+              }
+            }
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "title": "Order Item",
+        "properties": {
+          "sku_id": {
+            "type": "string",
+            "description": "Unique identifier of the SKU. It is assigned by Voucherify."
+          },
+          "product_id": {
+            "type": "string",
+            "description": "Unique identifier of the product. It is assigned by Voucherify."
+          },
+          "related_object": {
+            "type": "string",
+            "enum": [
+              "product",
+              "sku"
+            ],
+            "description": "Used along with the source_id property, can be set to either sku or product."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "The merchant's product/SKU ID (if it is different from the Voucherify product/SKU ID). It is useful in the integration between multiple systems. It can be an ID from an eCommerce site, a database, or a third-party service."
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "The quantity of the particular item in the cart."
+          },
+          "discount_quantity": {
+            "type": "integer",
+            "description": "Number of dicounted items."
+          },
+          "initial_quantity": {
+            "type": "integer",
+            "description": "A positive integer in the smallest unit quantity representing the total amount of the order; this is the sum of the order items' quantity."
+          },
+          "amount": {
+            "type": "integer",
+            "description": "The total amount of the order item (price * quantity)."
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "Sum of all order-item-level discounts applied to the order."
+          },
+          "initial_amount": {
+            "type": "integer",
+            "description": "A positive integer in the smallest currency unit (e.g. 100 cents for $1.00) representing the total amount of the order. This is the sum of the order items' amounts."
+          },
+          "price": {
+            "type": "integer",
+            "description": "Unit price of an item. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+          },
+          "product": {
+            "type": "object",
+            "description": "An object containing details of the related product.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "A unique identifier that represents the product and is assigned by Voucherify."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "The merchant's product ID (if it is different than Voucherify's product ID). It is really useful in case of integration between multiple systems. It can be an ID from an eCommerce site, a database or a 3rd party service."
+              },
+              "override": {
+                "type": "boolean",
+                "description": "The override set to `true` is used to store the product information in the system. If the product does not exist, it will be created with a source_id; if it does exist, the provided values for the name, price, and metadata will replace those already stored in the system. Override works only for endpoints that create an order in the database."
+              },
+              "name": {
+                "type": "string",
+                "description": "Product name."
+              },
+              "metadata": {
+                "type": "object",
+                "description": "A set of custom key/value pairs that you can attach to a product. It can be useful for storing additional information about the product in a structured format. It can be used to create product collections."
+              },
+              "price": {
+                "type": "number",
+                "description": "Product price. A positive integer in the smallest currency unit (e.g. 100 cents for $1.00)."
+              }
+            }
+          },
+          "sku": {
+            "type": "object",
+            "description": "An object containing details of the related SKU.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "A unique identifier that represents the SKU and is assigned by Voucherify."
+              },
+              "source_id": {
+                "type": "string",
+                "description": "The merchant's SKU ID (if it is different than Voucherify's SKU ID). It is really useful in case of integration between multiple systems. It can be an ID from an eCommerce site, a database or a 3rd party service."
+              },
+              "override": {
+                "type": "boolean",
+                "description": "The override set to `true` is used to store the product information in the system. If the product does not exist, it will be created with a source_id; if it does exist, the provided values for the name, price, and metadata will replace those already stored in the system."
+              },
+              "sku": {
+                "type": "string",
+                "description": "The SKU name."
+              },
+              "price": {
+                "type": "number",
+                "description": "SKU price. A positive integer in the smallest currency unit (e.g. 100 cents for $1.00)."
+              },
+              "metadata": {
+                "type": "object",
+                "description": "A set of custom key/value pairs that you can attach to an order item. It can be useful for storing additional information about the order item in a structured format. It can be used to create product collections."
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "A set of custom key/value pairs that you can attach to an order item. It can be useful for storing additional information about the order item in a structured format. It can be used to define business validation rules."
+          }
+        },
+        "required": [
+          "object"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/management/v1/projects/{projectId}/metadata-schemas/{metadataSchemaId}": {
+      "delete": {
+        "operationId": "delete-metadata-schema",
+        "tags": [
+          "Management"
+        ],
+        "summary": "Delete Metadata Schema",
+        "description": "Deletes permanently the metadata schema.\n\nIn standard metadata schemas, this endpoint removes permanently all definitions. The standard metadata schemas are:\n- Campaign\n- Voucher\n- Publication\n- Redemption\n- Product\n- Customer\n- Order\n- Order line item\n- Loyalty Tier\n- Promotion Tier\n- Earning rule\n- Reward\n\nIf you want to delete only one definition, use the [Update Metadata Schema](ref:update-metadata-schema) endpoint. In the request, provide the `\"deleted\": true` pair in the definition object. This definition will be moved to Removed definitions.\n\nIf you want to create a new standard metadata schema, use the [Create Metadata Schema](ref:create-metadata-schema) endpoint.\n\n> 🚧 Metadata Purging\n>\n>This endpoint deletes permanently the metadata schemas only. However, it does not purge the metadata from associated entities, so the metadata added to those entities will remain.\n>\n>If you want to purge metadata from the entities:\n>1. Remove all the definitions you want to purge. You can do this either in Voucherify Project Settings > Metadata Schema tab or with the [Update Metadata Schema](ref:update-metadata-schema) endpoint.\n>2. In Voucherify Project Settings > Metadata Schema tab, go to the relevant metadata schema.\n>3. In Removed definitions, click the bin button next to the definitions whose metadata you want to purge from entities.\n>Note:\n>- This is an asynchronous action. You will be notified when it has been completed.\n>- You cannot purge metadata for the Redemption and Publication schemas.\n>4. Use the Delete Metadata Schema request to delete the metadata schema from Voucherify.\n\n> 📘 Metadata Documentation\n>\n> Read [the Getting Started with Metadata](https://support.voucherify.io/article/99-schema-validation-metadata) and [Metadata Mapping](doc:metadata-mapping) articles to learn how metadata work in Voucherify.",
+        "parameters": [],
+        "security": [
+          {
+            "X-Management-Id": [],
+            "X-Management-Token": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returns no content if the metadata schema has been successfully deleted."
+          },
+          "401": {
+            "description": "Returns an error if an invalid token was provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "value": {
+                      "code": 401,
+                      "message": "Unauthorized",
+                      "key": "unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Returns an error if the current plan does not include the Management API feature.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPaymentRequired"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "code": 402,
+                      "message": "Payment required",
+                      "details": "Your current plan does not include a feature required to perform this operation.",
+                      "key": "missing_required_feature"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error when a resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "code": 404,
+                      "message": "Resource not found",
+                      "details": "Cannot find project with id proj_2F3txY7"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "ErrorPaymentRequired": {
+        "title": "Payment Required Error",
+        "type": "object",
+        "description": "Error: Payment required - the current plan does not include the feature.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details",
+          "key"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "X-Management-Id": {
+        "type": "apiKey",
+        "name": "X-Management-Id",
+        "in": "header"
+      },
+      "X-Management-Token": {
+        "type": "apiKey",
+        "name": "X-Management-Token",
+        "in": "header"
+      }
+    }
+  }
+}

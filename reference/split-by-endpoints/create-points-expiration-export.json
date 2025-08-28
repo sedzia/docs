@@ -1,0 +1,566 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/loyalties/{campaignId}/points-expiration/export": {
+      "post": {
+        "operationId": "create-points-expiration-export",
+        "tags": [
+          "Loyalties"
+        ],
+        "summary": "Export Loyalty Campaign Point Expiration",
+        "description": "Schedule the generation of a point expiration CSV file for a particular campaign. It can list point buckets, which can have an `ACTIVE` or `EXPIRED` status.",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "loyalties"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Specify the data filters, types of data to return and order in which the results should be returned.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoyaltiesPointsExpirationExportCreateRequestBody"
+              },
+              "examples": {
+                "Specific Vouchers": {
+                  "value": {
+                    "parameters": {
+                      "fields": [
+                        "id",
+                        "campaign_id",
+                        "voucher_id",
+                        "status",
+                        "expires_at",
+                        "points"
+                      ],
+                      "order": "-expires_at",
+                      "filters": {
+                        "junction": "and",
+                        "voucher_id": {
+                          "conditions": {
+                            "$in": [
+                              "v_0aMj6Mdp0i3zuXrd9NnBKboc7746mlgF",
+                              "v_YLn0WVWXSXbUfDvxgrgUbtfJ3SQIY655"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "Specific campaign": {
+                  "value": {
+                    "parameters": {
+                      "fields": [
+                        "id",
+                        "campaign_id",
+                        "voucher_id",
+                        "status",
+                        "expires_at",
+                        "points"
+                      ],
+                      "order": "-expires_at",
+                      "filters": {
+                        "junction": "and",
+                        "campaign_id": {
+                          "conditions": {
+                            "$is": "camp_7s3uXI44aKfIk5IhmeOPr6ic"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns an object with the export ID of the scheduled generation of CSV file with exported points expirations. You can use either the <!-- [Get Export](OpenAPI.json/paths/~1exports~1{exportId}/get) -->[Get Export](ref:get-export) endpoint to view the status and obtain the URL of the CSV file or <!-- [Download Export](OpenAPI.json/paths/~1exports~1{export_Id}/get) -->[Download Export](ref:download-export) endpoint to download the CSV file.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoyaltiesPointsExpirationExportCreateResponseBody"
+                },
+                "examples": {
+                  "Specific Vouchers": {
+                    "value": {
+                      "id": "exp_zC3eXAFss17XTMzMkkov4KGq",
+                      "object": "export",
+                      "created_at": "2022-11-28T13:00:23.621Z",
+                      "status": "SCHEDULED",
+                      "channel": "API",
+                      "exported_object": "points_expiration",
+                      "parameters": {
+                        "order": "-expires_at",
+                        "fields": [
+                          "id",
+                          "campaign_id",
+                          "voucher_id",
+                          "status",
+                          "expires_at",
+                          "points"
+                        ],
+                        "filters": {
+                          "junction": "and",
+                          "voucher_id": {
+                            "conditions": {
+                              "$in": [
+                                "v_0aMj6Mdp0i3zuXrd9NnBKboc7746mlgF",
+                                "v_YLn0WVWXSXbUfDvxgrgUbtfJ3SQIY655"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "result": null,
+                      "user_id": null
+                    }
+                  },
+                  "Specific Campaign": {
+                    "value": {
+                      "id": "exp_kfwVDMsavDHl2vOY6vH9q7P7",
+                      "object": "export",
+                      "created_at": "2022-11-28T16:46:34.148Z",
+                      "status": "SCHEDULED",
+                      "channel": "API",
+                      "exported_object": "points_expiration",
+                      "parameters": {
+                        "order": "-expires_at",
+                        "fields": [
+                          "id",
+                          "campaign_id",
+                          "voucher_id",
+                          "status",
+                          "expires_at",
+                          "points"
+                        ],
+                        "filters": {
+                          "junction": "and",
+                          "campaign_id": {
+                            "conditions": {
+                              "$is": "camp_7s3uXI44aKfIk5IhmeOPr6ic"
+                            }
+                          }
+                        }
+                      },
+                      "result": null,
+                      "user_id": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoyaltiesPointsExpirationExportCreateRequestBody": {
+        "title": "Loyalties Points Expiration Export Create Request Body",
+        "type": "object",
+        "description": "Request schema model for validating a voucher using **POST** `/v1/loyalties/{campaignId}/points-expiration/export`",
+        "properties": {
+          "parameters": {
+            "$ref": "#/components/schemas/LoyaltiesPointsExpirationExportCreateRequestBodyParameters"
+          }
+        }
+      },
+      "LoyaltiesPointsExpirationExportCreateResponseBody": {
+        "title": "Loyalties Points Expiration Export Create Response Body",
+        "type": "object",
+        "description": "Object representing an export of points expirations. ",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique export ID.",
+            "example": "exp_FFfp9o7daWuJqJCKp5xqqli4"
+          },
+          "object": {
+            "type": "string",
+            "default": "export",
+            "enum": [
+              "export"
+            ],
+            "description": "The type of object being represented. This object stores information about the export."
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2022-04-28T11:23:20.922Z",
+            "description": "Timestamp representing the date and time when the export was scheduled in ISO 8601 format.",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the export. Informs you whether the export has already been completed.",
+            "enum": [
+              "SCHEDULED"
+            ]
+          },
+          "channel": {
+            "type": "string",
+            "description": "The channel through which the export was triggered.",
+            "enum": [
+              "API",
+              "WEBSITE"
+            ]
+          },
+          "exported_object": {
+            "type": "string",
+            "description": "The type of exported object.",
+            "default": "points_expiration",
+            "enum": [
+              "points_expiration"
+            ]
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/LoyaltiesPointsExpirationExportCreateResponseBodyParameters"
+          },
+          "result": {
+            "type": "object",
+            "description": "Always null."
+          },
+          "user_id": {
+            "type": "string",
+            "example": "user_g24UoRO3Caxu7FCT4n5tpYEa3zUG0Fr",
+            "description": "`user_id` identifies the specific user who initiated the export through the Voucherify Dashboard. `user_id` is returned when the channel value is `WEBSITE`."
+          }
+        }
+      },
+      "LoyaltiesPointsExpirationExportCreateRequestBodyParameters": {
+        "type": "object",
+        "description": "List of fields and filters that will be used to create the export.",
+        "properties": {
+          "order": {
+            "type": "string",
+            "description": "How the export is filtered, where the dash `-` preceding a sorting option means sorting in a descending order.",
+            "enum": [
+              "expires_at",
+              "-expires_at"
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "description": "Array of strings containing the data that was exported. These fields define the headers in the CSV file. \n\n The array can be a combination of any of the following available fields:  \n\n| **Field** | **Definition** | **Example Export** |\n|:---|:---|:---|\n| id | Loyalty points bucket ID. | lopb_Wl1o3EjJIHSNjvO5BDLy4z1n |\n| campaign_id | Campaign ID of the parent loyalty campaign. | camp_7s3uXI44aKfIk5IhmeOPr6ic |\n| voucher_id | Voucher ID of the parent loyalty card. | v_YLn0WVWXSXbUfDvxgrgUbtfJ3SQIY655 |\n| status | Status of the loyalty point bucket. | `ACTIVE` or `EXPIRED` |\n| expires_at | Timestamp in ISO 8601 format representing the date when the points expire. | 2022-06-30 |\n| points | Number of points. | 1000 |",
+            "items": {
+              "type": "string",
+              "enum": [
+                "id",
+                "campaign_id",
+                "voucher_id",
+                "points",
+                "status",
+                "expires_at"
+              ]
+            }
+          },
+          "filters": {
+            "$ref": "#/components/schemas/LoyaltiesPointsExpirationExportCreateRequestBodyParametersFilters"
+          }
+        }
+      },
+      "LoyaltiesPointsExpirationExportCreateResponseBodyParameters": {
+        "type": "object",
+        "description": "List of fields and filters that were passed in the request body to create the export.",
+        "properties": {
+          "order": {
+            "type": "string",
+            "description": "How the export is filtered, where the dash `-` preceding a sorting option means sorting in a descending order.",
+            "enum": [
+              "expires_at",
+              "-expires_at"
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "description": "Array of strings containing the data that was exported. These fields define the headers in the CSV file. \n\n The array can be a combination of any of the following available fields:  \n\n| **Field** | **Definition** | **Example Export** |\n|:---|:---|:---|\n| id | Loyalty points bucket ID. | lopb_Wl1o3EjJIHSNjvO5BDLy4z1n |\n| campaign_id | Campaign ID of the parent loyalty campaign. | camp_7s3uXI44aKfIk5IhmeOPr6ic |\n| voucher_id | Voucher ID of the parent loyalty card. | v_YLn0WVWXSXbUfDvxgrgUbtfJ3SQIY655 |\n| status | Status of the loyalty points bucket. | `ACTIVE` or `INACTIVE` |\n| expires_at | Timestamp in ISO 8601 format representing the date when the points expire. | 2022-06-30 |\n| points | Number of points. | 1000 |",
+            "items": {
+              "type": "string",
+              "enum": [
+                "id",
+                "campaign_id",
+                "voucher_id",
+                "points",
+                "status",
+                "expires_at"
+              ]
+            }
+          },
+          "filters": {
+            "$ref": "#/components/schemas/LoyaltiesPointsExpirationExportCreateResponseBodyParametersFilters"
+          }
+        }
+      },
+      "LoyaltiesPointsExpirationExportCreateRequestBodyParametersFilters": {
+        "type": "object",
+        "description": "Data filters used to narrow down the data records to be returned in the export.",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "voucher_id": {
+            "type": "object",
+            "description": "Data filters used to narrow down the data records to be returned in the result.",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "description": "Data filters used to narrow down the data records to be returned in the result.",
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Specify the exact resource value."
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results should omit this value."
+                  }
+                }
+              }
+            }
+          },
+          "campaign_id": {
+            "type": "object",
+            "description": "Data filters used to narrow down the data records to be returned in the result.",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "description": "Data filters used to narrow down the data records to be returned in the result.",
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Specify the exact resource value."
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results should omit this value."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "LoyaltiesPointsExpirationExportCreateResponseBodyParametersFilters": {
+        "type": "object",
+        "description": "Data filters used to narrow down the data records to be returned in the export.",
+        "properties": {
+          "junction": {
+            "$ref": "#/components/schemas/Junction"
+          },
+          "voucher_id": {
+            "type": "object",
+            "description": "Data filters used to narrow down the data records to be returned in the result.",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "description": "Data filters used to narrow down the data records to be returned in the result.",
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be excluded from the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Specify the exact resource value."
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results should omit this value."
+                  }
+                }
+              }
+            }
+          },
+          "campaign_id": {
+            "type": "object",
+            "description": "Data filters used to narrow down the data records to be returned in the result.",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "description": "Data filters used to narrow down the data records to be returned in the result.",
+                "properties": {
+                  "$in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$not_in": {
+                    "type": "array",
+                    "description": "Array of the resource values that should be included in the results.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "$is": {
+                    "type": "string",
+                    "description": "Specify the exact resource value."
+                  },
+                  "$is_not": {
+                    "type": "string",
+                    "description": "Results should omit this value."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Junction": {
+        "title": "Junction",
+        "description": "Logical Operator Between Filters. Filter by conditions set on the `junction` parameter indicating how the `conditions` should be accounted for in the query. An `AND` is an all-inclusive logical operator, meaning the `AND` operator displays a record if **ALL** the conditions separated by AND are TRUE, while  an `OR` operator displays a record if **ANY** of the conditions separated by OR is TRUE.",
+        "enum": [
+          "and",
+          "or"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1038 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/campaigns/{campaignId}/import": {
+      "post": {
+        "operationId": "import-vouchers-to-campaign",
+        "tags": [
+          "Campaigns"
+        ],
+        "summary": "Import Vouchers to Campaign",
+        "description": "Imports vouchers to an **existing** campaign.\n\nThis API request starts a process that affects Voucherify data in bulk. \n\nIn case of small jobs (like bulk update) the request is put into a queue and processed once every other bulk request placed in the queue prior to this request is finished. However, when the job takes a longer time (like vouchers generation) then it is processed in small portions in a round-robin fashion. When there is a list of vouchers generation scheduled, then they will all have the `IN_PROGRESS` status shortly. This way, small jobs added just after scheduling big jobs of the same type will be processed in a short time window. \n\nThe result will return the async ID. You can verify the status of your request via this [API request](ref:get-async-action).",
+        "parameters": [],
+        "security": [
+          {
+            "X-App-Id": [],
+            "X-App-Token": [],
+            "X-Voucherify-OAuth": [
+              "api",
+              "campaigns"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Discount type, expiration date and the remaining attributes will be taken from the <!-- [Campaign](OpenAPI.json/components/schemas/Campaign) -->[Campaign](ref:get-campaign) settings.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignsImportCreateRequestBody"
+              },
+              "examples": {
+                "Example": {
+                  "value": [
+                    {
+                      "code": "CODE7",
+                      "category": "First",
+                      "redemption": {
+                        "quantity": 1
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "active": true
+                    },
+                    {
+                      "code": "CODE8",
+                      "category": "Second",
+                      "redemption": {
+                        "quantity": 18
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "active": true
+                    },
+                    {
+                      "code": "CODE9",
+                      "redemption": {
+                        "quantity": 4
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "active": true
+                    }
+                  ]
+                },
+                "Gift Cards": {
+                  "value": [
+                    {
+                      "code": "CODE13",
+                      "category": "First",
+                      "redemption": {
+                        "quantity": 1
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "gift": {
+                        "amount": 500
+                      },
+                      "active": true
+                    },
+                    {
+                      "code": "CODE14",
+                      "category": "Second",
+                      "redemption": {
+                        "quantity": 18
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "gift": {
+                        "amount": 2000
+                      },
+                      "active": true
+                    },
+                    {
+                      "code": "CODE15",
+                      "redemption": {
+                        "quantity": 4
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "active": false
+                    }
+                  ]
+                },
+                "Loyalty Cards": {
+                  "value": [
+                    {
+                      "code": "CODE10",
+                      "category": "First",
+                      "redemption": {
+                        "quantity": 1
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "loyalty_card": {
+                        "points": 300
+                      },
+                      "active": true
+                    },
+                    {
+                      "code": "CODE11",
+                      "category": "Second",
+                      "redemption": {
+                        "quantity": 18
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "loyalty_card": {
+                        "points": 2000
+                      },
+                      "active": true
+                    },
+                    {
+                      "code": "CODE12",
+                      "redemption": {
+                        "quantity": 4
+                      },
+                      "metadata": {
+                        "season": "Fall"
+                      },
+                      "additional_info": "secret-code1",
+                      "active": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Returns the ID of the scheduled asynchronous action, informing you that your request has been accepted and the vouchers will be imported to the repository asynchronously. To check the status and result, copy the `async_action_id` from the response and pass it using <!-- [Get Async Action](OpenAPI.json/paths/~1async-actions~1{asyncActionId}/get) -->[Get Async Action](ref:get-async-action) endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignsImportCreateResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns an error if the request includes incorrect data, e.g. a wrong data type or duplicated codes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/e_400_invalid_voucher"
+                    },
+                    {
+                      "$ref": "#/components/schemas/e_400_duplicate_key"
+                    }
+                  ]
+                },
+                "examples": {
+                  "Duplicate Codes": {
+                    "value": {
+                      "code": 400,
+                      "key": "duplicate_key",
+                      "message": "Duplicate codes",
+                      "details": "2 voucher codes(s) already exist.",
+                      "request_id": "v-0adaccaba61502e4b3"
+                    }
+                  },
+                  "Missing Code": {
+                    "value": {
+                      "code": 400,
+                      "key": "invalid_voucher",
+                      "message": "Invalid Voucher",
+                      "details": "Found 1 voucher(s) without 'code' value",
+                      "request_id": "v-0bbc38ce088c8b2f9a"
+                    }
+                  },
+                  "Invalid Payload": {
+                    "value": {
+                      "code": 400,
+                      "key": "invalid_payload",
+                      "message": "Invalid payload",
+                      "details": "Property .redemption.quantity should be number,null",
+                      "request_id": "v-0c545db3808418908f"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CampaignsImportCreateRequestBody": {
+        "type": "array",
+        "title": "Campaigns Import Create Request Body",
+        "description": "Request body schema for **POST** `v1/campaigns/{campaignId}/import`.",
+        "items": {
+          "$ref": "#/components/schemas/CampaignsImportVoucherItem"
+        }
+      },
+      "CampaignsImportCreateResponseBody": {
+        "type": "object",
+        "title": "Campaigns Import Create Response Body",
+        "description": "Response body schema for **POST** `v1/campaigns/{campaignId}/import`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AsyncActions"
+          }
+        ]
+      },
+      "e_400_invalid_voucher": {
+        "title": "Invalid Voucher",
+        "type": "object",
+        "description": "Error: Bad Request &rarr; Invalid Voucher",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "default": 400,
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "default": "invalid_voucher",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "default": "Invalid Voucher",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a884c6be8c3756f42",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          }
+        }
+      },
+      "e_400_duplicate_key": {
+        "title": "Duplicated Key",
+        "type": "object",
+        "description": "Error: Conflict &rarr; Duplicated key found",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "default": 400,
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "default": "duplicate_key",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "default": "Duplicate codes",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0aa36e570e44cb3bdd",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          }
+        }
+      },
+      "CampaignsImportVoucherItem": {
+        "title": "Campaigns Import Voucher Item",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/VoucherImportLoyaltyCard"
+          },
+          {
+            "$ref": "#/components/schemas/VoucherImportGift"
+          },
+          {
+            "$ref": "#/components/schemas/VoucherImportDiscount"
+          }
+        ]
+      },
+      "AsyncActions": {
+        "type": "object",
+        "title": "Asynchronous Actions",
+        "description": "Response to requests that are processed asynchronously.",
+        "properties": {
+          "async_action_id": {
+            "type": "string",
+            "example": "aa_0a875d56c805df6601",
+            "description": "The ID of the scheduled asynchronous action."
+          }
+        },
+        "required": [
+          "async_action_id"
+        ]
+      },
+      "VoucherImportLoyaltyCard": {
+        "title": "Voucher Import Loyalty Card",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VoucherImportBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "default": "LOYALTY_CARD",
+                "enum": [
+                  "LOYALTY_CARD"
+                ],
+                "description": "Defines the type of the voucher. "
+              },
+              "loyalty_card": {
+                "$ref": "#/components/schemas/SimpleLoyaltyCard"
+              }
+            },
+            "required": [
+              "loyalty_card"
+            ]
+          }
+        ]
+      },
+      "VoucherImportGift": {
+        "title": "Voucher Import Gift",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VoucherImportBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "default": "GIFT_VOUCHER",
+                "enum": [
+                  "GIFT_VOUCHER"
+                ],
+                "description": "Defines the type of the voucher. "
+              },
+              "gift": {
+                "$ref": "#/components/schemas/Gift"
+              }
+            },
+            "required": [
+              "gift"
+            ]
+          }
+        ]
+      },
+      "VoucherImportDiscount": {
+        "title": "Voucher Import Discount",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VoucherImportBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "default": "DISCOUNT_VOUCHER",
+                "enum": [
+                  "DISCOUNT_VOUCHER"
+                ],
+                "description": "Defines the type of the voucher. "
+              },
+              "discount": {
+                "$ref": "#/components/schemas/Discount"
+              }
+            },
+            "required": [
+              "discount"
+            ]
+          }
+        ]
+      },
+      "VoucherImportBase": {
+        "title": "Voucher Import Base",
+        "type": "object",
+        "description": "Object model for gift card object being imported.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Value representing the imported code."
+          },
+          "redemption": {
+            "type": "object",
+            "description": "Stores the quantity of redemptions that can be applied to the voucher.",
+            "properties": {
+              "quantity": {
+                "type": "integer",
+                "description": "How many times a voucher can be redeemed. A `null` value means unlimited.",
+                "example": 10
+              }
+            }
+          },
+          "active": {
+            "type": "boolean",
+            "description": "A flag to toggle the voucher on or off. You can disable a voucher even though it's within the active period defined by the `start_date` and `expiration_date`.  \n\n- `true` indicates an *active* voucher\n- `false` indicates an *inactive* voucher"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "The metadata object stores all custom attributes assigned to the code. A set of key/value pairs that you can attach to a voucher object. It can be useful for storing additional information about the voucher in a structured format."
+          },
+          "category": {
+            "type": "string",
+            "description": "Tag defining the category that this voucher belongs to. Useful when listing vouchers using the [List Vouchers](ref:list-vouchers) endpoint."
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Activation timestamp presented in the ISO 8601 format. Voucher is *inactive before* this date. Start date defines when the code starts to be active.\nAllowed date formats are:\n- YYYY-MM-DD\n- YYYY-MM-DDTHH\n- YYYY-MM-DDTHH:mm\n- YYYY-MM-DDTHH:mm:ss\n- YYYY-MM-DDTHH:mm:ssZ\n- YYYY-MM-DDTHH:mm:ss.SSSZ",
+            "format": "date-time",
+            "example": "2020-12-28T12:49:16.272Z"
+          },
+          "expiration_date": {
+            "type": "string",
+            "description": "Expiration date defines when the code expires. Expiration timestamp is presented in the ISO 8601 format.  Voucher is *inactive after* this date.\nAllowed date formats are:\n- YYYY-MM-DD\n- YYYY-MM-DDTHH\n- YYYY-MM-DDTHH:mm\n- YYYY-MM-DDTHH:mm:ss\n- YYYY-MM-DDTHH:mm:ssZ\n- YYYY-MM-DDTHH:mm:ss.SSSZ",
+            "format": "date-time",
+            "example": "2053-12-28T12:49:16.272Z"
+          },
+          "validity_timeframe": {
+            "$ref": "#/components/schemas/ValidityTimeframe"
+          },
+          "validity_day_of_week": {
+            "$ref": "#/components/schemas/ValidityDayOfWeek"
+          },
+          "additional_info": {
+            "type": "string",
+            "description": "An optional field to keep any extra textual information about the code such as a code description and details."
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "SimpleLoyaltyCard": {
+        "title": "Simple Loyalty Card",
+        "type": "object",
+        "description": "Simplified loyalty card data.",
+        "required": [
+          "points"
+        ],
+        "properties": {
+          "points": {
+            "type": "integer",
+            "description": "Total number of points added to the loyalty card over its lifespan."
+          },
+          "balance": {
+            "type": "integer",
+            "description": "Points available for reward redemption. This is calculated as follows: `balance` = `points` - `expired_points` - `subtracted_points` - `redemption.redeemed_points`."
+          },
+          "next_expiration_date": {
+            "type": "string",
+            "description": "The next closest date when the next set of points are due to expire."
+          },
+          "next_expiration_points": {
+            "type": "integer",
+            "description": "The amount of points that are set to expire next."
+          },
+          "pending_points": {
+            "type": "integer",
+            "description": "Shows the number of pending points that will be added to the loyalty card when they are activated automatically or manually."
+          },
+          "expired_points": {
+            "type": "integer",
+            "description": "Shows the total number of expired points over the lifetime of the loyalty card."
+          },
+          "subtracted_points": {
+            "type": "integer",
+            "description": "Shows the total number of subtracted points over the lifetime of the loyalty card."
+          }
+        }
+      },
+      "Gift": {
+        "title": "Gift",
+        "type": "object",
+        "description": "Contains current gift card balance information.",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Total gift card income over the lifetime of the card. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`."
+          },
+          "subtracted_amount": {
+            "type": "integer",
+            "description": "Total amount of subtracted credits over the gift card lifetime."
+          },
+          "balance": {
+            "type": "number",
+            "description": "Available funds. The value is multiplied by 100 to represent 2 decimal places. For example `10000 cents` for `$100.00`. `balance` = `amount` - `subtracted_amount` - `redemption.redeemed_amount`."
+          },
+          "effect": {
+            "type": "string",
+            "description": "Defines how the credits are applied to the customer's order.",
+            "enum": [
+              "APPLY_TO_ORDER",
+              "APPLY_TO_ITEMS"
+            ]
+          }
+        },
+        "required": [
+          "amount",
+          "balance"
+        ]
+      },
+      "Discount": {
+        "title": "Discount",
+        "type": "object",
+        "description": "Contains information about discount.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DiscountAmount"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountUnit"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountUnitMultiple"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountPercent"
+          },
+          {
+            "$ref": "#/components/schemas/DiscountFixed"
+          }
+        ]
+      },
+      "ValidityTimeframe": {
+        "title": "Validity Timeframe",
+        "type": "object",
+        "description": "Set recurrent time periods when the earning rule is valid. For example, valid for 1 hour every other day.`start_date` **required** when including the `validity_timeframe`.",
+        "properties": {
+          "duration": {
+            "type": "string",
+            "description": "Defines the amount of time an earning rule will be active in ISO 8601 format. For example, an earning rule with a `duration` of `PT1H` will be valid for a duration of one hour.",
+            "example": "PT1H"
+          },
+          "interval": {
+            "type": "string",
+            "description": "Defines the intervening time between two time points in ISO 8601 format, expressed as a duration. For example, an earning rule with an `interval` of `P2D` will be valid every other day.",
+            "example": "P2D"
+          }
+        }
+      },
+      "ValidityDayOfWeek": {
+        "title": "Validity Day Of Week",
+        "type": "array",
+        "description": "Integer array corresponding to the particular days of the week in which the voucher is valid.\n\n- `0` Sunday\n- `1` Monday\n- `2` Tuesday\n- `3` Wednesday\n- `4` Thursday\n- `5` Friday\n- `6` Saturday",
+        "items": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      },
+      "DiscountAmount": {
+        "type": "object",
+        "title": "Amount",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "AMOUNT",
+            "enum": [
+              "AMOUNT"
+            ],
+            "description": "Defines the type of the voucher."
+          },
+          "amount_off": {
+            "type": "number",
+            "description": "Amount taken off the subtotal of a price. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 discount is written as 1000."
+          },
+          "amount_off_formula": {
+            "type": "string"
+          },
+          "aggregated_amount_limit": {
+            "type": "integer",
+            "description": "Maximum discount amount per order."
+          },
+          "effect": {
+            "description": "Defines how the discount is applied to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountAmountVouchersEffectTypes"
+              }
+            ]
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "amount_off"
+        ]
+      },
+      "DiscountUnit": {
+        "type": "object",
+        "title": "Unit",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "enum": [
+              "UNIT"
+            ],
+            "description": "Discount type."
+          },
+          "unit_off": {
+            "type": "integer",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_off_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the number of units."
+          },
+          "effect": {
+            "description": "Defines how the unit is added to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountUnitVouchersEffectTypes"
+              }
+            ]
+          },
+          "unit_type": {
+            "type": "string",
+            "description": "The product deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "product": {
+            "description": "Contains information about the product.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimpleProductDiscountUnit"
+              }
+            ]
+          },
+          "sku": {
+            "$ref": "#/components/schemas/SimpleSkuDiscountUnit"
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "unit_type"
+        ]
+      },
+      "DiscountUnitMultiple": {
+        "type": "object",
+        "title": "Unit Multiple",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "UNIT",
+            "enum": [
+              "UNIT"
+            ],
+            "description": "Discount type."
+          },
+          "effect": {
+            "type": "string",
+            "default": "ADD_MANY_ITEMS",
+            "enum": [
+              "ADD_MANY_ITEMS"
+            ],
+            "description": "Defines how the discount is applied to the customer's order."
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiscountUnitMultipleOneUnit"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "units"
+        ]
+      },
+      "DiscountPercent": {
+        "type": "object",
+        "title": "Percent",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "PERCENT",
+            "enum": [
+              "PERCENT"
+            ],
+            "description": "Defines the type of the voucher."
+          },
+          "percent_off": {
+            "type": "number",
+            "description": "The percent discount that the customer will receive."
+          },
+          "percent_off_formula": {
+            "type": "string"
+          },
+          "amount_limit": {
+            "type": "number",
+            "description": "Upper limit allowed to be applied as a discount. Value is multiplied by 100 to precisely represent 2 decimal places. For example, a $6 maximum discount is written as 600."
+          },
+          "aggregated_amount_limit": {
+            "type": "integer",
+            "description": "Maximum discount amount per order."
+          },
+          "effect": {
+            "description": "Defines how the discount is applied to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountPercentVouchersEffectTypes"
+              }
+            ]
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "percent_off"
+        ]
+      },
+      "DiscountFixed": {
+        "title": "Fixed",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "FIXED",
+            "enum": [
+              "FIXED"
+            ],
+            "description": "Defines the type of the voucher."
+          },
+          "fixed_amount": {
+            "type": "number",
+            "description": "Sets a fixed value for an order total or the item price. The value is multiplied by 100 to precisely represent 2 decimal places. For example, a $10 discount is written as 1000. If the fixed amount is calculated by the formula, i.e. the `fixed_amount_formula` parameter is present in the fixed amount definition, this value becomes the **fallback value**. As a result, if the formula cannot be calculated due to missing metadata, for example, this value will be used as the fixed value."
+          },
+          "fixed_amount_formula": {
+            "type": "string"
+          },
+          "effect": {
+            "description": "Defines how the discount is applied to the customer's order.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiscountFixedVouchersEffectTypes"
+              }
+            ]
+          },
+          "is_dynamic": {
+            "type": "boolean",
+            "description": "Flag indicating whether the discount was calculated using a formula."
+          }
+        },
+        "required": [
+          "type",
+          "fixed_amount"
+        ]
+      },
+      "DiscountAmountVouchersEffectTypes": {
+        "title": "Discount Amount Vouchers Effect Types",
+        "enum": [
+          "APPLY_TO_ORDER",
+          "APPLY_TO_ITEMS",
+          "APPLY_TO_ITEMS_PROPORTIONALLY",
+          "APPLY_TO_ITEMS_PROPORTIONALLY_BY_QUANTITY",
+          "APPLY_TO_ITEMS_BY_QUANTITY"
+        ],
+        "type": "string"
+      },
+      "DiscountUnitVouchersEffectTypes": {
+        "title": "Discount Unit Vouchers Effect Types",
+        "enum": [
+          "ADD_MISSING_ITEMS",
+          "ADD_NEW_ITEMS",
+          "ADD_MANY_ITEMS"
+        ],
+        "type": "string"
+      },
+      "SimpleProductDiscountUnit": {
+        "type": "object",
+        "title": "Simple Product Discount Unit",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique product ID, assigned by Voucherify."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "Product's source ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "Product name."
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "SimpleSkuDiscountUnit": {
+        "type": "object",
+        "title": "Simple Sku Discount Unit",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique SKU ID, assigned by Voucherify."
+          },
+          "source_id": {
+            "type": "string",
+            "description": "Product variant's source ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "Sku name"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "DiscountUnitMultipleOneUnit": {
+        "type": "object",
+        "title": "One Unit",
+        "properties": {
+          "unit_off": {
+            "type": "number",
+            "description": "Number of units to be granted a full value discount."
+          },
+          "unit_off_formula": {
+            "type": "string",
+            "description": "Formula used to calculate the number of units."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "ADD_NEW_ITEMS",
+              "ADD_MISSING_ITEMS"
+            ],
+            "description": "Defines how the unit is added to the customer's order.\n\n"
+          },
+          "unit_type": {
+            "type": "string",
+            "description": "The product deemed as free, chosen from product inventory (e.g. time, items)."
+          },
+          "product": {
+            "description": "Contains information about the product.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimpleProductDiscountUnit"
+              }
+            ]
+          },
+          "sku": {
+            "description": "Contains information about the sku.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimpleSkuDiscountUnit"
+              }
+            ]
+          }
+        },
+        "required": [
+          "effect",
+          "unit_type"
+        ]
+      },
+      "DiscountPercentVouchersEffectTypes": {
+        "title": "Discount Percent Vouchers Effect Types",
+        "enum": [
+          "APPLY_TO_ORDER",
+          "APPLY_TO_ITEMS"
+        ],
+        "type": "string"
+      },
+      "DiscountFixedVouchersEffectTypes": {
+        "title": "Discount Fixed Vouchers Effect Types",
+        "enum": [
+          "APPLY_TO_ORDER",
+          "APPLY_TO_ITEMS"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "X-App-Id": {
+        "type": "apiKey",
+        "name": "X-App-Id",
+        "in": "header"
+      },
+      "X-App-Token": {
+        "type": "apiKey",
+        "name": "X-App-Token",
+        "in": "header"
+      },
+      "X-Voucherify-OAuth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://api.voucherify.io/v1/oauth/token",
+            "scopes": {
+              "api": "Gives access to whole server-side API.",
+              "vouchers": "Gives access to all endpoints and methods starting with `v1/vouchers`.",
+              "client_api": "Gives access to whole client-side API.",
+              "client_vouchers": "Gives access to all endpoints and methods starting with `/client/v1/vouchers`.",
+              "promotions": "Gives access to all endpoints and methods starting with `/v1/promotions`.",
+              "client_promotions": "Gives access to all endpoints and methods starting with `/client/v1/promotions`",
+              "campaigns": "Gives access to all endpoints and methods starting with `v1/campaigns`.",
+              "client_publish": "Gives access to all endpoints and methods starting with `/client/v1/publish`.",
+              "exports": "Gives access to all endpoints and methods starting with `/v1/exports`.",
+              "publications": "Gives access to all endpoints and methods starting with `/v1/publications`.",
+              "client_validate": "Gives access to all endpoints and methods starting with `/client/v1/validate`.",
+              "validations": "Gives access to all endpoints and methods starting with `/v1/validations`.",
+              "client_validations": "Gives access to all endpoints and methods starting with `/client/v1/validations`.",
+              "qualifications": "Gives access to all endpoints and methods starting with `/v1/qualifications`.",
+              "client_qualifications": "Gives access to all endpoints and methods starting with `/client/v1/qualifications`.",
+              "client_redeem": "Gives access to all endpoints and methods starting with `/client/v1/redeem",
+              "redemptions": "Gives access to all endpoints and methods starting with `/v1/redemptions`.",
+              "client_redemptions": "Gives access to all endpoints and methods starting with `/client/v1/redemptions`",
+              "customers": "Gives access to all endpoints and methods starting with `/v1/customers`.",
+              "client_customers": "Gives access to all endpoints and methods starting with `/client/v1/customers`.",
+              "orders": "Gives access to all endpoints and methods starting with `/v1/orders`.",
+              "products": "Gives access to all endpoints and methods starting with `/v1/products`.",
+              "skus": "Gives access to all endpoints and methods starting with `/v1/skus`.",
+              "validation-rules": "Gives access to all endpoints and methods starting with `/v1/validation-rules`.",
+              "validation-rules-assignments": "Gives access to all endpoints and methods starting with `/v1/validation-rules-assignments",
+              "segments": "Gives access to all endpoints and methods starting with `/v1/segments`.",
+              "events": "Gives access to all endpoints and methods starting with `/v1/events`.",
+              "client_events": "Gives access to all endpoints and methods starting with `client/v1/events`.",
+              "rewards": "Gives access to all endpoints and methods starting with `/v1/rewards`.",
+              "assets": "Gives access to all endpoints and methods starting with `/v1/assets`.",
+              "task-results": "Gives access to all endpoints and methods starting with `/v1/task-results`.",
+              "loyalties": "Gives access to all endpoints and methods starting with `/v1/loyalties`.",
+              "client_consents": "Gives access to all endpoints and methods starting with `client/v1/consents`.",
+              "consents": "Gives access to all endpoints and methods starting with `/v1/consents`.",
+              "async-actions": "Gives access to all endpoints and methods starting with `/v1/async-actions`.",
+              "product-collections": "Gives access to all endpoints and methods starting with `/v1/product-collections`.",
+              "categories": "Gives access to all endpoints and methods starting with `/v1/categories`.",
+              "metadata-schemas": "Gives access to all endpoints and methods starting with `/v1/metadata-schemas`.",
+              "locations": "Gives access to all endpoints and methods starting with `/v1/locations`.",
+              "referrals": "Gives access to all endpoints and methods starting with `/v1/referrals`.",
+              "trash-bin": "Gives access to all endpoints and methods starting with `/v1/trash-bin`.",
+              "templates": "Gives access to all endpoints and methods starting with `/v1/templates`."
+            }
+          }
+        }
+      }
+    }
+  }
+}

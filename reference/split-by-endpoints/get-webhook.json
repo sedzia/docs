@@ -1,0 +1,377 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Voucherify API",
+    "version": "v2018-08-01",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
+    "contact": {
+      "name": "Voucherify Team",
+      "url": "https://www.voucherify.io/contact-support",
+      "email": "support@voucherify.io"
+    },
+    "termsOfService": "https://www.voucherify.io/legal/subscription-agreement",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/voucherifyio/voucherify-js-sdk/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{cluster}.voucherify.io",
+      "description": "Base URL",
+      "variables": {
+        "cluster": {
+          "default": "api",
+          "enum": [
+            "api",
+            "us1.api",
+            "as1.api",
+            "download",
+            "us1.download",
+            "as1.download"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/management/v1/projects/{projectId}/webhooks/{webhookId}": {
+      "get": {
+        "operationId": "get-webhook",
+        "tags": [
+          "Management"
+        ],
+        "summary": "Get Webhook",
+        "description": "Retrieves a webhook configuration.\n\n> 📘 Webhook Documentation\n>\n> Read [Webhooks v2024-01-1](ref:introduction-to-webhooks) article to learn how webhooks work in Voucherify.",
+        "parameters": [],
+        "security": [
+          {
+            "X-Management-Id": [],
+            "X-Management-Token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the webhook configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementProjectsWebhooksGetResponseBody"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "object": "webhook",
+                      "created_at": "2024-04-30T08:13:55.789Z",
+                      "id": "wh_Fk1HzL9lqC1lpuIFxp3TShB4",
+                      "events": [
+                        "redemption.succeeded"
+                      ],
+                      "target_url": "your_url",
+                      "active": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns an error if an invalid token was provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "value": {
+                      "code": 401,
+                      "message": "Unauthorized",
+                      "key": "unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Returns an error if the current plan does not include the Management API feature.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPaymentRequired"
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "code": 402,
+                      "message": "Payment required",
+                      "details": "Your current plan does not include a feature required to perform this operation.",
+                      "key": "missing_required_feature"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns an error when a resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Resource not found": {
+                    "value": {
+                      "code": 404,
+                      "key": "not_found",
+                      "message": "Resource not found",
+                      "details": "Cannot find webhook with id wh_ekFHVL6lqC4lDuIFxpETSGa",
+                      "request_id": "v-0ead4423d55b6996f2",
+                      "resource_id": "wh_ekFHVL6lqC4lDuIFxpETSGa",
+                      "resource_type": "webhook"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ManagementProjectsWebhooksGetResponseBody": {
+        "type": "object",
+        "title": "Management Webhook Get Response Response",
+        "description": "Response body schema for **GET** `/management/v1/projects/{projectId}/webhooks/{webhookId}`.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ManagementProjectsWebhook"
+          }
+        ]
+      },
+      "Error": {
+        "title": "Error Object",
+        "type": "object",
+        "description": "Error details",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "example": "v-0a885062c80375740f",
+            "description": "This ID is useful when troubleshooting and/or finding the root cause of an error response by our support team."
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Unique resource ID that can be used in another endpoint to get more details.",
+            "example": "rf_0c5d710a87c8a31f86"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type.",
+            "example": "voucher"
+          },
+          "error": {
+            "type": "object",
+            "description": "Includes additional information about the error.",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "The message configured by the user in a validation rule."
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "ErrorPaymentRequired": {
+        "title": "Payment Required Error",
+        "type": "object",
+        "description": "Error: Payment required - the current plan does not include the feature.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error's HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable message providing a short description of the error."
+          },
+          "details": {
+            "type": "string",
+            "description": "A human-readable message providing more details about the error."
+          },
+          "key": {
+            "type": "string",
+            "description": "Short string describing the kind of error which occurred."
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details",
+          "key"
+        ]
+      },
+      "ManagementProjectsWebhook": {
+        "type": "object",
+        "title": "Management Projects Webhook",
+        "description": "Response body schema for webhook endpoints.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier of the webhook.",
+                "example": "wh_i45Uez36Uz8XNW6PXC0eyGmb"
+              },
+              "object": {
+                "type": "string",
+                "description": "The type of the object represented by JSON.",
+                "default": "webhook",
+                "enum": [
+                  "webhook"
+                ]
+              },
+              "created_at": {
+                "type": "string",
+                "description": "Timestamp representing the date and time when the webhook configuration was created. The value for this parameter is shown in the ISO 8601 format.",
+                "format": "date-time",
+                "example": "2024-01-02T08:31:46.562Z"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ManagementProjectsWebhookBase"
+          }
+        ],
+        "required": [
+          "id",
+          "object",
+          "created_at",
+          "target_url",
+          "events",
+          "active"
+        ]
+      },
+      "ManagementProjectsWebhookBase": {
+        "type": "object",
+        "description": "",
+        "properties": {
+          "target_url": {
+            "type": "string",
+            "description": "URL address that receives webhooks."
+          },
+          "events": {
+            "type": "array",
+            "description": "Lists the events that trigger webhook sendout.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "business_validation_rule.assignment.created",
+                "business_validation_rule.assignment.deleted",
+                "business_validation_rule.created",
+                "business_validation_rule.deleted",
+                "business_validation_rule.updated",
+                "campaign.created",
+                "campaign.deleted",
+                "campaign.disabled",
+                "campaign.enabled",
+                "campaign.earning_rule.assigned",
+                "campaign.earning_rule.deleted",
+                "campaign.earning_rule.disabled",
+                "campaign.earning_rule.enabled",
+                "campaign.earning_rule.updated",
+                "campaign.loyalty_tier.created",
+                "campaign.loyalty_tier.deleted",
+                "campaign.loyalty_tier.updated",
+                "campaign.promotion_stack.created",
+                "campaign.promotion_stack.updated",
+                "campaign.promotion_tier.created",
+                "campaign.promotion_tier.deleted",
+                "campaign.promotion_tier.disabled",
+                "campaign.promotion_tier.enabled",
+                "campaign.promotion_tier.updated",
+                "campaign.referral_tier.created",
+                "campaign.referral_tier.deleted",
+                "campaign.referral_tier.updated",
+                "campaign.reward.assignment.created",
+                "campaign.reward.assignment.deleted",
+                "campaign.reward.assignment.updated",
+                "campaign.updated",
+                "campaign.vouchers.aded",
+                "campaign.vouchers.generation.completed",
+                "campaign.vouchers.generation.failed",
+                "campaign.vouchers.generation.started",
+                "customer.confirmed",
+                "customer.created",
+                "customer.deleted",
+                "customer.rewarded",
+                "customer.rewarded.loyalty_points",
+                "publication.succeeded",
+                "redemption.failed",
+                "redemption.rollback.failed",
+                "redemption.rollback.succeeded",
+                "redemption.succeeded",
+                "voucher.created",
+                "voucher.deleted",
+                "voucher.disabled",
+                "voucher.enabled",
+                "voucher.gift.balance_aded",
+                "voucher.gift.transaction.created",
+                "voucher.loyalty_card.pending_points.activated",
+                "voucher.loyalty_card.pending_points.aded",
+                "voucher.loyalty_card.pending_points.canceled",
+                "voucher.loyalty_card.pending_points.updated",
+                "voucher.loyalty_card.points_aded",
+                "voucher.loyalty_card.points_expired",
+                "voucher.loyalty_card.transaction.created",
+                "voucher.published",
+                "voucher.updated"
+              ]
+            }
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Determines if the webhook configuration is active.",
+            "default": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "X-Management-Id": {
+        "type": "apiKey",
+        "name": "X-Management-Id",
+        "in": "header"
+      },
+      "X-Management-Token": {
+        "type": "apiKey",
+        "name": "X-Management-Token",
+        "in": "header"
+      }
+    }
+  }
+}
