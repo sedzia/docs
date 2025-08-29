@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Voucherify</id>
+    <title>Voucherify</title>
+    <authors>Voucherify</authors>
+    <owners>Voucherify</owners>
+    <readme>docs\readme.md</readme>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/voucherifyio/voucherify-dotNET-sdk</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <version>8.0.1</version>
+    <description>.Net SDK for Voucherify - coupons, vouchers, promo codes - http://www.voucherify.io</description>
+    <copyright>MIT</copyright>
+    <repository type="git" url="https://github.com/voucherifyio/voucherify-dotNET-sdk" />
+    <releaseNotes>
+        2025-05-07: 8.0.1
+            - Added OAuth support for Loyalty Pending Points endpoints.
+        2025-05-07: 8.0.0
+            - New complete version of Voucherify SDK, generated out of OpenApi specification.
+
+        Other notes available in readme.md in repository.
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="JsonSubTypes" version="2.0.1" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+        <dependency id="RestSharp" version="112.0.0" />
+        <dependency id="Polly" version="8.1.0" />
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="JsonSubTypes" version="2.0.1" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+        <dependency id="RestSharp" version="112.0.0" />
+        <dependency id="Polly" version="8.1.0" />
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="JsonSubTypes" version="2.0.1" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+        <dependency id="RestSharp" version="112.0.0" />
+        <dependency id="Polly" version="8.1.0" />
+        <dependency id="Polly.Extensions.Http" version="3.0.0" />
+        <dependency id="Microsoft.Extensions.DependencyInjection" version="9.0.0-preview.4.24156.5" />
+        <dependency id="Microsoft.Extensions.Http" version="9.0.0-preview.4.24156.5" />
+        <dependency id="Microsoft.Extensions.Hosting" version="9.0.0-preview.4.24156.5" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\readme.md" target="docs\readme.md" />
+    <file src="..\..\lib\net9.0\Voucherify.dll" target="lib\net9.0\Voucherify.dll" />
+    <file src="..\..\lib\netstandard2.0\Voucherify.dll" target="lib\netstandard2.0\Voucherify.dll" />
+    <file src="..\..\lib\netstandard2.1\Voucherify.dll" target="lib\netstandard2.1\Voucherify.dll" />
+  </files>
+</package>

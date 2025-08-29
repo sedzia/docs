@@ -1,44 +1,21 @@
-# Mintlify Starter Kit
+# Voucherify's OpenAPI Specification and SDK
 
-Use the starter kit to get your docs deployed and ready to customize.
+[![JAVA SDK](https://img.shields.io/badge/JAVA-SDK-FF0000?logo=openjdk&logoColor=red)](https://github.com/voucherifyio/sdk-java-openapi-based)
+[![PHP SDK](https://img.shields.io/badge/PHP-SDK-777BB4?logo=php&logoColor=white)](https://github.com/voucherifyio/sdk-php-openapi-based)
+[![PYTHON SDK](https://img.shields.io/badge/PYTHON-SDK-58ad09?logo=python&logoColor=green)](https://github.com/voucherifyio/sdk-python-openapi-based)
+[![RUBY SDK](https://img.shields.io/badge/RUBY-SDK-c71628?logo=ruby&logoColor=c71628)](https://github.com/voucherifyio/sdk-ruby-openapi-based)
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+This repository contains OpenAPI specification for Voucherify's API.
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+ - **Version supported**: `3.0.1`
+ - **Spec location**: [/production/readOnly-openAPI.json](/production/readOnly-openAPI.json)
+ - **Changelog**: `Changelog.md`
+ - **Status**: _Released_
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+This OpenAPI specification is live. 
 
-## Development
-
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
-npm i -g mint
-```
-
-Run the following command at the root of your documentation, where your `docs.json` is located:
-
-```
-mint dev
-```
-
-View your local preview at `http://localhost:3000`.
-
-## Publishing changes
-
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
-
-## Need help?
-
-### Troubleshooting
-
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
-- [Mintlify community](https://mintlify.com/community)
+Please refer to the following guides:
+- [Guides](https://docs.voucherify.io/docs)
+- [Recipes](https://docs.voucherify.io/recipes)
+- [API Reference](https://docs.voucherify.io/reference/)
+- [Support Documentation](https://support.voucherify.io/)
