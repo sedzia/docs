@@ -2572,6 +2572,8 @@
           },
           "result": {
             "type": "object",
+            "nullable": true,
+            "default": null,
             "description": "Contains the URL of the CSV file."
           },
           "user_id": {

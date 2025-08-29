@@ -13258,10 +13258,14 @@
             "description": "Defines the type of the voucher. "
           },
           "discount": {
-            "type": "object"
+            "type": "object",
+            "nullable": true,
+            "default": null
           },
           "gift": {
-            "type": "object"
+            "type": "object",
+            "nullable": true,
+            "default": null
           },
           "loyalty_card": {
             "type": "object",
@@ -16419,6 +16423,8 @@
           },
           "result": {
             "type": "object",
+            "nullable": true,
+            "default": null,
             "description": "Contains the URL of the CSV file."
           },
           "user_id": {

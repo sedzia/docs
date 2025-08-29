@@ -2600,10 +2600,14 @@
           },
           "referral": {
             "type": "object",
+            "nullable": true,
+            "default": null,
             "description": "A `null` referral object."
           },
           "loyalty": {
             "type": "object",
+            "nullable": true,
+            "default": null,
             "description": "A `null` loyalty object."
           },
           "metadata": {
