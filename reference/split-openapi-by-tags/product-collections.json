@@ -3,7 +3,7 @@
   "info": {
     "title": "Voucherify API - Product Collections",
     "version": "v2018-08-01",
-    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details. - Endpoints tagged with 'Product Collections'",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
     "contact": {
       "name": "Voucherify Team",
       "url": "https://www.voucherify.io/contact-support",
@@ -283,6 +283,17 @@
       }
     },
     "/v1/product-collections/{productCollectionId}": {
+      "parameters": [
+        {
+          "schema": {
+            "$ref": "#/components/schemas/ParameterProductCollectionId"
+          },
+          "name": "productCollectionId",
+          "in": "path",
+          "required": true,
+          "description": "A unique product collection ID."
+        }
+      ],
       "get": {
         "operationId": "get-product-collection",
         "tags": [
@@ -451,6 +462,17 @@
       }
     },
     "/v1/product-collections/{productCollectionId}/products": {
+      "parameters": [
+        {
+          "schema": {
+            "$ref": "#/components/schemas/ParameterProductCollectionId"
+          },
+          "name": "productCollectionId",
+          "in": "path",
+          "required": true,
+          "description": "Unique product collection ID."
+        }
+      ],
       "get": {
         "operationId": "list-products-in-collection",
         "tags": [
@@ -792,6 +814,10 @@
           "code",
           "message"
         ]
+      },
+      "ParameterProductCollectionId": {
+        "type": "string",
+        "example": "pc_41V4DiQQO8YGqj0J2oZD57j4"
       },
       "ResourceInUseError": {
         "title": "Resource in Use Error Object",

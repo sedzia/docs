@@ -111,7 +111,7 @@
             "pages": [
               {
                 "group": "Publications",
-                "openapi": "/reference/split-by-tags/publications.json",
+                "openapi": "/reference/split-openapi-by-tags/publications.json",
                 "pages": [
                   "GET /v1/publications/create",
                   "GET /v1/publications",
@@ -120,14 +120,14 @@
               },
               {
                 "group": "Qualifications",
-                "openapi": "/reference/split-by-tags/qualifications.json",
+                "openapi": "/reference/split-openapi-by-tags/qualifications.json",
                 "pages": [
                   "POST /v1/qualifications"
                 ]
               },
               {
                 "group": "Validations",
-                "openapi": "/reference/split-by-tags/validations.json",
+                "openapi": "/reference/split-openapi-by-tags/validations.json",
                 "pages": [
                   "POST /v1/validations",
                   "POST /v1/vouchers/{code}/validate",
@@ -137,7 +137,7 @@
               },
               {
                 "group": "Redemptions",
-                "openapi": "/reference/split-by-tags/redemptions.json",
+                "openapi": "/reference/split-openapi-by-tags/redemptions.json",
                 "pages": [
                   "GET /v1/redemptions",
                   "POST /v1/redemptions",
@@ -151,7 +151,7 @@
               },
               {
                 "group": "Vouchers",
-                "openapi": "/reference/split-by-tags/vouchers.json",
+                "openapi": "/reference/split-openapi-by-tags/vouchers.json",
                 "pages": [
                   "GET /v1/vouchers",
                   "POST /v1/vouchers",
@@ -174,7 +174,7 @@
               },
               {
                 "group": "Campaigns",
-                "openapi": "/reference/split-by-tags/campaigns.json",
+                "openapi": "/reference/split-openapi-by-tags/campaigns.json",
                 "pages": [
                   "POST /v1/campaigns",
                   "GET /v1/campaigns",
@@ -195,7 +195,7 @@
               },
               {
                 "group": "Promotions",
-                "openapi": "/reference/split-by-tags/promotions.json",
+                "openapi": "/reference/split-openapi-by-tags/promotions.json",
                 "pages": [
                   "GET /v1/promotions/tiers",
                   "GET /v1/promotions/{campaignId}/tiers",
@@ -215,7 +215,7 @@
               },
               {
                 "group": "Rewards",
-                "openapi": "/reference/split-by-tags/rewards.json",
+                "openapi": "/reference/split-openapi-by-tags/rewards.json",
                 "pages": [
                   "GET /v1/rewards",
                   "POST /v1/rewards",
@@ -231,7 +231,7 @@
               },
               {
                 "group": "Loyalties",
-                "openapi": "/reference/split-by-tags/loyalties.json",
+                "openapi": "/reference/split-openapi-by-tags/loyalties.json",
                 "pages": [
                   "GET /v1/loyalties",
                   "POST /v1/loyalties",
@@ -289,7 +289,7 @@
               },
               {
                 "group": "Customers",
-                "openapi": "/reference/split-by-tags/customers.json",
+                "openapi": "/reference/split-openapi-by-tags/customers.json",
                 "pages": [
                   "GET /v1/customers",
                   "POST /v1/customers",
@@ -308,7 +308,7 @@
               },
               {
                 "group": "Orders",
-                "openapi": "/reference/split-by-tags/orders.json",
+                "openapi": "/reference/split-openapi-by-tags/orders.json",
                 "pages": [
                   "GET /v1/orders",
                   "POST /v1/orders",
@@ -320,7 +320,7 @@
               },
               {
                 "group": "Products",
-                "openapi": "/reference/split-by-tags/products.json",
+                "openapi": "/reference/split-openapi-by-tags/products.json",
                 "pages": [
                   "GET /v1/products",
                   "POST /v1/products",
@@ -340,7 +340,7 @@
               },
               {
                 "group": "Product Collections",
-                "openapi": "/reference/split-by-tags/product-collections.json",
+                "openapi": "/reference/split-openapi-by-tags/product-collections.json",
                 "pages": [
                   "GET /v1/product-collections",
                   "POST /v1/product-collections",
@@ -351,7 +351,7 @@
               },
               {
                 "group": "Validation Rules",
-                "openapi": "/reference/split-by-tags/validation-rules.json",
+                "openapi": "/reference/split-openapi-by-tags/validation-rules.json",
                 "pages": [
                   "GET /v1/validation-rules",
                   "POST /v1/validation-rules",
@@ -366,7 +366,7 @@
               },
               {
                 "group": "Segments",
-                "openapi": "/reference/split-by-tags/segments.json",
+                "openapi": "/reference/split-openapi-by-tags/segments.json",
                 "pages": [
                   "GET /v1/segments/{segmentId}",
                   "DELETE /v1/segments/{segmentId}",
@@ -375,14 +375,14 @@
               },
               {
                 "group": "Events",
-                "openapi": "/reference/split-by-tags/events.json",
+                "openapi": "/reference/split-openapi-by-tags/events.json",
                 "pages": [
                   "POST /v1/events"
                 ]
               },
               {
                 "group": "Async Actions",
-                "openapi": "/reference/split-by-tags/async-actions.json",
+                "openapi": "/reference/split-openapi-by-tags/async-actions.json",
                 "pages": [
                   "GET /v1/async-actions",
                   "GET /v1/async-actions/{asyncActionId}"
@@ -390,7 +390,7 @@
               },
               {
                 "group": "Exports",
-                "openapi": "/reference/split-by-tags/exports.json",
+                "openapi": "/reference/split-openapi-by-tags/exports.json",
                 "pages": [
                   "POST /v1/exports",
                   "GET /v1/exports",
@@ -401,7 +401,7 @@
               },
               {
                 "group": "Categories",
-                "openapi": "/reference/split-by-tags/categories.json",
+                "openapi": "/reference/split-openapi-by-tags/categories.json",
                 "pages": [
                   "GET /v1/categories",
                   "POST /v1/categories",
@@ -412,7 +412,7 @@
               },
               {
                 "group": "Metadata Schemas",
-                "openapi": "/reference/split-by-tags/metadata-schemas.json",
+                "openapi": "/reference/split-openapi-by-tags/metadata-schemas.json",
                 "pages": [
                   "GET /v1/metadata-schemas",
                   "GET /v1/metadata-schemas/{resource}"
@@ -420,7 +420,7 @@
               },
               {
                 "group": "Locations",
-                "openapi": "/reference/split-by-tags/locations.json",
+                "openapi": "/reference/split-openapi-by-tags/locations.json",
                 "pages": [
                   "GET /v1/locations",
                   "GET /v1/locations/{locationId}"
@@ -428,7 +428,7 @@
               },
               {
                 "group": "Referrals",
-                "openapi": "/reference/split-by-tags/referrals.json",
+                "openapi": "/reference/split-openapi-by-tags/referrals.json",
                 "pages": [
                   "POST /v1/referrals/{campaignId}/members/{memberId}/holders",
                   "GET /v1/referrals/{campaignId}/members/{memberId}/holders",
@@ -440,7 +440,7 @@
               },
               {
                 "group": "Bin",
-                "openapi": "/reference/split-by-tags/bin.json",
+                "openapi": "/reference/split-openapi-by-tags/bin.json",
                 "pages": [
                   "GET /v1/trash-bin",
                   "DELETE /v1/trash-bin/{binEntryId}"
@@ -448,7 +448,7 @@
               },
               {
                 "group": "Templates",
-                "openapi": "/reference/split-by-tags/templates.json",
+                "openapi": "/reference/split-openapi-by-tags/templates.json",
                 "pages": [
                   "GET /v1/templates/campaigns",
                   "POST /v1/templates/campaigns",
@@ -461,7 +461,7 @@
               },
               {
                 "group": "Management",
-                "openapi": "/reference/split-by-tags/management.json",
+                "openapi": "/reference/split-openapi-by-tags/management.json",
                 "pages": [
                   "POST /management/v1/projects",
                   "GET /management/v1/projects",
@@ -505,7 +505,7 @@
               },
               {
                 "group": "OAuth",
-                "openapi": "/reference/split-by-tags/oauth.json",
+                "openapi": "/reference/split-openapi-by-tags/oauth.json",
                 "pages": [
                   "POST /v1/oauth/token",
                   "POST /v1/oauth/introspect",
@@ -514,7 +514,7 @@
               },
               {
                 "group": "Client-side",
-                "openapi": "/reference/split-by-tags/client-side.json",
+                "openapi": "/reference/split-openapi-by-tags/client-side.json",
                 "pages": [
                   "POST /client/v1/qualifications",
                   "GET /client/v1/promotions/tiers",

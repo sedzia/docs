@@ -3,7 +3,7 @@
   "info": {
     "title": "Voucherify API - Rewards",
     "version": "v2018-08-01",
-    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details. - Endpoints tagged with 'Rewards'",
+    "description": "Voucherify promotion engine REST API. Please see https://docs.voucherify.io/docs for more details.",
     "contact": {
       "name": "Voucherify Team",
       "url": "https://www.voucherify.io/contact-support",
@@ -343,6 +343,17 @@
       }
     },
     "/v1/rewards/{rewardId}": {
+      "parameters": [
+        {
+          "schema": {
+            "$ref": "#/components/schemas/ParameterRewardId"
+          },
+          "name": "rewardId",
+          "in": "path",
+          "required": true,
+          "description": "A unique reward ID."
+        }
+      ],
       "get": {
         "operationId": "get-reward",
         "tags": [
@@ -636,6 +647,17 @@
       }
     },
     "/v1/rewards/{rewardId}/assignments": {
+      "parameters": [
+        {
+          "schema": {
+            "$ref": "#/components/schemas/ParameterRewardId"
+          },
+          "name": "rewardId",
+          "in": "path",
+          "required": true,
+          "description": "A unique reward ID."
+        }
+      ],
       "get": {
         "operationId": "list-reward-assignments",
         "tags": [
@@ -887,6 +909,26 @@
       }
     },
     "/v1/rewards/{rewardId}/assignments/{assignmentId}": {
+      "parameters": [
+        {
+          "schema": {
+            "$ref": "#/components/schemas/ParameterRewardId"
+          },
+          "name": "rewardId",
+          "in": "path",
+          "required": true,
+          "description": "A unique reward ID."
+        },
+        {
+          "schema": {
+            "$ref": "#/components/schemas/ParameterRewardAssignmentId"
+          },
+          "name": "assignmentId",
+          "in": "path",
+          "required": true,
+          "description": "A unique reward assignment ID."
+        }
+      ],
       "put": {
         "operationId": "update-reward-assignment",
         "tags": [
@@ -1321,6 +1363,10 @@
           "code",
           "message"
         ]
+      },
+      "ParameterRewardId": {
+        "type": "string",
+        "example": "rew_2erjvECLs92GYzKbak3QkyTV"
       },
       "RewardsUpdateRequestBody": {
         "title": "Rewards Update Request Body",
